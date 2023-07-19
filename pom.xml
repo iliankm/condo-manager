@@ -5,6 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>condo-manager</artifactId>
+    <modules>
+        <module>condo-manager-core</module>
+    </modules>
     <groupId>com.ikm.condo-manager</groupId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
