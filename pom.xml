@@ -9,6 +9,7 @@
         <module>condo-manager-core</module>
         <module>condo-manager-adapter</module>
         <module>condo-manager-test</module>
+        <module>condo-manager-infrastructure</module>
     </modules>
     <groupId>com.ikm.condo-manager</groupId>
     <version>1.0-SNAPSHOT</version>
