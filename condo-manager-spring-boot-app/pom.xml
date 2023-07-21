@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>condo-manager-springboot-app</artifactId>
+    <artifactId>condo-manager-spring-boot-app</artifactId>
     <name>Condominium Manager - Spring Boot Application</name>
 
     <dependencies>
