@@ -34,6 +34,7 @@
         <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
         <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
         <detekt-maven-plugin.version>1.22.0</detekt-maven-plugin.version>
+        <detekt-formatting-version>1.23.0</detekt-formatting-version>
         <junit-jupiter-engine.version>5.9.2</junit-jupiter-engine.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
     </properties>
@@ -89,6 +90,13 @@
                             </configuration>
                         </execution>
                     </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>io.gitlab.arturbosch.detekt</groupId>
+                            <artifactId>detekt-formatting</artifactId>
+                            <version>${detekt-formatting-version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
@@ -117,8 +125,8 @@
                             <configuration>
                                 <haltOnFailure>true</haltOnFailure>
                                 <excludes>
-<!--                                    <exclude>**/dto/**</exclude>-->
-<!--                                    <exclude>**/exception/**</exclude>-->
+                                    <!--                                    <exclude>**/dto/**</exclude>-->
+                                    <!--                                    <exclude>**/exception/**</exclude>-->
                                     <exclude>**/CondominiumManagerSpringBootApplicationKt.*</exclude>
                                 </excludes>
                                 <rules>
