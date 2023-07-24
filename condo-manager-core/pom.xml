@@ -10,6 +10,9 @@
     </parent>
 
     <packaging>pom</packaging>
+    <modules>
+        <module>condo-manager-core-domain</module>
+    </modules>
 
     <groupId>com.ikm.condo-manager.core</groupId>
     <artifactId>condo-manager-core</artifactId>

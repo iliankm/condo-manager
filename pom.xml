@@ -46,6 +46,18 @@
         </repository>
     </repositories>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Project artifacts -->
+            <dependency>
+                <groupId>com.ikm.condo-manager.core.domain</groupId>
+                <artifactId>condo-manager-core-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- Project artifacts -->
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
