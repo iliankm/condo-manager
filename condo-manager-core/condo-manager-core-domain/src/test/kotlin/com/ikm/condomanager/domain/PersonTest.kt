@@ -17,7 +17,7 @@ class PersonTest {
 
     @ParameterizedTest
     @MethodSource("validPersonParams")
-    fun `should be a valid Person`(id: PersonId, name: String, email: String?, phone: String?) {
+    fun `should be a valid Person`(id: PersonId?, name: String, email: String?, phone: String?) {
         // given
         val person = Person(id = id, name = "")
         person.name = name
@@ -49,6 +49,12 @@ class PersonTest {
         @JvmStatic
         fun validPersonParams() =
             listOf(
+                Arguments.of(
+                    null,
+                    "John Doe",
+                    null,
+                    null
+                ),
                 Arguments.of(
                     PersonId(UUID.randomUUID().toString(), 1),
                     "John Doe",

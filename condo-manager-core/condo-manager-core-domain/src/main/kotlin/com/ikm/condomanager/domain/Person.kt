@@ -16,7 +16,7 @@ typealias PersonId = DomainId
  */
 class Person(
     @field:Valid
-    val id: PersonId,
+    val id: PersonId? = null,
 
     @field:NotBlank
     @field:Size(max = 70)
