@@ -11,7 +11,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>com.ikm.condo-manager</groupId>
     <artifactId>condo-manager</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
     <modules>
         <module>condo-manager-core</module>
         <module>condo-manager-adapter</module>
@@ -19,9 +23,6 @@
         <module>condo-manager-infrastructure</module>
         <module>condo-manager-spring-boot-app</module>
     </modules>
-    <groupId>com.ikm.condo-manager</groupId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
 
     <name>Condominium Manager</name>
 
@@ -50,8 +51,13 @@
         <dependencies>
             <!-- Project artifacts -->
             <dependency>
-                <groupId>com.ikm.condo-manager.core.domain</groupId>
+                <groupId>com.ikm.condo-manager</groupId>
                 <artifactId>condo-manager-core-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ikm.condo-manager</groupId>
+                <artifactId>condo-manager-core-use-case</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- Project artifacts -->

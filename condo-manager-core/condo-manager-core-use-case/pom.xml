@@ -5,51 +5,37 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.ikm.condo-manager</groupId>
-        <artifactId>condo-manager</artifactId>
+        <artifactId>condo-manager-core</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>condo-manager-spring-boot-app</artifactId>
-    <name>Condominium Manager - Spring Boot Application</name>
+    <artifactId>condo-manager-core-use-case</artifactId>
+    <name>Condominium Manager - Core Use Case</name>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-reflect</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
         </dependency>
-
-        <!-- Project artifacts -->
-        <dependency>
-            <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-use-case</artifactId>
-        </dependency>
-        <!-- Project artifacts -->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -64,4 +50,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

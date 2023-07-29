@@ -11,7 +11,6 @@
 
     <packaging>pom</packaging>
 
-    <groupId>com.ikm.condo-manager.test</groupId>
     <artifactId>condo-manager-test</artifactId>
     <name>Condominium Manager - Test</name>
 </project>

@@ -10,11 +10,12 @@
     </parent>
 
     <packaging>pom</packaging>
-    <modules>
-        <module>condo-manager-core-domain</module>
-    </modules>
 
-    <groupId>com.ikm.condo-manager.core</groupId>
     <artifactId>condo-manager-core</artifactId>
     <name>Condominium Manager - Core</name>
+
+    <modules>
+        <module>condo-manager-core-domain</module>
+        <module>condo-manager-core-use-case</module>
+    </modules>
 </project>
