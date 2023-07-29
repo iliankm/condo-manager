@@ -5,25 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.ikm.condo-manager</groupId>
-        <artifactId>condo-manager-core</artifactId>
+        <artifactId>condo-manager-infrastructure</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>condo-manager-core-use-case</artifactId>
-    <name>Condominium Manager - Core Use Case</name>
+    <artifactId>condo-manager-infrastructure-exception</artifactId>
+    <name>Condominium Manager - Infrastructure Exception</name>
 
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-domain</artifactId>
         </dependency>
 
         <dependency>

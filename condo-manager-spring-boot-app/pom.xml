@@ -33,6 +33,10 @@
         </dependency>
         <dependency>
             <groupId>com.ikm.condo-manager</groupId>
+            <artifactId>condo-manager-infrastructure-exception</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ikm.condo-manager</groupId>
             <artifactId>condo-manager-core-use-case</artifactId>
         </dependency>
         <!-- Project artifacts -->

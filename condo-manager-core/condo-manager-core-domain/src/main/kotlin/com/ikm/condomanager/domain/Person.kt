@@ -13,6 +13,16 @@ typealias PersonId = DomainId
 
 /**
  * Domain object representing a [Person].
+ *
+ * @property id the id of the person. If null, it is still not persisted and is created only in the memory.
+ * @property name the name of the person. Must be not blank and max size is 70.
+ * @property email the email of the person. Must be a valid email.
+ * @property phoneNumber the phone number of the person. Must be a valid phone number in the following formats:
+ * 0888111222
+ * 0888-111-222
+ * 0888 111 222
+ * +359894991153
+ * +359 894 991 153
  */
 class Person(
     @field:Valid

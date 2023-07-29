@@ -10,6 +10,9 @@
     </parent>
 
     <packaging>pom</packaging>
+    <modules>
+        <module>condo-manager-infrastructure-exception</module>
+    </modules>
 
     <artifactId>condo-manager-infrastructure</artifactId>
     <name>Condominium Manager - Infrastructure</name>

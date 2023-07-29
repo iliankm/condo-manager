@@ -18,4 +18,11 @@
         <module>condo-manager-core-domain</module>
         <module>condo-manager-core-use-case</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ikm.condo-manager</groupId>
+            <artifactId>condo-manager-infrastructure-exception</artifactId>
+        </dependency>
+    </dependencies>
 </project>
