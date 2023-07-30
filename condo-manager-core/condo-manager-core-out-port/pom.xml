@@ -9,8 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>condo-manager-core-application</artifactId>
-    <name>Condominium Manager - Core Application</name>
+    <artifactId>condo-manager-core-out-port</artifactId>
+    <name>Condominium Manager - Core Out Port</name>
 
     <dependencies>
         <dependency>
@@ -18,16 +18,12 @@
             <artifactId>kotlin-stdlib</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.ikm.condo-manager</groupId>
             <artifactId>condo-manager-core-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-use-case</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-out-port</artifactId>
         </dependency>
 
         <dependency>
@@ -38,11 +34,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -63,5 +54,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

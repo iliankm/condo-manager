@@ -62,6 +62,11 @@
             </dependency>
             <dependency>
                 <groupId>com.ikm.condo-manager</groupId>
+                <artifactId>condo-manager-core-out-port</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ikm.condo-manager</groupId>
                 <artifactId>condo-manager-core-application</artifactId>
                 <version>${project.version}</version>
             </dependency>
