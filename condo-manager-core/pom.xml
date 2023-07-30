@@ -17,6 +17,7 @@
     <modules>
         <module>condo-manager-core-domain</module>
         <module>condo-manager-core-use-case</module>
+        <module>condo-manager-core-application</module>
     </modules>
 
     <dependencies>
