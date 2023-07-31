@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>condo-manager-infrastructure-exception</module>
+        <module>condo-manager-infrastructure-spring-configuration</module>
     </modules>
 
     <artifactId>condo-manager-infrastructure</artifactId>

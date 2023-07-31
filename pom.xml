@@ -72,6 +72,11 @@
             </dependency>
             <dependency>
                 <groupId>com.ikm.condo-manager</groupId>
+                <artifactId>condo-manager-infrastructure-spring-configuration</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ikm.condo-manager</groupId>
                 <artifactId>condo-manager-infrastructure-exception</artifactId>
                 <version>${project.version}</version>
             </dependency>
