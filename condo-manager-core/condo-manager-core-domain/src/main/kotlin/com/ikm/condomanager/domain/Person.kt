@@ -1,6 +1,5 @@
 package com.ikm.condomanager.domain
 
-import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
@@ -25,7 +24,6 @@ typealias PersonId = DomainId
  * +359 894 991 153
  */
 class Person(
-    @field:Valid
     val id: PersonId? = null,
 
     @field:NotBlank
@@ -40,7 +38,11 @@ class Person(
         message = "Must be a valid phone number"
     )
     var phoneNumber: String? = null
-) {
+) : SelfValidating<Person>() {
+    init {
+        validateSelf()
+    }
+
     override fun toString(): String {
         return "Person(id=$id, name='$name', email=$email, phoneNumber=$phoneNumber)"
     }
