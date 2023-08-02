@@ -40,7 +40,7 @@ class Person(
     var phoneNumber: String? = null
 ) : SelfValidating<Person>() {
     init {
-        validateSelf()
+        validate()
     }
 
     override fun toString(): String {

@@ -16,6 +16,6 @@ sealed class SelfValidating<T> {
      * Validates the current instance.
      */
     @Suppress("UNCHECKED_CAST")
-    protected fun validateSelf() =
+    fun validate() =
         validator.validate(this as T).takeIf { it.isNotEmpty() }?.let { throw ConstraintViolationException(it) }
 }

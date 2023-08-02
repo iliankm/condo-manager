@@ -17,6 +17,6 @@ data class DomainId(
     val version: Long
 ) : SelfValidating<DomainId>() {
     init {
-        validateSelf()
+        validate()
     }
 }
