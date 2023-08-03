@@ -10,6 +10,9 @@
     </parent>
 
     <packaging>pom</packaging>
+    <modules>
+        <module>condo-manager-adapter-persistence</module>
+    </modules>
 
     <artifactId>condo-manager-adapter</artifactId>
     <name>Condominium Manager - Adapter</name>

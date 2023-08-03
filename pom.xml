@@ -80,6 +80,11 @@
                 <artifactId>condo-manager-infrastructure-exception</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ikm.condo-manager</groupId>
+                <artifactId>condo-manager-adapter-persistence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- Project artifacts -->
         </dependencies>
     </dependencyManagement>
