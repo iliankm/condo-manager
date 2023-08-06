@@ -3,7 +3,7 @@ package com.ikm.condomanager.adapter.persistence.repository
 import com.ikm.condomanager.adapter.persistence.entity.EntityId
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.NoRepositoryBean
-import java.util.*
+import java.util.Optional
 
 /**
  * Base repository for all Spring Data JPA repositories.

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS person (
-   id VARCHAR(36) PRIMARY KEY,
+   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
    version INT NOT NULL,
    created_at TIMESTAMP NOT NULL,
    updated_at TIMESTAMP NOT NULL,

@@ -6,7 +6,7 @@ import jakarta.persistence.EntityManager
 import org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation
 import org.springframework.data.jpa.repository.support.JpaEntityInformation
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository
-import java.util.Optional
+import java.util.*
 
 /**
  * Implementation of [BaseRepository].
@@ -39,7 +39,6 @@ class BaseRepositoryImpl<T, ID>(
 
     override fun findAllByEntityId(ids: Iterable<EntityId>): List<T> =
         entityManager.createQuery(findByIdsAndVersionQuery, domainClass)
-            .setParameter("param", ids.map { it.id + "_ver_" + it.version })
+            .setParameter("param", ids.map { it.id.toString() + "_ver_" + it.version })
             .resultList
-
 }

@@ -5,6 +5,7 @@ import com.ikm.condomanager.adapter.persistence.entity.PersonEntity
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
+import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -29,7 +30,7 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
         val savedPersonEntity = personRepository.saveAndFlush(personEntity)
         // then
         assertNotNull(savedPersonEntity)
-        assertTrue(savedPersonEntity.id?.isNotEmpty() ?: false)
+        assertTrue(savedPersonEntity.id.toString().isNotEmpty())
         assertEquals(0, savedPersonEntity.version)
         assertNotNull(savedPersonEntity.createdAt)
         assertNotNull(savedPersonEntity.updatedAt)
@@ -39,10 +40,11 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
     @Sql("/sql/create-person.sql")
     fun `should find by EntityId`() {
         // when
-        val person = personRepository.findByEntityId(EntityId("5f92185c-3452-11ee-be56-0242ac120002", 0))
+        val person =
+            personRepository.findByEntityId(EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120002"), 0))
         // then
         assertTrue(person.isPresent)
-        assertEquals(EntityId("5f92185c-3452-11ee-be56-0242ac120002", 0), person.get().entityId)
+        assertEquals(EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120002"), 0), person.get().entityId)
     }
 
     @Test
@@ -50,17 +52,17 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
     fun `should find all by EntityId`() {
         // given
         val existing = listOf(
-            EntityId("5f92185c-3452-11ee-be56-0242ac120002", 0),
-            EntityId("5f92185c-3452-11ee-be56-0242ac120003", 1),
-            EntityId("5f92185c-3452-11ee-be56-0242ac120004", 2)
+            EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120002"), 0),
+            EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120003"), 1),
+            EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120004"), 2)
         )
         // when
         val result = personRepository.findAllByEntityId(
             existing +
                 listOf(
-                    EntityId("5f92185c-3452-11ee-be56", 0),
-                    EntityId("5f92185c-3452-11ee-be56-0242ac120004", 0),
-                    EntityId("5f92185c-3452-11ee-be56-0242ac120003", 10),
+                    EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120000"), 0),
+                    EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120004"), 0),
+                    EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120003"), 10),
                 )
         )
         // then
