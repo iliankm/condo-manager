@@ -38,6 +38,7 @@
         <detekt-formatting-version>1.23.0</detekt-formatting-version>
         <junit-jupiter-engine.version>5.9.2</junit-jupiter-engine.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <testcontainers.postgresql.version>1.18.3</testcontainers.postgresql.version>
     </properties>
 
     <repositories>
@@ -86,6 +87,11 @@
                 <version>${project.version}</version>
             </dependency>
             <!-- Project artifacts -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${testcontainers.postgresql.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -105,12 +111,18 @@
                         </args>
                         <compilerPlugins>
                             <plugin>spring</plugin>
+                            <plugin>jpa</plugin>
                         </compilerPlugins>
                     </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.jetbrains.kotlin</groupId>
                             <artifactId>kotlin-maven-allopen</artifactId>
+                            <version>${kotlin.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.jetbrains.kotlin</groupId>
+                            <artifactId>kotlin-maven-noarg</artifactId>
                             <version>${kotlin.version}</version>
                         </dependency>
                     </dependencies>

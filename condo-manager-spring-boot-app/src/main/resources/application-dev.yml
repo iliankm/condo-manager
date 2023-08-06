@@ -1,0 +1,5 @@
+condomanager:
+  db:
+    url: jdbc:postgresql://localhost:5432/condo-manager
+    username: postgres
+    password: postgres
