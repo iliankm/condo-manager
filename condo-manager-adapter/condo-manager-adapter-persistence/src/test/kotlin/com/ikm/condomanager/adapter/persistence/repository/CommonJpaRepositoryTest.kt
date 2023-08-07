@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
 import java.util.UUID
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -68,5 +69,16 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
         // then
         assertEquals(3, result.size)
         assertTrue(result.map { it.entityId }.containsAll(existing))
+    }
+
+    @Test
+    @Sql("/sql/create-person.sql")
+    fun `should delete by EntityId`() {
+        // given
+        val entityId = EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120002"), 0)
+        // when
+        personRepository.deleteByEntityId(entityId)
+        // then
+        assertFalse(personRepository.findByEntityId(entityId).isPresent)
     }
 }

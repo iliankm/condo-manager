@@ -41,4 +41,8 @@ class BaseRepositoryImpl<T, ID>(
         entityManager.createQuery(findByIdsAndVersionQuery, domainClass)
             .setParameter("param", ids.map { it.id.toString() + "_ver_" + it.version })
             .resultList
+
+    override fun deleteByEntityId(entityId: EntityId) {
+        findByEntityId(entityId).ifPresent { delete(it) }
+    }
 }

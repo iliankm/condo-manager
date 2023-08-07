@@ -8,7 +8,7 @@ import java.util.Optional
 /**
  * Base repository for all Spring Data JPA repositories.
  * The purpose of this base interface is to have common methods like:
- * [findByEntityId], [findAllByEntityId], [deleteByEntityId], [deleteAllByEntityId] etc. in all repositories.
+ * [findByEntityId], [findAllByEntityId], [deleteByEntityId] etc. in all repositories.
  */
 @NoRepositoryBean
 interface BaseRepository<T, ID> : JpaRepository<T, ID> {
@@ -29,4 +29,12 @@ interface BaseRepository<T, ID> : JpaRepository<T, ID> {
      * @return guaranteed to be not null. The size can be equal or less than the number of given ids.
      */
     fun findAllByEntityId(ids: Iterable<EntityId>): List<T>
+
+    /**
+     * Deletes the entity with the given [entityId].
+     * If the entity is not found in the persistence store it is silently ignored.
+     *
+     * @param entityId
+     */
+    fun deleteByEntityId(entityId: EntityId)
 }
