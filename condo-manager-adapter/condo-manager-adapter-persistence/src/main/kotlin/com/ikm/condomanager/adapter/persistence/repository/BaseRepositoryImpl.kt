@@ -1,12 +1,13 @@
 package com.ikm.condomanager.adapter.persistence.repository
 
-import com.ikm.condomanager.adapter.persistence.entity.EntityId
+import com.ikm.condomanager.domain.DomainId
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityManager
 import org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation
 import org.springframework.data.jpa.repository.support.JpaEntityInformation
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 /**
  * Implementation of [BaseRepository].
@@ -29,20 +30,20 @@ class BaseRepositoryImpl<T, ID>(
         select o from $entityName o where CONCAT(o.id, '_ver_', o.version) IN :param
     """.trimIndent()
 
-    override fun findByEntityId(entityId: EntityId): Optional<T & Any> =
+    override fun findByDomainId(domainId: DomainId): Optional<T & Any> =
         Optional.ofNullable(
             entityManager.createQuery(findByIdAndVersionQuery, domainClass)
-                .setParameter("id", entityId.id)
-                .setParameter("version", entityId.version)
+                .setParameter("id", UUID.fromString(domainId.id))
+                .setParameter("version", domainId.version)
                 .resultList.firstOrNull()
         )
 
-    override fun findAllByEntityId(ids: Iterable<EntityId>): List<T> =
+    override fun findAllByDomainId(ids: Iterable<DomainId>): List<T> =
         entityManager.createQuery(findByIdsAndVersionQuery, domainClass)
-            .setParameter("param", ids.map { it.id.toString() + "_ver_" + it.version })
+            .setParameter("param", ids.map { it.id + "_ver_" + it.version })
             .resultList
 
-    override fun deleteByEntityId(entityId: EntityId) {
-        findByEntityId(entityId).ifPresent { delete(it) }
+    override fun deleteByDomainId(domainId: DomainId) {
+        findByDomainId(domainId).ifPresent { delete(it) }
     }
 }

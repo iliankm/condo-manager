@@ -1,5 +1,6 @@
 package com.ikm.condomanager.adapter.persistence.entity
 
+import com.ikm.condomanager.domain.DomainId
 import jakarta.persistence.Column
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -25,8 +26,8 @@ sealed class BaseEntity {
     @Column(name = "version", nullable = false)
     val version: Long? = null
 
-    val entityId: EntityId?
-        get() = if (id != null && version != null) EntityId(id, version) else null
+    val domainId: DomainId?
+        get() = if (id != null && version != null) DomainId(id.toString(), version) else null
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)

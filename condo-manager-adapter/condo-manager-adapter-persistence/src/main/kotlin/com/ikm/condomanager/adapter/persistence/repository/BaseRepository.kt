@@ -1,6 +1,6 @@
 package com.ikm.condomanager.adapter.persistence.repository
 
-import com.ikm.condomanager.adapter.persistence.entity.EntityId
+import com.ikm.condomanager.domain.DomainId
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.NoRepositoryBean
 import java.util.Optional
@@ -8,17 +8,17 @@ import java.util.Optional
 /**
  * Base repository for all Spring Data JPA repositories.
  * The purpose of this base interface is to have common methods like:
- * [findByEntityId], [findAllByEntityId], [deleteByEntityId] etc. in all repositories.
+ * [findByDomainId], [findAllByDomainId], [deleteByDomainId] etc. in all repositories.
  */
 @NoRepositoryBean
 interface BaseRepository<T, ID> : JpaRepository<T, ID> {
     /**
-     * Retrieves an entity by its [entityId].
+     * Retrieves an entity by its [domainId].
      *
-     * @param entityId
+     * @param domainId
      * @return the entity or [Optional.empty] if not found.
      */
-    fun findByEntityId(entityId: EntityId): Optional<T & Any>
+    fun findByDomainId(domainId: DomainId): Optional<T & Any>
 
     /**
      * Returns all instances of the type [T] with the given [ids].
@@ -28,13 +28,13 @@ interface BaseRepository<T, ID> : JpaRepository<T, ID> {
      * @param ids
      * @return guaranteed to be not null. The size can be equal or less than the number of given ids.
      */
-    fun findAllByEntityId(ids: Iterable<EntityId>): List<T>
+    fun findAllByDomainId(ids: Iterable<DomainId>): List<T>
 
     /**
-     * Deletes the entity with the given [entityId].
+     * Deletes the entity with the given [domainId].
      * If the entity is not found in the persistence store it is silently ignored.
      *
-     * @param entityId
+     * @param domainId
      */
-    fun deleteByEntityId(entityId: EntityId)
+    fun deleteByDomainId(domainId: DomainId)
 }

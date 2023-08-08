@@ -1,11 +1,10 @@
 package com.ikm.condomanager.adapter.persistence.repository
 
-import com.ikm.condomanager.adapter.persistence.entity.EntityId
 import com.ikm.condomanager.adapter.persistence.entity.PersonEntity
+import com.ikm.condomanager.domain.DomainId
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
-import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -39,13 +38,13 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
 
     @Test
     @Sql("/sql/create-person.sql")
-    fun `should find by EntityId`() {
+    fun `should find by DomainId`() {
         // when
         val person =
-            personRepository.findByEntityId(EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120002"), 0))
+            personRepository.findByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0))
         // then
         assertTrue(person.isPresent)
-        assertEquals(EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120002"), 0), person.get().entityId)
+        assertEquals(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0), person.get().domainId)
     }
 
     @Test
@@ -53,32 +52,32 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
     fun `should find all by EntityId`() {
         // given
         val existing = listOf(
-            EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120002"), 0),
-            EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120003"), 1),
-            EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120004"), 2)
+            DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0),
+            DomainId("5f92185c-3452-11ee-be56-0242ac120003", 1),
+            DomainId("5f92185c-3452-11ee-be56-0242ac120004", 2)
         )
         // when
-        val result = personRepository.findAllByEntityId(
+        val result = personRepository.findAllByDomainId(
             existing +
                 listOf(
-                    EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120000"), 0),
-                    EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120004"), 0),
-                    EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120003"), 10),
+                    DomainId("5f92185c-3452-11ee-be56-0242ac120000", 0),
+                    DomainId("5f92185c-3452-11ee-be56-0242ac120004", 0),
+                    DomainId("5f92185c-3452-11ee-be56-0242ac120003", 10),
                 )
         )
         // then
         assertEquals(3, result.size)
-        assertTrue(result.map { it.entityId }.containsAll(existing))
+        assertTrue(result.map { it.domainId }.containsAll(existing))
     }
 
     @Test
     @Sql("/sql/create-person.sql")
     fun `should delete by EntityId`() {
         // given
-        val entityId = EntityId(UUID.fromString("5f92185c-3452-11ee-be56-0242ac120002"), 0)
+        val entityId = DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0)
         // when
-        personRepository.deleteByEntityId(entityId)
+        personRepository.deleteByDomainId(entityId)
         // then
-        assertFalse(personRepository.findByEntityId(entityId).isPresent)
+        assertFalse(personRepository.findByDomainId(entityId).isPresent)
     }
 }
