@@ -7,11 +7,11 @@ import org.aspectj.lang.annotation.Before
 import org.springframework.stereotype.Component
 
 /**
- * Aspect for validation of domain objects passed as arguments to the Spring components etc.
+ * Aspect for validation of [SelfValidating] objects passed as arguments to the Spring components etc.
  */
 @Component
 @Aspect
-class DomainObjectsValidationAspect {
+class SelfValidatingArgumentsAspect {
     /**
      * Advice for domain objects validation when passed to the components.
      */

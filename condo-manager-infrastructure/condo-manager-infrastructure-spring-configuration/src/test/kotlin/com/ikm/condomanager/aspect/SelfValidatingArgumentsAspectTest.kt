@@ -13,12 +13,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import kotlin.test.assertNotNull
 
 /**
- * Spring test for [DomainObjectsValidationAspect].
+ * Spring test for [SelfValidatingArgumentsAspect].
  */
 @ExtendWith(SpringExtension::class)
 @EnableAspectJAutoProxy
-@ContextConfiguration(classes = [DomainObjectsValidationAspect::class, ValidationTestComponent::class])
-class DomainObjectsValidationAspectTest {
+@ContextConfiguration(classes = [SelfValidatingArgumentsAspect::class, ValidationTestComponent::class])
+class SelfValidatingArgumentsAspectTest {
     @Autowired
     lateinit var validationTestComponent: ValidationTestComponent
 
