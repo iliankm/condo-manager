@@ -9,7 +9,7 @@ import jakarta.validation.Validator
  *
  * @param T the type parameter of the validated object.
  */
-sealed class SelfValidating<T> {
+open class SelfValidating<T> {
     private val validator: Validator = Validation.buildDefaultValidatorFactory().validator
 
     /**

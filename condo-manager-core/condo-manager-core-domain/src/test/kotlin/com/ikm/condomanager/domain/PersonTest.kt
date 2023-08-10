@@ -42,7 +42,7 @@ class PersonTest {
     ) {
         // given & when
         val exception = Assertions.assertThrows(ConstraintViolationException::class.java) {
-            Person(id, name, email, phone)
+            Person(id = id, name = name, email = email, phoneNumber = phone)
         }
         // then
         assertTrue(

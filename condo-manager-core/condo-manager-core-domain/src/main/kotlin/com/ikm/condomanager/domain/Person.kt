@@ -24,11 +24,11 @@ typealias PersonId = DomainId
  * +359 894 991 153
  */
 class Person(
-    val id: PersonId? = null,
-
     @field:NotBlank
     @field:Size(max = 70)
     var name: String,
+
+    val id: PersonId? = null,
 
     @field:Email(regexp = ".+@.+\\..+")
     var email: String? = null,
