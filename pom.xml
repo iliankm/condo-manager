@@ -39,6 +39,8 @@
         <junit-jupiter-engine.version>5.9.2</junit-jupiter-engine.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <testcontainers.postgresql.version>1.18.3</testcontainers.postgresql.version>
+        <mockk.version>1.13.5</mockk.version>
+        <springmockk.version>4.0.2</springmockk.version>
     </properties>
 
     <repositories>
@@ -87,6 +89,18 @@
                 <version>${project.version}</version>
             </dependency>
             <!-- Project artifacts -->
+            <dependency>
+                <groupId>io.mockk</groupId>
+                <artifactId>mockk-jvm</artifactId>
+                <version>${mockk.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ninja-squad</groupId>
+                <artifactId>springmockk</artifactId>
+                <version>${springmockk.version}</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>postgresql</artifactId>
