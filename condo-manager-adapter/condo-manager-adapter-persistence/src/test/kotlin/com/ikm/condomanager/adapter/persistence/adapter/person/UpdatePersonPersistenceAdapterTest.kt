@@ -1,7 +1,6 @@
 package com.ikm.condomanager.adapter.persistence.adapter.person
 
 import com.ikm.condomanager.adapter.persistence.converter.convertToPerson
-import com.ikm.condomanager.adapter.persistence.converter.convertToPersonEntity
 import com.ikm.condomanager.adapter.persistence.converter.mergeToPersonEntity
 import com.ikm.condomanager.adapter.persistence.entity.PersonEntity
 import com.ikm.condomanager.adapter.persistence.repository.PersonRepository
@@ -9,7 +8,7 @@ import com.ikm.condomanager.domain.DomainId
 import com.ikm.condomanager.domain.Person
 import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.exception.NotFoundException
-import com.ikm.condomanager.port.person.SavePersonPort
+import com.ikm.condomanager.port.person.UpdatePersonPort
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.mockk
@@ -22,40 +21,24 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.lang.IllegalStateException
 import java.util.Optional
 import kotlin.test.assertTrue
 
 /**
- * Spring test for [SavePersonPersistenceAdapter].
+ * Spring test for [UpdatePersonPersistenceAdapter].
  */
 @ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes = [SavePersonPersistenceAdapter::class])
-class SavePersonPersistenceAdapterTest {
+@ContextConfiguration(classes = [UpdatePersonPersistenceAdapter::class])
+class UpdatePersonPersistenceAdapterTest {
     @MockkBean
     lateinit var personRepository: PersonRepository
 
     @Autowired
-    lateinit var savePersonPort: SavePersonPort
+    lateinit var updatePersonPort: UpdatePersonPort
 
     @Test
-    fun `given Person#id is null, when save, should create Person`() {
-        // given
-        mockkStatic(Person::convertToPersonEntity, PersonEntity::convertToPerson)
-        val person = spyk(Person(id = null, name = "John Doe"))
-        val personEntity = PersonEntity(name = "John Doe")
-        every { person.convertToPersonEntity() } returns personEntity
-        val savedPersonEntity = mockk<PersonEntity>()
-        every { personRepository.save(personEntity) } returns savedPersonEntity
-        val savedPerson = mockk<Person>()
-        every { savedPersonEntity.convertToPerson() } returns savedPerson
-        // when
-        val result = savePersonPort.save(person)
-        // then
-        assertSame(savedPerson, result)
-    }
-
-    @Test
-    fun `given Person#id not null, when save, should update Person`() {
+    fun `should update Person`() {
         // given
         mockkStatic(Person::mergeToPersonEntity, PersonEntity::convertToPerson)
         val person = spyk(Person(id = PersonId("person-id", 0), name = "John Doe"))
@@ -67,9 +50,19 @@ class SavePersonPersistenceAdapterTest {
         val savedPerson = mockk<Person>()
         every { savedPersonEntity.convertToPerson() } returns savedPerson
         // when
-        val result = savePersonPort.save(person)
+        val result = updatePersonPort.update(person)
         // then
         assertSame(savedPerson, result)
+    }
+
+    @Test
+    fun `when Person#id is null, should throw IllegalStateException`() {
+        // given
+        val person = Person(name = "John Doe")
+        // when & then
+        assertThrows<IllegalStateException> {
+            updatePersonPort.update(person)
+        }
     }
 
     @Test
@@ -80,7 +73,7 @@ class SavePersonPersistenceAdapterTest {
         every { personRepository.findByDomainId(id) } returns Optional.empty()
         // when
         val ex = assertThrows<NotFoundException> {
-            savePersonPort.save(person)
+            updatePersonPort.update(person)
         }
         // then
         assertTrue(ex.message?.contains("$id not found") ?: false)
