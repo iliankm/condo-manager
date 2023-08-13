@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>condo-manager-adapter-persistence</module>
+        <module>condo-manager-adapter-web</module>
     </modules>
 
     <artifactId>condo-manager-adapter</artifactId>

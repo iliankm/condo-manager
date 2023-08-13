@@ -1,4 +1,4 @@
-package com.ikm.condomanager.application.person
+package com.ikm.condomanager.application.service.person
 
 import com.ikm.condomanager.domain.Person
 import com.ikm.condomanager.domain.PersonId

@@ -88,6 +88,11 @@
                 <artifactId>condo-manager-adapter-persistence</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ikm.condo-manager</groupId>
+                <artifactId>condo-manager-adapter-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- Project artifacts -->
             <dependency>
                 <groupId>io.mockk</groupId>

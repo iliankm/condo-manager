@@ -55,6 +55,10 @@
             <groupId>com.ikm.condo-manager</groupId>
             <artifactId>condo-manager-adapter-persistence</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ikm.condo-manager</groupId>
+            <artifactId>condo-manager-adapter-web</artifactId>
+        </dependency>
         <!-- Project artifacts -->
 
         <dependency>
