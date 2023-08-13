@@ -27,15 +27,7 @@
         </dependency>
         <dependency>
             <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-use-case</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-out-port</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-application</artifactId>
+            <artifactId>condo-manager-core-domain</artifactId>
         </dependency>
 
         <dependency>

@@ -19,10 +19,6 @@
         </dependency>
         <dependency>
             <groupId>com.ikm.condo-manager</groupId>
-            <artifactId>condo-manager-core-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ikm.condo-manager</groupId>
             <artifactId>condo-manager-core-use-case</artifactId>
         </dependency>
         <dependency>
@@ -49,6 +45,11 @@
             <groupId>io.mockk</groupId>
             <artifactId>mockk-jvm</artifactId>
             <version>${mockk.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
