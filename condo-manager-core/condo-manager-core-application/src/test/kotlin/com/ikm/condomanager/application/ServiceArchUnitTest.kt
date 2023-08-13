@@ -13,6 +13,16 @@ import org.springframework.stereotype.Service
 class ServiceArchUnitTest {
 
     @ArchTest
+    fun `all classes should be annotated with @Component or @Service`(importedClasses: JavaClasses) {
+        classes()
+            .should()
+            .beAnnotatedWith(Component::class.java)
+            .orShould()
+            .beAnnotatedWith(Service::class.java)
+            .check(importedClasses)
+    }
+
+    @ArchTest
     fun `all classes implementing UseCase should be annotated with @Service`(importedClasses: JavaClasses) {
         classes().that()
             .implement(HasName.Predicates.nameEndingWith("UseCase"))
@@ -20,16 +30,6 @@ class ServiceArchUnitTest {
             .haveSimpleNameEndingWith("Service")
             .andShould()
             .beAnnotatedWith(Service::class.java)
-            .check(importedClasses)
-    }
-
-    @ArchTest
-    fun `all classes with names Component should be annotated with @Component`(importedClasses: JavaClasses) {
-        classes().that()
-            .haveSimpleNameEndingWith("Component")
-            .should()
-            .beAnnotatedWith(Component::class.java)
-            .allowEmptyShould(true)
             .check(importedClasses)
     }
 }
