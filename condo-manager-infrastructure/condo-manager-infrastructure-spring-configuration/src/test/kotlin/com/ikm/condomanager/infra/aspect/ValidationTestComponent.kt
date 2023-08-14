@@ -1,4 +1,4 @@
-package com.ikm.condomanager.aspect
+package com.ikm.condomanager.infra.aspect
 
 import com.ikm.condomanager.domain.SelfValidating
 import jakarta.validation.constraints.Max

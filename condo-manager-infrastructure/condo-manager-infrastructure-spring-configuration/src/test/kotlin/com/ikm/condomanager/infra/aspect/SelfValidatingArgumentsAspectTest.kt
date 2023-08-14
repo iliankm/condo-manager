@@ -1,4 +1,4 @@
-package com.ikm.condomanager.aspect
+package com.ikm.condomanager.infra.aspect
 
 import jakarta.validation.ConstraintViolationException
 import org.junit.jupiter.api.Assertions.assertSame
