@@ -18,7 +18,7 @@ class DomainIdTest {
     @MethodSource("validDomainIdParams")
     fun `should be a valid DomainId`(id: String, version: Long?) {
         // given & when
-        val domainId = DomainId(id, version)
+        val domainId = version?.let { DomainId(id, version) } ?: DomainId(id)
         // then
         assertEquals(version, domainId.version)
         assertEquals(id, domainId.id)
