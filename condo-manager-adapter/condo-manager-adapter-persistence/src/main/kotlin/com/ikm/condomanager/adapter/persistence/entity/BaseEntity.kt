@@ -27,7 +27,7 @@ sealed class BaseEntity {
     val version: Long? = null
 
     val domainId: DomainId?
-        get() = if (id != null && version != null) DomainId(id.toString(), version) else null
+        get() = if (id != null) DomainId(id.toString(), version) else null
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)

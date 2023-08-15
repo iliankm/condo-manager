@@ -23,11 +23,7 @@ class BaseRepositoryImpl<T, ID>(
         }
 
     private val findByIdAndVersionQuery = """
-        select o from $entityName o where o.id=:id and o.version=:version
-    """.trimIndent()
-
-    private val findByIdsAndVersionQuery = """
-        select o from $entityName o where CONCAT(o.id, '_ver_', o.version) IN :param
+        select o from $entityName o where o.id=:id and (:version is NULL or o.version=:version)
     """.trimIndent()
 
     override fun findByDomainId(domainId: DomainId): Optional<T & Any> =
@@ -37,11 +33,6 @@ class BaseRepositoryImpl<T, ID>(
                 .setParameter("version", domainId.version)
                 .resultList.firstOrNull()
         )
-
-    override fun findAllByDomainId(ids: Iterable<DomainId>): List<T> =
-        entityManager.createQuery(findByIdsAndVersionQuery, domainClass)
-            .setParameter("param", ids.map { it.id + "_ver_" + it.version })
-            .resultList
 
     override fun deleteByDomainId(domainId: DomainId) {
         findByDomainId(domainId).ifPresent { delete(it) }

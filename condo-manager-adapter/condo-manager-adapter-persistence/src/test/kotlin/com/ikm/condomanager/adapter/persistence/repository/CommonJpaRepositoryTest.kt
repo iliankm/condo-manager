@@ -41,33 +41,10 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
     fun `should find by DomainId`() {
         // when
         val person =
-            personRepository.findByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0))
+            personRepository.findByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac120002"))
         // then
         assertTrue(person.isPresent)
         assertEquals(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0), person.get().domainId)
-    }
-
-    @Test
-    @Sql("/sql/create-person.sql")
-    fun `should find all by EntityId`() {
-        // given
-        val existing = listOf(
-            DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0),
-            DomainId("5f92185c-3452-11ee-be56-0242ac120003", 1),
-            DomainId("5f92185c-3452-11ee-be56-0242ac120004", 2)
-        )
-        // when
-        val result = personRepository.findAllByDomainId(
-            existing +
-                listOf(
-                    DomainId("5f92185c-3452-11ee-be56-0242ac120000", 0),
-                    DomainId("5f92185c-3452-11ee-be56-0242ac120004", 0),
-                    DomainId("5f92185c-3452-11ee-be56-0242ac120003", 10),
-                )
-        )
-        // then
-        assertEquals(3, result.size)
-        assertTrue(result.map { it.domainId }.containsAll(existing))
     }
 
     @Test

@@ -14,7 +14,7 @@ data class DomainId(
     val id: String,
 
     @field:PositiveOrZero
-    val version: Long
+    val version: Long? = null
 ) : SelfValidating<DomainId>() {
     init {
         validate()
