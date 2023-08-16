@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
+import java.util.UUID
 
 /**
  * Unit test for [CreatePersonService].
@@ -19,7 +20,7 @@ class CreatePersonServiceTest {
     fun `should create Person`() {
         // given
         val person = Person(id = null, name = "John Doe")
-        val createdPerson = Person(id = PersonId("person-id", 0), name = "John Doe")
+        val createdPerson = Person(id = PersonId(UUID.randomUUID().toString(), 0), name = "John Doe")
         every { createPersonPort.create(person) } returns createdPerson
         // when
         val res = createPersonUseCase.create(person)

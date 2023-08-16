@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.Optional
+import java.util.UUID
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
@@ -37,7 +38,7 @@ class LoadPersonPersistenceAdapterTest {
     fun `should load Person by id`() {
         // given
         mockkStatic(PersonEntity::convertToPerson)
-        val id = DomainId("person-id", 0)
+        val id = DomainId(UUID.randomUUID().toString(), 0)
         val personEntity = mockk<PersonEntity>()
         val person = Person(id = id, name = "John Doe")
         every { personEntity.convertToPerson() } returns person
@@ -51,7 +52,7 @@ class LoadPersonPersistenceAdapterTest {
     @Test
     fun `should throw NotFoundException`() {
         // given
-        val id = DomainId("person-id", 0)
+        val id = DomainId(UUID.randomUUID().toString(), 0)
         every { personRepository.findByDomainId(id) } returns Optional.empty()
         // when
         val ex = assertThrows<NotFoundException> {

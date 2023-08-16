@@ -26,6 +26,6 @@ class UpdatePersonPersistenceAdapter(
         }.let {
             person.mergeToPersonEntity(it)
         }.let {
-            personRepository.save(it).convertToPerson()
+            personRepository.saveAndFlush(it).convertToPerson()
         }
 }

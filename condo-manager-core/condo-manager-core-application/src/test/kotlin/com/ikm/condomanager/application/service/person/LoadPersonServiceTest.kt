@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
+import java.util.UUID
 
 /**
  * Unit test for [LoadPersonService].
@@ -18,7 +19,7 @@ class LoadPersonServiceTest {
     @Test
     fun `should load Person by id`() {
         // given
-        val personId = PersonId(id = "person-id", version = 2)
+        val personId = PersonId(id = UUID.randomUUID().toString(), version = 2)
         val person = Person(id = personId, name = "John Doe")
         every { loadPersonPort.load(personId) } returns person
         // when

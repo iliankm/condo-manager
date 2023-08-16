@@ -23,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.lang.IllegalStateException
 import java.util.Optional
+import java.util.UUID
 import kotlin.test.assertTrue
 
 /**
@@ -41,12 +42,12 @@ class UpdatePersonPersistenceAdapterTest {
     fun `should update Person`() {
         // given
         mockkStatic(Person::mergeToPersonEntity, PersonEntity::convertToPerson)
-        val person = spyk(Person(id = PersonId("person-id", 0), name = "John Doe"))
+        val person = spyk(Person(id = PersonId(UUID.randomUUID().toString(), 0), name = "John Doe"))
         val personEntity = mockk<PersonEntity>()
         every { personRepository.findByDomainId(person.id!!) } returns Optional.of(personEntity)
         every { person.mergeToPersonEntity(personEntity) } returns personEntity
         val savedPersonEntity = mockk<PersonEntity>()
-        every { personRepository.save(personEntity) } returns savedPersonEntity
+        every { personRepository.saveAndFlush(personEntity) } returns savedPersonEntity
         val savedPerson = mockk<Person>()
         every { savedPersonEntity.convertToPerson() } returns savedPerson
         // when
@@ -68,7 +69,7 @@ class UpdatePersonPersistenceAdapterTest {
     @Test
     fun `should throw NotFoundException`() {
         // given
-        val id = DomainId("person-id", 0)
+        val id = DomainId(UUID.randomUUID().toString(), 0)
         val person = Person(id = id, name = "John Doe")
         every { personRepository.findByDomainId(id) } returns Optional.empty()
         // when
