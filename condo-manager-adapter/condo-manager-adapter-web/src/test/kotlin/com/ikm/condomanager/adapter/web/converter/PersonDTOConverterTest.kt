@@ -1,6 +1,6 @@
 package com.ikm.condomanager.adapter.web.converter
 
-import com.ikm.condomanager.adapter.web.controller.PersonDTO
+import com.ikm.condomanager.adapter.web.dto.PersonDTO
 import com.ikm.condomanager.domain.Person
 import com.ikm.condomanager.domain.PersonId
 import org.junit.jupiter.api.Assertions.assertEquals

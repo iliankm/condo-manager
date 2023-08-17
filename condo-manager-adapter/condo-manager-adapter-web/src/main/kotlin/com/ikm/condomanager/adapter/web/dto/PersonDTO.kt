@@ -1,4 +1,4 @@
-package com.ikm.condomanager.adapter.web.controller
+package com.ikm.condomanager.adapter.web.dto
 
 import com.ikm.condomanager.domain.PersonId
 

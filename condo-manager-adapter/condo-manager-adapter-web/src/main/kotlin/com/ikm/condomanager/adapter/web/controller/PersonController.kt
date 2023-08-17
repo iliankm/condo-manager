@@ -3,6 +3,7 @@ package com.ikm.condomanager.adapter.web.controller
 import com.ikm.condomanager.adapter.web.converter.convertToPerson
 import com.ikm.condomanager.adapter.web.converter.convertToPersonDTO
 import com.ikm.condomanager.adapter.web.converter.mergeToPerson
+import com.ikm.condomanager.adapter.web.dto.PersonDTO
 import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.usecase.person.CreatePersonUseCase
 import com.ikm.condomanager.usecase.person.LoadPersonUseCase
