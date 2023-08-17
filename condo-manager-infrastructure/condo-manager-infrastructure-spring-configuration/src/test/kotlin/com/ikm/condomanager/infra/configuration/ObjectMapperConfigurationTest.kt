@@ -53,7 +53,7 @@ class ObjectMapperConfigurationTest {
         with(result) {
             assertEquals("aaa", p1)
             assertNull(p2)
-            assertEquals(LocalDate.of(1977,5,24), p3)
+            assertEquals(LocalDate.of(1977, 5, 24), p3)
             assertEquals(LocalDateTime.of(1977, 5, 24, 13, 30, 0), p4)
         }
     }
