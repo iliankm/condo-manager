@@ -4,6 +4,7 @@ import com.ikm.condomanager.adapter.web.controller.PersonDTO
 import com.ikm.condomanager.domain.Person
 import com.ikm.condomanager.domain.PersonId
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import java.util.UUID
@@ -28,6 +29,21 @@ class PersonDTOConverterTest {
         assertEquals(personDTO.name, person.name)
         assertEquals(personDTO.email, person.email)
         assertEquals(personDTO.phoneNumber, person.phoneNumber)
+    }
+
+    @Test
+    fun `should convert PersonDTO with nulls to Person`() {
+        // given
+        val personDTO = PersonDTO(
+            name = "John Doe",
+        )
+        // when
+        val person = personDTO.convertToPerson()
+        // then
+        assertEquals(personDTO.name, person.name)
+        assertNull(person.id)
+        assertNull(person.email)
+        assertNull(person.phoneNumber)
     }
 
     @Test
