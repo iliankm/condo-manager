@@ -60,6 +60,11 @@
             <artifactId>springmockk</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.ikm.condo-manager</groupId>
+            <artifactId>condo-manager-infrastructure-spring-configuration</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
