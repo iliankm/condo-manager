@@ -2,7 +2,10 @@ package com.ikm.condomanager.adapter.persistence.repository
 
 import com.ikm.condomanager.adapter.persistence.entity.PersonEntity
 import com.ikm.condomanager.domain.DomainId
+import com.ikm.condomanager.exception.NotFoundException
+import com.ikm.condomanager.exception.VersionNotMatchedException
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
@@ -38,6 +41,42 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
 
     @Test
     @Sql("/sql/create-person.sql")
+    fun `should get by DomainId without version`() {
+        // when
+        val person = personRepository.getByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac120002"))
+        // then
+        assertEquals(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0), person.domainId)
+    }
+
+    @Test
+    @Sql("/sql/create-person.sql")
+    fun `should get by DomainId with version`() {
+        // when
+        val person = personRepository.getByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0))
+        // then
+        assertEquals(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 0), person.domainId)
+    }
+
+    @Test
+    @Sql("/sql/create-person.sql")
+    fun `should throw NotFoundException`() {
+        // when & then
+        assertThrows<NotFoundException> {
+            personRepository.getByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac121111", 0))
+        }
+    }
+
+    @Test
+    @Sql("/sql/create-person.sql")
+    fun `should throw VersionNotMatchedException`() {
+        // when & then
+        assertThrows<VersionNotMatchedException> {
+            personRepository.getByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 10))
+        }
+    }
+
+    @Test
+    @Sql("/sql/create-person.sql")
     fun `should find by DomainId`() {
         // when
         val person =
@@ -56,5 +95,23 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
         personRepository.deleteByDomainId(entityId)
         // then
         assertFalse(personRepository.findByDomainId(entityId).isPresent)
+    }
+
+    @Test
+    @Sql("/sql/create-person.sql")
+    fun `when delete by not existing id, should throw NotFoundException`() {
+        // when & then
+        assertThrows<NotFoundException> {
+            personRepository.deleteByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac121111", 0))
+        }
+    }
+
+    @Test
+    @Sql("/sql/create-person.sql")
+    fun `when delete but the version is not matched, should throw VersionNotMatchedException`() {
+        // when & then
+        assertThrows<VersionNotMatchedException> {
+            personRepository.deleteByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac120002", 10))
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.ikm.condomanager.port.person
 
 import com.ikm.condomanager.domain.Person
 import com.ikm.condomanager.exception.NotFoundException
+import com.ikm.condomanager.exception.VersionNotMatchedException
 
 /**
  * Out port for updating a [Person] in the db.
@@ -14,6 +15,7 @@ interface UpdatePersonPort {
      * @param person the [Person] to be updated.
      * @return the updated [Person].
      * @throws NotFoundException if the [Person] to be updated, identified by [Person.id], is not found in the db.
+     * @throws VersionNotMatchedException if [Person.id?.version] is passed, but it doesn't match version of the object.
      */
     fun update(person: Person): Person
 }

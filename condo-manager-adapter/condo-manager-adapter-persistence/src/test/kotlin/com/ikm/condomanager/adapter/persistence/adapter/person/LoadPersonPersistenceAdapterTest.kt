@@ -5,22 +5,18 @@ import com.ikm.condomanager.adapter.persistence.entity.PersonEntity
 import com.ikm.condomanager.adapter.persistence.repository.PersonRepository
 import com.ikm.condomanager.domain.DomainId
 import com.ikm.condomanager.domain.Person
-import com.ikm.condomanager.exception.NotFoundException
 import com.ikm.condomanager.port.person.LoadPersonPort
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.Optional
 import java.util.UUID
 import kotlin.test.assertSame
-import kotlin.test.assertTrue
 
 /**
  * Spring test for [LoadPersonPersistenceAdapter].
@@ -42,23 +38,10 @@ class LoadPersonPersistenceAdapterTest {
         val personEntity = mockk<PersonEntity>()
         val person = Person(id = id, name = "John Doe")
         every { personEntity.convertToPerson() } returns person
-        every { personRepository.findByDomainId(id) } returns Optional.of(personEntity)
+        every { personRepository.getByDomainId(id) } returns personEntity
         // when
         val result = loadPersonPort.load(id)
         // then
         assertSame(person, result)
-    }
-
-    @Test
-    fun `should throw NotFoundException`() {
-        // given
-        val id = DomainId(UUID.randomUUID().toString(), 0)
-        every { personRepository.findByDomainId(id) } returns Optional.empty()
-        // when
-        val ex = assertThrows<NotFoundException> {
-            loadPersonPort.load(id)
-        }
-        // then
-        assertTrue(ex.message?.contains("$id not found") ?: false)
     }
 }

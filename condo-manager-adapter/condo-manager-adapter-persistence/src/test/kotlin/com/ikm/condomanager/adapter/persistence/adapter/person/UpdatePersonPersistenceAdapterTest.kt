@@ -4,10 +4,8 @@ import com.ikm.condomanager.adapter.persistence.converter.convertToPerson
 import com.ikm.condomanager.adapter.persistence.converter.mergeToPersonEntity
 import com.ikm.condomanager.adapter.persistence.entity.PersonEntity
 import com.ikm.condomanager.adapter.persistence.repository.PersonRepository
-import com.ikm.condomanager.domain.DomainId
 import com.ikm.condomanager.domain.Person
 import com.ikm.condomanager.domain.PersonId
-import com.ikm.condomanager.exception.NotFoundException
 import com.ikm.condomanager.port.person.UpdatePersonPort
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -21,10 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.lang.IllegalStateException
-import java.util.Optional
 import java.util.UUID
-import kotlin.test.assertTrue
 
 /**
  * Spring test for [UpdatePersonPersistenceAdapter].
@@ -44,7 +39,7 @@ class UpdatePersonPersistenceAdapterTest {
         mockkStatic(Person::mergeToPersonEntity, PersonEntity::convertToPerson)
         val person = spyk(Person(id = PersonId(UUID.randomUUID().toString(), 0), name = "John Doe"))
         val personEntity = mockk<PersonEntity>()
-        every { personRepository.findByDomainId(person.id!!) } returns Optional.of(personEntity)
+        every { personRepository.getByDomainId(person.id!!) } returns personEntity
         every { person.mergeToPersonEntity(personEntity) } returns personEntity
         val savedPersonEntity = mockk<PersonEntity>()
         every { personRepository.saveAndFlush(personEntity) } returns savedPersonEntity
@@ -64,19 +59,5 @@ class UpdatePersonPersistenceAdapterTest {
         assertThrows<IllegalStateException> {
             updatePersonPort.update(person)
         }
-    }
-
-    @Test
-    fun `should throw NotFoundException`() {
-        // given
-        val id = DomainId(UUID.randomUUID().toString(), 0)
-        val person = Person(id = id, name = "John Doe")
-        every { personRepository.findByDomainId(id) } returns Optional.empty()
-        // when
-        val ex = assertThrows<NotFoundException> {
-            updatePersonPort.update(person)
-        }
-        // then
-        assertTrue(ex.message?.contains("$id not found") ?: false)
     }
 }

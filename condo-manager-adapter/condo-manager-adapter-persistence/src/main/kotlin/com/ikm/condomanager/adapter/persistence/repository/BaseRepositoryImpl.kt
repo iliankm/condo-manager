@@ -1,6 +1,9 @@
 package com.ikm.condomanager.adapter.persistence.repository
 
+import com.ikm.condomanager.adapter.persistence.entity.BaseEntity
 import com.ikm.condomanager.domain.DomainId
+import com.ikm.condomanager.exception.NotFoundException
+import com.ikm.condomanager.exception.VersionNotMatchedException
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityManager
 import org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation
@@ -12,7 +15,7 @@ import java.util.UUID
 /**
  * Implementation of [BaseRepository].
  */
-class BaseRepositoryImpl<T, ID>(
+class BaseRepositoryImpl<T : BaseEntity, ID : Any>(
     entityInformation: JpaEntityInformation<T, *>,
     private val entityManager: EntityManager
 ) : SimpleJpaRepository<T, ID>(entityInformation, entityManager), BaseRepository<T, ID> {
@@ -26,7 +29,16 @@ class BaseRepositoryImpl<T, ID>(
         select o from $entityName o where o.id=:id and (:version is NULL or o.version=:version)
     """.trimIndent()
 
-    override fun findByDomainId(domainId: DomainId): Optional<T & Any> =
+    @Suppress("UNCHECKED_CAST")
+    override fun getByDomainId(domainId: DomainId): T {
+        checkNotNull(domainId.id)
+        return findById(UUID.fromString(domainId.id) as ID)
+            .orElseThrow { NotFoundException("$entityName with $domainId not found.") }
+            .takeIf { domainId.version == null || domainId.version == it.version }
+            ?: throw VersionNotMatchedException("$entityName version doesn't match the required ${domainId.version}")
+    }
+
+    override fun findByDomainId(domainId: DomainId): Optional<T> =
         Optional.ofNullable(
             entityManager.createQuery(findByIdAndVersionQuery, domainClass)
                 .setParameter("id", UUID.fromString(domainId.id))
@@ -35,6 +47,6 @@ class BaseRepositoryImpl<T, ID>(
         )
 
     override fun deleteByDomainId(domainId: DomainId) {
-        findByDomainId(domainId).ifPresent { delete(it) }
+        delete(getByDomainId(domainId))
     }
 }
