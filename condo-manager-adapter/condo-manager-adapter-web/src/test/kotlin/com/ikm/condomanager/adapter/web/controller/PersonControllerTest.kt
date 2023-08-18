@@ -7,6 +7,7 @@ import com.ikm.condomanager.adapter.web.dto.PersonDTO
 import com.ikm.condomanager.domain.Person
 import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.usecase.person.CreatePersonUseCase
+import com.ikm.condomanager.usecase.person.DeletePersonUseCase
 import com.ikm.condomanager.usecase.person.LoadPersonUseCase
 import com.ikm.condomanager.usecase.person.UpdatePersonUseCase
 import com.ninjasquad.springmockk.MockkBean
@@ -18,6 +19,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
@@ -38,6 +40,9 @@ class PersonControllerTest : BaseControllerTest() {
 
     @MockkBean
     lateinit var updatePersonUseCase: UpdatePersonUseCase
+
+    @MockkBean
+    lateinit var deletePersonUseCase: DeletePersonUseCase
 
     @Autowired
     lateinit var mvc: MockMvc
@@ -125,5 +130,19 @@ class PersonControllerTest : BaseControllerTest() {
             andExpect(jsonPath("$.id.id").value(updatedPersonDTO.id?.id))
             andExpect(jsonPath("$.id.version").value(2))
         }
+    }
+
+    @Test
+    fun `should delete person resource`() {
+        // given
+        val id = PersonId(UUID.randomUUID().toString(), 1)
+        every { deletePersonUseCase.delete(id) } returns Unit
+        // when
+        val result = mvc.perform(
+            delete("/api/v1/persons/{id}", id.id)
+                .header(HttpHeaders.IF_MATCH, 1)
+        )
+        // then
+        result.andExpect(status().isOk)
     }
 }

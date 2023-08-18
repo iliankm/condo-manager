@@ -6,12 +6,14 @@ import com.ikm.condomanager.adapter.web.converter.mergeToPerson
 import com.ikm.condomanager.adapter.web.dto.PersonDTO
 import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.usecase.person.CreatePersonUseCase
+import com.ikm.condomanager.usecase.person.DeletePersonUseCase
 import com.ikm.condomanager.usecase.person.LoadPersonUseCase
 import com.ikm.condomanager.usecase.person.UpdatePersonUseCase
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -29,7 +31,8 @@ import org.springframework.web.bind.annotation.RestController
 class PersonController(
     val createPersonUseCase: CreatePersonUseCase,
     val loadPersonUseCase: LoadPersonUseCase,
-    val updatePersonUseCase: UpdatePersonUseCase
+    val updatePersonUseCase: UpdatePersonUseCase,
+    val deletePersonUseCase: DeletePersonUseCase
 ) {
 
     /**
@@ -79,4 +82,19 @@ class PersonController(
         }.convertToPersonDTO().let {
             ResponseEntity(it, OK)
         }
+
+    /**
+     * DELETE endpoint for deleting a person resource.
+     *
+     * @param id person resource id
+     * @param version person resource version
+     */
+    @DeleteMapping("{id}")
+    fun deletePerson(
+        @PathVariable("id") id: String,
+        @RequestHeader(HttpHeaders.IF_MATCH) version: Long
+    ): ResponseEntity<Unit> {
+        deletePersonUseCase.delete(PersonId(id, version))
+        return ResponseEntity(OK)
+    }
 }
