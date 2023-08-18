@@ -19,6 +19,7 @@ class UpdatePersonPersistenceAdapter(
     override fun update(person: Person): Person =
         person.let {
             checkNotNull(it.id)
+            checkNotNull(it.id!!.version)
             personRepository.getByDomainId(it.id!!)
         }.let {
             person.mergeToPersonEntity(it)

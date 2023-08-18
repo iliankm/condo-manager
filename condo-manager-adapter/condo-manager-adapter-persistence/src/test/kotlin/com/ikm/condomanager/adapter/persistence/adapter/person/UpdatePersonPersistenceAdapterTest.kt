@@ -11,7 +11,6 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.spyk
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -37,13 +36,13 @@ class UpdatePersonPersistenceAdapterTest {
     fun `should update Person`() {
         // given
         mockkStatic(Person::mergeToPersonEntity, PersonEntity::convertToPerson)
-        val person = spyk(Person(id = PersonId(UUID.randomUUID().toString(), 0), name = "John Doe"))
+        val person = Person(id = PersonId(UUID.randomUUID().toString(), 0), name = "John Doe")
         val personEntity = mockk<PersonEntity>()
         every { personRepository.getByDomainId(person.id!!) } returns personEntity
         every { person.mergeToPersonEntity(personEntity) } returns personEntity
         val savedPersonEntity = mockk<PersonEntity>()
         every { personRepository.saveAndFlush(personEntity) } returns savedPersonEntity
-        val savedPerson = mockk<Person>()
+        val savedPerson = Person(id = PersonId(UUID.randomUUID().toString(), 1), name = "John Doe")
         every { savedPersonEntity.convertToPerson() } returns savedPerson
         // when
         val result = updatePersonPort.update(person)
@@ -55,6 +54,16 @@ class UpdatePersonPersistenceAdapterTest {
     fun `when Person#id is null, should throw IllegalStateException`() {
         // given
         val person = Person(name = "John Doe")
+        // when & then
+        assertThrows<IllegalStateException> {
+            updatePersonPort.update(person)
+        }
+    }
+
+    @Test
+    fun `when Person#id#version is null, should throw IllegalStateException`() {
+        // given
+        val person = Person(id = PersonId(UUID.randomUUID().toString()), name = "John Doe")
         // when & then
         assertThrows<IllegalStateException> {
             updatePersonPort.update(person)
