@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional
  * Persistence adapter implementation of [CreatePersonPort].
  */
 @Component
+@Transactional
 class CreatePersonPersistenceAdapter(
     val personRepository: PersonRepository
 ) : CreatePersonPort {
-    @Transactional
     override fun create(person: Person): Person =
         person.convertToPersonEntity().let {
             personRepository.save(it).convertToPerson()

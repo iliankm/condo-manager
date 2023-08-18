@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional
  * Persistence adapter implementation of [UpdatePersonPort].
  */
 @Component
+@Transactional
 class UpdatePersonPersistenceAdapter(
     val personRepository: PersonRepository
 ) : UpdatePersonPort {
-    @Transactional
     override fun update(person: Person): Person =
         person.let {
             checkNotNull(it.id)
