@@ -7,7 +7,7 @@ import jakarta.persistence.Table
 /**
  * JPA entity representing a person.
  */
-@Entity
+@Entity(name = "Person")
 @Table(name = "person")
 class PersonEntity(
     @Column(name = "name", nullable = false, length = 70)

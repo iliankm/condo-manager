@@ -34,8 +34,14 @@ class BaseRepositoryImpl<T : BaseEntity, ID : Any>(
         checkNotNull(domainId.id)
         return findById(UUID.fromString(domainId.id) as ID)
             .orElseThrow { NotFoundException("$entityName with $domainId not found.") }
-            .takeIf { domainId.version == null || domainId.version == it.version }
-            ?: throw VersionNotMatchedException("$entityName version doesn't match the required ${domainId.version}")
+            .let {
+                if (domainId.version != null && domainId.version != it.version) {
+                    throw VersionNotMatchedException(
+                        "$entityName current version ${it.version} doesn't match the required ${domainId.version}"
+                    )
+                }
+                it
+            }
     }
 
     override fun findByDomainId(domainId: DomainId): Optional<T> =
