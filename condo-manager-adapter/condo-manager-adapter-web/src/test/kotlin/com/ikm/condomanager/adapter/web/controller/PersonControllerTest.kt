@@ -14,11 +14,9 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.mockkStatic
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -43,9 +41,6 @@ class PersonControllerTest : BaseControllerTest() {
 
     @MockkBean
     lateinit var deletePersonUseCase: DeletePersonUseCase
-
-    @Autowired
-    lateinit var mvc: MockMvc
 
     @Test
     fun `should create person resource`() {
