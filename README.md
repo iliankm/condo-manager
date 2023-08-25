@@ -49,6 +49,22 @@ https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
   ## condo-manager-test
   
 # Build and run
+``./mvnw test`` </br>
+Compiles the source code and runs unit tests. </br>
+</br>
+``./mvnw package`` </br>
+Packages Spring Boot executable jar in the ``condo-manager-spring-boot-app/target`` directory. </br>
+Builds docker image in the local repository with tag: ``condo-manager:${project.version}`` </br>
+If the image has tag to be versioned with ``latest``, enable maven profile: ``local-dev`` </br>
+The build of the docker image can be omitted with switching off the maven profile ``build-docker-image`` or via ``./mvnw package -DskipBuildDocker``. </br>
+If any specific image version tag is needed, pass ``image.tag`` property: ``./mvnw package -Dimage.tag=DEV123``</br>
+</br>
+``./mvnw verify`` </br>
+TODO: Runs integration tests against the build image.</br>
+</br>
+``./mvnw install`` </br>
+Installs the maven artifacts in the local maven repo.</br>
+
 # CI
 # Deploy
 
