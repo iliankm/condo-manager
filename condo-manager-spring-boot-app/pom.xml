@@ -12,6 +12,11 @@
     <artifactId>condo-manager-spring-boot-app</artifactId>
     <name>Condominium Manager - Spring Boot Application</name>
 
+    <properties>
+        <image.tag>${project.version}</image.tag>
+        <spring-boot.build-image.imageName>condo-manager:${image.tag}</spring-boot.build-image.imageName>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,4 +93,38 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>build-docker-image</id>
+            <activation>
+                <property>
+                    <name>!skipBuildDocker</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>build-docker-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build-image</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>local-dev</id>
+            <properties>
+                <image.tag>latest</image.tag>
+            </properties>
+        </profile>
+    </profiles>
 </project>

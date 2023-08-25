@@ -4,23 +4,19 @@ services:
     image: postgres:15.3
     restart: always
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: condo-manager
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data
-  keycloak:
-    image: jboss/keycloak:9.0.2
+  condo-mamager:
+    image: condo-manager:latest
     ports:
-      - 8080:8080
+      - "8080:8080"
+      - "5005:5005"
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: q
-      DB_VENDOR: postgres
-      DB_ADDR: postgres:5432
-      DB_USER: postgres
-      DB_PASSWORD: q
-    volumes:
-      - ~/IdeaProjects/awina-keycloak/themes/awina:/opt/jboss/keycloak/themes/awina
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      SPRING_PROFILES_ACTIVE: dev
+      CONDOMANAGER_DB_HOST: postgres
