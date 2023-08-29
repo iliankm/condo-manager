@@ -11,7 +11,7 @@ services:
       POSTGRES_DB: condo-manager
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data
-  condo-mamager:
+  condo-manager:
     image: condo-manager:latest
     ports:
       - "8080:8080"

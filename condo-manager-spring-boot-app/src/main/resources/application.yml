@@ -5,3 +5,9 @@ spring:
     url: jdbc:postgresql://${condomanager.db.host}:${condomanager.db.port}/${condomanager.db.dbname}
     username: ${condomanager.db.username}
     password: ${condomanager.db.password}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
