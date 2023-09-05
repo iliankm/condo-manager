@@ -54,9 +54,9 @@ Compiles the source code and runs unit tests. </br>
 </br>
 ``./mvnw package`` </br>
 Packages Spring Boot executable jar in the ``condo-manager-spring-boot-app/target`` directory. </br>
-Builds docker image in the local repository with tag: ``condo-manager:${project.version}`` </br>
-If the image has tag to be versioned with ``latest``, enable maven profile: ``local-dev`` </br>
-The build of the docker image can be omitted with switching off the maven profile ``build-docker-image`` or via ``./mvnw package -DskipBuildDocker``. </br>
+Builds docker image in the local repository with tag: ``condo-manager:${image.tag}`` </br>
+The Maven property ``image.tag`` default value is ``latest`` </br>
+Building the docker image can be omitted with switching off the maven profile ``build-docker-image`` or via ``./mvnw package -DskipBuildDocker``. </br>
 If any specific image version tag is needed, pass ``image.tag`` property: ``./mvnw package -Dimage.tag=DEV123``</br>
 </br>
 ``./mvnw verify`` </br>
