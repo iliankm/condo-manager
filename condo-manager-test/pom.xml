@@ -10,6 +10,9 @@
     </parent>
 
     <packaging>pom</packaging>
+    <modules>
+        <module>condo-manager-integration-test</module>
+    </modules>
 
     <artifactId>condo-manager-test</artifactId>
     <name>Condominium Manager - Test</name>

@@ -12,11 +12,6 @@
     <artifactId>condo-manager-spring-boot-app</artifactId>
     <name>Condominium Manager - Spring Boot Application</name>
 
-    <properties>
-        <image.tag>latest</image.tag>
-        <spring-boot.build-image.imageName>condo-manager:${image.tag}</spring-boot.build-image.imageName>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,7 +56,7 @@
             <artifactId>condo-manager-adapter-persistence</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ikm.condo-manager</groupId>${project.version
+            <groupId>com.ikm.condo-manager</groupId>
             <artifactId>condo-manager-adapter-web</artifactId>
         </dependency>
         <!-- Project artifacts -->
