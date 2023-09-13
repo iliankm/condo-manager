@@ -1,0 +1,17 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:15.3
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: condo-manager
+  condo-manager:
+    image: condo-manager:${IMAGE_TAG}
+    environment:
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      SPRING_PROFILES_ACTIVE: integration-test
+      SPRING_CONFIG_LOCATION: /config/
+    volumes:
+      - ../config:/config
