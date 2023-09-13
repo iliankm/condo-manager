@@ -15,3 +15,4 @@ services:
       SPRING_CONFIG_LOCATION: /config/
     volumes:
       - ../config:/config
+      - ../logs/integration-test:/workspace/logs

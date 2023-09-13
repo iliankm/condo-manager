@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+logs/spring**.log
+logs/integration-test/spring**.log
