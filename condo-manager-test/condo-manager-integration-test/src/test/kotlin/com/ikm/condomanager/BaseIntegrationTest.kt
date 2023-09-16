@@ -7,6 +7,9 @@ import org.testcontainers.containers.wait.strategy.Wait
 import java.io.File
 import java.time.Duration
 
+/**
+ * Base class for integration tests.
+ */
 sealed class BaseIntegrationTest {
     companion object {
         private const val POSTGRE_SQL_PORT = 5432
@@ -16,7 +19,7 @@ sealed class BaseIntegrationTest {
         private const val CONDO_MANAGER_APP_SERVICE_NAME = "condo-manager_1"
 
         @JvmStatic
-        protected val environment: DockerComposeContainer<*> =
+        private val environment: DockerComposeContainer<*> =
             DockerComposeContainer(File("../../docker/docker-compose-integration-test.yml"))
                 .withExposedService(
                     POSTGRE_SQL_SERVICE_NAME,
