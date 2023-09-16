@@ -47,6 +47,10 @@ https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
     Spring Boot application packaging all application modules and dependencies.
   
   ## condo-manager-test
+  ### condo-manager-integration-test
+Real integration tests for the REST api. </br> 
+All tests are run against a real environment and the docker image produced by the build: ``condo-manager:${image.tag}``. </br>
+Tech stack: [Testcontainers](https://testcontainers.com/) with [REST Assured](https://rest-assured.io/).
   
 # Build and run
 ``./mvnw test`` </br>
@@ -60,10 +64,16 @@ Building the docker image can be omitted with switching off the maven profile ``
 If any specific image version tag is needed, pass ``image.tag`` property: ``./mvnw package -Dimage.tag=DEV123``</br>
 </br>
 ``./mvnw verify`` </br>
-TODO: Runs integration tests against the build image.</br>
+Runs integration tests against the build image.</br>
 </br>
 ``./mvnw install`` </br>
 Installs the maven artifacts in the local maven repo.</br>
+</br>
+``./mvnw install -DskipTests`` </br>
+Skip unit and integration tests.</br>
+</br>
+``./mvnw install -DskipITs`` </br>
+Skip integration tests.</br>
 
 # CI
 # Deploy
