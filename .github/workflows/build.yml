@@ -20,7 +20,7 @@ jobs:
     - name: Compile and code linting
       run: ./mvnw -B compile -DskipTests
     - name: Package
-      run: ./mvnw -B package -DskipTests -DskipITs -DskipBuildDocker
+      run: ./mvnw -B install -DskipTests -DskipITs -DskipBuildDocker
     - name: Build docker image
       run: ./mvnw spring-boot:build-image -pl condo-manager-spring-boot-app -DskipTests
 
