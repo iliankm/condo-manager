@@ -72,8 +72,11 @@ Installs the maven artifacts in the local maven repo.</br>
 ``./mvnw install -DskipTests`` </br>
 Skip unit and integration tests.</br>
 </br>
+``./mvnw install -DskipUTs`` </br>
+Skip only unit tests.</br>
+</br>
 ``./mvnw install -DskipITs`` </br>
-Skip integration tests.</br>
+Skip only integration tests.</br>
 
 # CI
 # Deploy
