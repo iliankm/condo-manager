@@ -63,4 +63,4 @@ jobs:
       - name: Load image in docker
         run: docker load --input /tmp/condo-manager-image.tar
       - name: Run integration tests
-        run: ./mvnw -B verify -pl condo-manager-integration-test
+        run: ./mvnw -B verify -pl condo-manager-test/condo-manager-integration-test
