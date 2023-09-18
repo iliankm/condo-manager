@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -16,8 +17,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build and package
-      run: ./mvnw -B package -DskipTests -DskipITs
+    - name: Compile and code linting
+      run: ./mvnw -B compile -DskipTests
+    - name: Package
+      run: ./mvnw -B package -DskipTests -DskipITs -DskipBuildDocker
+    - name: Build docker image
+      run: ./mvnw spring-boot:build-image -pl condo-manager-spring-boot-app -DskipTests
 
   unit-tests:
     runs-on: ubuntu-latest
