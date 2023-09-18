@@ -43,7 +43,7 @@ jobs:
             cache: maven
         - name: Run unit tests
           run: ./mvnw -B test -DskipITs
-  
+
   integration-tests:
     name: Run integration tests
     runs-on: ubuntu-latest
@@ -63,4 +63,6 @@ jobs:
       - name: Load image in docker
         run: docker load --input /tmp/condo-manager-image.tar
       - name: Run integration tests
-        run: ./mvnw -B verify -pl condo-manager-test/condo-manager-integration-test
+        run: |
+          ./mvnw -B install -pl condo-manager-adapter/condo-manager-adapter-web -DskipTests 
+          ./mvnw -B verify -pl condo-manager-test/condo-manager-integration-test
