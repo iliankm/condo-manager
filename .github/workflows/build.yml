@@ -18,7 +18,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Compile, code linting, package and build docker image
-      run: ./mvnw -B package -DskipTests
+      run: ./mvnw -B verify -DskipTests
     - name: Export docker image in a .tar file
       run: docker save condo-manager:latest > /tmp/condo-manager-image.tar
     - name: Upload docker image .tar file
