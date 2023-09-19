@@ -21,7 +21,7 @@ jobs:
       run: ./mvnw -B verify -DskipTests -DskipBuildDocker
 
   unit-tests:
-    name: Run unit tests
+    name: Unit tests
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -35,7 +35,7 @@ jobs:
           run: ./mvnw -B test
 
   integration-tests:
-    name: Run integration tests
+    name: Integration tests
     runs-on: ubuntu-latest
     needs: build
     steps:
