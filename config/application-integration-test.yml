@@ -7,4 +7,4 @@ condomanager:
     password: postgres
 
 logging:
-  level.root: DEBUG
+  level.root: INFO
