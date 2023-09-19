@@ -5,3 +5,6 @@ condomanager:
     dbname: condo-manager
     username: postgres
     password: postgres
+
+logging:
+  level.root: DEBUG
