@@ -17,15 +17,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Compile, code linting, package and build docker image
-      run: ./mvnw -B verify -DskipTests
-    - name: Export docker image in a .tar file
-      run: docker save condo-manager:latest > /tmp/condo-manager-image.tar
-    - name: Upload docker image .tar file
-      uses: actions/upload-artifact@v3
-      with:
-        name: condo-manager-image
-        path: /tmp/condo-manager-image.tar
+    - name: Compile and code linting
+      run: ./mvnw -B verify -DskipTests -DskipBuildDocker
 
   unit-tests:
     name: Run unit tests
@@ -52,12 +45,5 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - name: Download image .tar file
-        uses: actions/download-artifact@v3
-        with:
-          name: condo-manager-image
-          path: /tmp
-      - name: Load image in docker
-        run: docker load --input /tmp/condo-manager-image.tar
-      - name: Run integration tests
-        run: ./mvnw -B verify -DskipUTs -DskipBuildDocker -Ddetekt.skip
+      - name: Build docker image and run integration tests
+        run: ./mvnw -B verify -DskipUTs -Ddetekt.skip
