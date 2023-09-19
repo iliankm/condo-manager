@@ -46,11 +46,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build docker image and run integration tests
-        run: | 
-          ./mvnw -B verify -DskipUTs -Ddetekt.skip
-          cp logs/integration-test/spring.log /tmp/spring.log
+        run: ./mvnw -B verify -DskipUTs -Ddetekt.skip
+      - name: Collect docker logs on failure
+        uses: jwalton/gh-docker-logs@v2
+        with:
+          images: 'condo-manager'
+          dest: 'logs/integration-test'
       - name: Upload container logs
         uses: actions/upload-artifact@v3
         with:
           name: integration-tests-container-logs
-          path: /tmp/spring.log
+          path: logs/integration-test/*
