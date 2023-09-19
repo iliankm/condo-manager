@@ -19,9 +19,9 @@
     <modules>
         <module>condo-manager-core</module>
         <module>condo-manager-adapter</module>
-        <module>condo-manager-test</module>
         <module>condo-manager-infrastructure</module>
         <module>condo-manager-spring-boot-app</module>
+        <module>condo-manager-test</module>
     </modules>
 
     <name>Condominium Manager</name>
