@@ -47,3 +47,10 @@ jobs:
           cache: maven
       - name: Build docker image and run integration tests
         run: ./mvnw -B verify -DskipUTs -Ddetekt.skip
+      - name: List logs directory
+        run: ls -l logs/integration-test/
+      - name: Upload container logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-tests-container-logs
+          path: logs/integration-test/*
