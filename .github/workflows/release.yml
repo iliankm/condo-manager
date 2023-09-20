@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version to be released'
+        default: ''
+        required: true
+        type: string
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v3
+        with:
+          ref: release
+      - name: Reset release branch onto dev
+        run: |
+          git fetch origin dev --depth 1
+          git reset --hard origin/dev
+          git push --force
