@@ -13,7 +13,7 @@
 
     <groupId>com.ikm.condo-manager</groupId>
     <artifactId>condo-manager</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -31,6 +31,7 @@
         <kotlin.code.style>official</kotlin.code.style>
 
         <!-- Versions -->
+        <revision>1.0-SNAPSHOT</revision>
         <java.version>17</java.version>
         <kotlin.version>1.9.0</kotlin.version>
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
