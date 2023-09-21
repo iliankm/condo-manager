@@ -31,14 +31,6 @@ jobs:
           git commit -am "Set version to ${{ inputs.release-version }}"
           git push --force
       - name: Create Pull Request for the release branch
-        uses: devops-infra/action-pull-request@v0.5.5
-        with:
-          github_token: ${{ secrets.ACTIONS_TOKEN }}
-          source_branch: release
-          target_branch: main
-          title: Merge release branch for version ${{ inputs.release-version }} in main
-          label: release
-          milestone: Version ${{ inputs.release-version }}
-          draft: false
-          get_diff: true
-          allow_no_diff: true
+        run: gh pr create -B main -H release --title "Merge release branch into main for version ${{ inputs.release-version }}" --body "Created by Github action"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
