@@ -22,9 +22,11 @@ jobs:
         run: |
           git fetch origin dev --depth 1
           git reset --hard origin/dev
+      - name: Setup git user
+        uses: fregante/setup-git-user@v2
       - name: Set project release version
         run: |
           ./mvnw versions:set-property -Dproperty=revision -DnewVersion=${{ inputs.release-version }}
           ./mvnw versions:commit
-          git commit -am "Set version to ${{ inputs.release-version }}"
+          git commit -m "Set version to ${{ inputs.release-version }}"
           git push --force
