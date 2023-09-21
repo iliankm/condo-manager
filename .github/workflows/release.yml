@@ -3,7 +3,7 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version:
+      release-version:
         description: 'The version to be released'
         default: ''
         required: true
@@ -22,4 +22,15 @@ jobs:
         run: |
           git fetch origin dev --depth 1
           git reset --hard origin/dev
+      - name: Setup git user
+        uses: fregante/setup-git-user@v2
+      - name: Set project release version
+        run: |
+          ./mvnw versions:set-property -Dproperty=revision -DnewVersion=${{ inputs.release-version }}
+          ./mvnw versions:commit
+          git commit -am "Set version to ${{ inputs.release-version }}"
           git push --force
+      - name: Create Pull Request for the release branch
+        run: gh pr create -B main -H release --title "Merge release branch into main for version ${{ inputs.release-version }}" --body "Created by Github action"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
