@@ -40,3 +40,5 @@ jobs:
           label: release
           milestone: Version ${{ inputs.release-version }}
           draft: false
+          get_diff: true
+          allow_no_diff: true
