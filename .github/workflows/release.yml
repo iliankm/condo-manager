@@ -31,8 +31,12 @@ jobs:
           git commit -am "Set version to ${{ inputs.release-version }}"
           git push --force
       - name: Create Pull Request for the release branch
-        uses: peter-evans/create-pull-request@v5
+        uses: devops-infra/action-pull-request@v0.5.5
         with:
-          token: ${{ secrets.ACTIONS_TOKEN }}
-          branch: main
-          base: release
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          source_branch: release
+          target_branch: main
+          title: Merge release branch for version ${{ inputs.release-version }} in main
+          label: release
+          milestone: Version ${{ inputs.release-version }}
+          draft: false
