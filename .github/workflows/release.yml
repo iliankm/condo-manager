@@ -16,7 +16,9 @@ jobs:
     steps:
       - name: Check
         if: contains(fromJSON(vars.RELEASE_WORKFLOW_ALLOWED_USERS), github.actor) != true
-        run: exit 1
+        run: |
+          echo "User is not authorized to run the workflow"
+          exit 1
   release:
     name: Release
     runs-on: ubuntu-latest
