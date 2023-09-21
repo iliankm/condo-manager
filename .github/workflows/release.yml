@@ -34,5 +34,5 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.ACTIONS_TOKEN }}
-          branch: release
-          base: main
+          branch: main
+          base: release
