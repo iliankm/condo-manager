@@ -12,13 +12,9 @@ on:
 jobs:
   release:
     name: Release
+    if: contains(vars.RELEASE_WORKFLOW_ALLOWED_USERS, github.actor)
     runs-on: ubuntu-latest
     steps:
-      - name: Show GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-        shell: bash
       - name: Checkout release branch
         uses: actions/checkout@v3
         with:
