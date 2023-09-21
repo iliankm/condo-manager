@@ -10,10 +10,17 @@ on:
         type: string
 
 jobs:
+  authorize:
+    name: Authorize the user running the workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check
+        if: !contains(fromJSON(vars.RELEASE_WORKFLOW_ALLOWED_USERS), github.actor)
+        run: exit 1
   release:
     name: Release
-    if: contains(vars.RELEASE_WORKFLOW_ALLOWED_USERS, github.actor)
     runs-on: ubuntu-latest
+    needs: authorize
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v3
