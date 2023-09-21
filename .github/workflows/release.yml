@@ -25,10 +25,14 @@ jobs:
       - name: Setup git user
         uses: fregante/setup-git-user@v2
       - name: Set project release version
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         run: |
           ./mvnw versions:set-property -Dproperty=revision -DnewVersion=${{ inputs.release-version }}
           ./mvnw versions:commit
           git commit -am "Set version to ${{ inputs.release-version }}"
           git push --force
+      - name: Create Pull Request for the release branch
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          branch: release
+          base: main
