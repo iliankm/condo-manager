@@ -12,6 +12,7 @@ on:
 jobs:
   release:
     name: Release
+    if: contains(vars.RELEASE_WORKFLOW_ALLOWED_USERS, github.actor)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout release branch
