@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check
-        if: !contains(fromJSON(vars.RELEASE_WORKFLOW_ALLOWED_USERS), github.actor)
+        if: ${{ !contains(fromJSON(vars.RELEASE_WORKFLOW_ALLOWED_USERS), github.actor) }}
         run: exit 1
   release:
     name: Release
