@@ -28,5 +28,5 @@ jobs:
         run: |
           ./mvnw versions:set-property -Dproperty=revision -DnewVersion=${{ inputs.release-version }}
           ./mvnw versions:commit
-          git commit -m "Set version to ${{ inputs.release-version }}"
+          git commit -am "Set version to ${{ inputs.release-version }}"
           git push --force
