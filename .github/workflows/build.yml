@@ -59,3 +59,14 @@ jobs:
         with:
           name: integration-tests-container-logs
           path: logs/integration-test/*
+  merge-release-pr:
+    name: Merge release PR
+    needs: [build, unit-tests, integration-tests]
+    if: github.ref == 'refs/heads/release' && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Merge PR for the release branch
+        run: gh pr merge --merge --subject "Merge release branch for version ${{ inputs.release-version }} in main."
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
