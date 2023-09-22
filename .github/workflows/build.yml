@@ -11,6 +11,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+    - run: echo ref=${{ github.ref }} event_name=${{ github.event_name }}
     - uses: actions/checkout@v3
     - uses: actions/setup-java@v3
       with:
@@ -59,3 +60,16 @@ jobs:
         with:
           name: integration-tests-container-logs
           path: logs/integration-test/*
+  merge-release-pr:
+    name: Merge release PR
+    needs: [build, unit-tests, integration-tests]
+    if: github.event_name == 'pull_request' && github.head_ref == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: release
+      - name: Merge PR for the release branch
+        run: gh pr merge --merge --subject "Merge release branch for version ${{ inputs.release-version }} in main."
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
