@@ -63,7 +63,7 @@ jobs:
   merge-release-pr:
     name: Merge release PR
     needs: [build, unit-tests, integration-tests]
-    if: github.ref == 'refs/heads/release' && github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.head_ref == 'release'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
