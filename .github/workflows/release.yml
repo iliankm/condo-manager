@@ -38,9 +38,9 @@ jobs:
         run: |
           ./mvnw versions:set-property -Dproperty=revision -DnewVersion=${{ inputs.release-version }}
           ./mvnw versions:commit
-          git commit -am "Set version to ${{ inputs.release-version }}"
+          git commit -am "Set pom version to ${{ inputs.release-version }}"
           git push --force
-      - name: Create Pull Request for the release branch
-        run: gh pr create -B main -H release --title "Merge release branch into main for version ${{ inputs.release-version }}" --body "Created by Github action"
+      - name: Create PR for the release branch
+        run: gh pr create -B main -H release --title "[PR] Merge release branch for version ${{ inputs.release-version }} into main" --body "Created by Github action"
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
