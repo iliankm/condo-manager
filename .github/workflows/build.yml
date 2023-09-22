@@ -19,6 +19,7 @@ jobs:
         cache: maven
     - name: Compile and code linting
       run: ./mvnw -B verify -DskipTests -DskipBuildDocker
+    - run: echo ${{ github }}
 
   unit-tests:
     name: Unit tests
