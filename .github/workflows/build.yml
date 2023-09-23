@@ -60,6 +60,29 @@ jobs:
         with:
           name: integration-tests-container-logs
           path: logs/integration-test/*
+  publish-docker-image:
+    name: Publish docker image
+    needs: [build, unit-tests, integration-tests]
+    if: github.event_name == 'pull_request' && github.head_ref == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: release
+      - name: Image name
+        run: |
+          VERSION=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
+          IMAGE_NAME=ghcr.io/condo-manager:$VERSION
+      - name: Build docker image
+        run: ./mvnw -B package -DskipTests -Dspring-boot.build-image.imageName=$IMAGE_NAME
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push image
+        run: docker push $IMAGE_NAME
   merge-release-pr:
     name: Merge release PR and tag main
     needs: [build, unit-tests, integration-tests]
