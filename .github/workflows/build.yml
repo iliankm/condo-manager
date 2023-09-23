@@ -78,10 +78,11 @@ jobs:
           ref: main
       - name: Setup git user
         uses: fregante/setup-git-user@v2
-      - name: Tag main branch
+      - name: Tag main branch and create release
         run: |
           VERSION=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
           git tag -a v$VERSION -m "Version $VERSION"
           git push origin --tag
+          gh release create v$VERSION --generate-notes
         env:
           GITHUB_TOKEN: ${{ github.token }}
