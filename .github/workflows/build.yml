@@ -76,8 +76,9 @@ jobs:
           cache: maven
       - name: Image name
         run: |
-          VERSION=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
-          IMAGE_NAME=ghcr.io/condo-manager:$VERSION
+          version=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
+          imageName=ghcr.io/condo-manager:$version
+          echo "IMAGE_NAME=$imageName" >> $GITHUB_ENV
       - name: Build docker image
         run: ./mvnw -B package -DskipTests -Dspring-boot.build-image.imageName=$IMAGE_NAME
       - name: Login to GitHub Container Registry
