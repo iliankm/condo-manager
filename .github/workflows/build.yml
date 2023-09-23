@@ -77,7 +77,7 @@ jobs:
       - name: Image name
         run: |
           version=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
-          imageName=ghcr.io/condo-manager:$version
+          imageName=ghcr.io/iliankm/condo-manager/condo-manager:$version
           echo "IMAGE_NAME=$imageName" >> $GITHUB_ENV
       - name: Build docker image
         run: ./mvnw -B package -DskipTests -Dspring-boot.build-image.imageName=$IMAGE_NAME
