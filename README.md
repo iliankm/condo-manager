@@ -79,5 +79,13 @@ Skip only unit tests.</br>
 Skip only integration tests.</br>
 
 # CI
+Continuous integration is introduced in [Github Actions](https://github.com/iliankm/condo-manager/actions) via the following workflows:
+### [Build](https://github.com/iliankm/condo-manager/actions/workflows/build.yml) workflow
+Multibranch workflow triggered automatically on each branch push or pull request.
+There's special handling if it is a pull request for the `release` branch. 
+In that case additional jobs are triggered:
+- build and publish the docker image for the release version
+- merging and tagging the release PR in the `main` branch. 
+
 # Deploy
 
