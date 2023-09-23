@@ -61,7 +61,7 @@ jobs:
           name: integration-tests-container-logs
           path: logs/integration-test/*
   merge-release-pr:
-    name: Merge release PR
+    name: Merge release PR and tag main
     needs: [build, unit-tests, integration-tests]
     if: github.event_name == 'pull_request' && github.head_ref == 'release'
     runs-on: ubuntu-latest
@@ -72,4 +72,16 @@ jobs:
       - name: Merge release PR
         run: gh pr merge --merge --subject "Merge release branch into main."
         env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Setup git user
+        uses: fregante/setup-git-user@v2
+      - name: Tag main branch
+        run: |
+          VERSION=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
+          git tag -a v$VERSION -m "Version $VERSION"
+          git push origin --tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
