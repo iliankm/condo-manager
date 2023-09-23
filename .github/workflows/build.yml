@@ -71,5 +71,13 @@ jobs:
           ref: release
       - name: Merge release PR
         run: gh pr merge --merge --subject "Merge release branch into main."
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Tag main branch
+        run: |
+          VERSION=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
+          git tag -a v$VERSION -m "Version $VERSION"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
