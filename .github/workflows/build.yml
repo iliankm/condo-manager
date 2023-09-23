@@ -82,6 +82,6 @@ jobs:
         run: |
           VERSION=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
           git tag -a v$VERSION -m "Version $VERSION"
-          git push origin –-tag
+          git push origin --tag
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
