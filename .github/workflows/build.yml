@@ -80,9 +80,12 @@ jobs:
     if: github.event_name == 'pull_request' && github.head_ref == 'release'
     runs-on: ubuntu-latest
     steps:
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v7
       - uses: actions/checkout@v3
         with:
-          ref: release
+          ref: ${{ steps.branch-name.outputs.current_branch }}
       - uses: actions/setup-java@v3
         with:
           java-version: '17'
