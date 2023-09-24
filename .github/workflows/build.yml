@@ -33,7 +33,18 @@ jobs:
             distribution: 'temurin'
             cache: maven
         - name: Run unit tests
-          run: ./mvnw -B test
+          run: ./mvnw -B verify -DskipITs -Ddetekt.skip
+        - name: Add coverage to PR
+          if: github.event_name == 'pull_request'
+          uses: madrapps/jacoco-report@v1.6.1
+          with:
+            paths: |
+              ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
+            token: ${{ secrets.GITHUB_TOKEN }}
+            min-coverage-overall: 80
+            min-coverage-changed-files: 80
+            title: Code Coverage
+            update-comment: true
 
   integration-tests:
     name: Integration tests
