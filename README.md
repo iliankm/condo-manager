@@ -79,13 +79,34 @@ Skip only unit tests.</br>
 Skip only integration tests.</br>
 
 # CI
-Continuous integration is introduced in [Github Actions](https://github.com/iliankm/condo-manager/actions) via the following workflows:
+Continuous integration is introduced in [GitHub Actions](https://github.com/iliankm/condo-manager/actions) via the following workflows:
 ### [Build](https://github.com/iliankm/condo-manager/actions/workflows/build.yml) workflow
-Multibranch workflow triggered automatically on each branch push or pull request.
+Multibranch workflow triggered automatically on each branch push or pull request. </br>
+The code is being compiled, lint, tested (unit and integration tests), code coverage is reported in the PRs etc.
+
+Docker image is being built and published to the [registry](https://github.com/iliankm?tab=packages&repo_name=condo-manager)
+The image tag depends on the branch that was built:
+- `dev` -> condo-manager:latest
+- `release` -> condo-manager:0.1 (the released version)
+- `some_feature_branch` -> condo-manager:some_feature_branch
+
 There's special handling if it is a pull request for the `release` branch. 
-In that case additional jobs are triggered:
-- build and publish the docker image for the release version
-- merging and tagging the release PR in the `main` branch. 
+In that case additional job is triggered for merging and tagging the release PR in the `main` branch.
+
+### [Release](https://github.com/iliankm/condo-manager/actions/workflows/release.yml) workflow
+Manually triggered workflow for preparing a release with a version that is required as an input. </br>
+Only certain users enumerated in RELEASE_WORKFLOW_ALLOWED_USERS variable are allowed to trigger that workflow.
+- `release` branch is reset onto `dev` HEAD
+- pom versions are set to the given input
+- `release` branch is force pushed
+- GitHub PR is created for merging `release` branch into `main`
+
+After the workflow successfully finished, the Build workflow shall be triggered for the `release` branch PR. </br>
+If all the checks are passing, a special job in the Build workflow will merge the PR into `main` and tag the release.
+
+### Deploy workflow
+TODO
 
 # Deploy
+TODO
 
