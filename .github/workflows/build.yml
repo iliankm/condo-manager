@@ -11,8 +11,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - run: echo ref=${{ github.ref }} event_name=${{ github.event_name }}
     - uses: actions/checkout@v3
+    - run: |
+        echo ref=${{ github.ref }} event_name=${{ github.event_name }}
+        branch=`git branch --show-current`
+        echo $branch
     - uses: actions/setup-java@v3
       with:
         java-version: '17'
