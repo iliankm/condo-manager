@@ -41,6 +41,6 @@ jobs:
           git commit -am "Set pom version to ${{ inputs.release-version }}"
           git push --force
       - name: Create PR for the release branch
-        run: gh pr create -B main -H release --title "[PR] Merge release branch for version ${{ inputs.release-version }} into main" --body "Created by Github action"
+        run: gh pr create -B main -H release --title "Release branch for version ${{ inputs.release-version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}

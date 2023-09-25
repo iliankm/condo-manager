@@ -135,7 +135,7 @@ jobs:
         with:
           ref: release
       - name: Merge release PR
-        run: gh pr merge --merge --subject "Merge release branch into main."
+        run: gh pr merge --merge
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/checkout@v3
