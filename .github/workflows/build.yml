@@ -17,8 +17,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Compile and code linting
-      run: ./mvnw -B verify -DskipTests -DskipBuildDocker
+    - name: Compile, code linting, package and build docker image
+      run: ./mvnw -B verify -DskipTests
+    - name: Save docker image to file
+      run: docker save condo-manager:latest > /tmp/condo-manager-image.tar
+    - name: Upload docker image file
+      uses: actions/upload-artifact@v3
+      with:
+        name: condo-manager-image
+        path: /tmp/condo-manager-image.tar
 
   unit-tests:
     name: Unit tests
@@ -56,8 +63,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - name: Build docker image and run integration tests
-        run: ./mvnw -B verify -DskipUTs -Ddetekt.skip
+      - name: Download docker image file
+        uses: actions/download-artifact@v3
+        with:
+          name: condo-manager-image
+          path: /tmp
+      - name: Load docker image
+        run: docker load < /tmp/condo-manager-image.tar
+      - name: Run integration tests
+        run: ./mvnw -B verify -DskipUTs -Ddetekt.skip -DskipBuildDocker
       - name: Collect docker logs on failure
         if: failure()
         uses: jwalton/gh-docker-logs@v2
@@ -92,7 +106,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build docker image and push it to registry
+      - name: Download docker image file
+        uses: actions/download-artifact@v3
+        with:
+          name: condo-manager-image
+          path: /tmp
+      - name: Tag docker image and push it to registry
         run: |
           branch=${{ steps.branch-name.outputs.current_branch }}
           version=branch
@@ -103,7 +122,8 @@ jobs:
             version=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
           fi
           imageName=ghcr.io/iliankm/condo-manager/condo-manager:$version
-          ./mvnw -B package -DskipTests -Dspring-boot.build-image.imageName=$imageName
+          docker load < /tmp/condo-manager-image.tar
+          docker tag condo-manager:latest $imageName
           docker push $imageName
   merge-release-pr:
     name: Merge release PR and tag main
