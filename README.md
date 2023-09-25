@@ -97,16 +97,15 @@ In that case additional job is triggered for merging and tagging the release PR 
 Manually triggered workflow for preparing a release with a version that is required as an input. </br>
 Only certain users enumerated in RELEASE_WORKFLOW_ALLOWED_USERS variable are allowed to trigger that workflow.
 - `release` branch is reset onto `dev` HEAD
-- pom versions are set to the given input
+- pom versions are set according to the given input
 - `release` branch is force pushed
 - GitHub PR is created for merging `release` branch into `main`
 
 After the workflow successfully finished, the Build workflow shall be triggered for the `release` branch PR. </br>
-If all the checks are passing, a special job in the Build workflow will merge the PR into `main` and tag the release.
+If all the checks passed, a special job in the Build workflow will merge the PR into `main` and tag the release.
 
 ### Deploy workflow
 TODO
 
 # Deploy
 TODO
-
