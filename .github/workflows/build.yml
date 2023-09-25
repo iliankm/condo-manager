@@ -114,7 +114,7 @@ jobs:
       - name: Tag docker image and push it to registry
         run: |
           branch=${{ steps.branch-name.outputs.current_branch }}
-          version=branch
+          version=$branch
           if [[ "$branch" == "dev" ]]; then
             version="latest"
           fi
