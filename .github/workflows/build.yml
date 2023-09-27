@@ -115,7 +115,7 @@ jobs:
         run: |
           branch=${{ steps.branch-name.outputs.current_branch }}
           version=$branch
-          if [[ "$branch" == "dev" ]]; then
+          if [[ "$branch" == "main" ]]; then
             version="latest"
           fi
           if [[ "$branch" == "release" ]]; then
