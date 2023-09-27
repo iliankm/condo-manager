@@ -11,9 +11,6 @@ jobs:
     name: Merge release PR and tag main
     runs-on: ubuntu-latest
     steps:
-      - name: Get branch name
-        id: branch-name
-        uses: tj-actions/branch-names@v7
       - uses: actions/checkout@v3
         with:
           ref: release
@@ -28,7 +25,6 @@ jobs:
         uses: fregante/setup-git-user@v2
       - name: Tag main branch and create release
         run: |
-          echo Current branch: ${{ steps.branch-name.outputs.current_branch }}
           version=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
           git tag -a v$version -m "Version $version"
           git push origin --tag
