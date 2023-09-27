@@ -1,0 +1,37 @@
+name: Merge release PR
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types: [completed]
+    branches: ["release"]
+
+jobs:
+  merge-release-pr:
+    name: Merge release PR and tag main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v7
+      - uses: actions/checkout@v3
+        with:
+          ref: release
+      - name: Merge release PR
+        run: gh pr merge --merge
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Setup git user
+        uses: fregante/setup-git-user@v2
+      - name: Tag main branch and create release
+        run: |
+          echo Current branch: ${{ steps.branch-name.outputs.current_branch }}
+          version=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
+          git tag -a v$version -m "Version $version"
+          git push origin --tag
+          gh release create v$version --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
