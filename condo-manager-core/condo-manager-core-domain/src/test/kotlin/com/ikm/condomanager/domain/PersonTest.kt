@@ -2,33 +2,67 @@ package com.ikm.condomanager.domain
 
 import jakarta.validation.ConstraintViolationException
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.UUID
-import kotlin.test.assertTrue
+import kotlin.test.assertNull
 
 /**
  * Unit test for [Person].
  */
 class PersonTest {
 
+    @Test
+    fun `should create Person`() {
+        // when
+        val person = Person("John Doe")
+        // then
+        with(person) {
+            assertEquals(name, "John Doe")
+            assertNull(id)
+            assertNull(email)
+            assertNull(phoneNumber)
+            assertEquals("Person(id=null, name='John Doe', email=null, phoneNumber=null)", person.toString())
+        }
+    }
+
+    @Test
+    fun `should modify Person`() {
+        // given
+        val id = PersonId(UUID.randomUUID().toString(), 1)
+        val person = Person("John D.", id, "john.d@company.com", "00888111111")
+        // when
+        person.name = "John Doe"
+        person.email = "john.doe@company.com"
+        person.phoneNumber = "00888111222"
+        person.validate()
+        // then
+        with(person) {
+            assertEquals("John Doe", name)
+            assertEquals(id, this.id)
+            assertEquals("john.doe@company.com", email)
+            assertEquals("00888111222", phoneNumber)
+            assertEquals(
+                "Person(id=$id, name='John Doe', email=john.doe@company.com, phoneNumber=00888111222)",
+                person.toString()
+            )
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("validPersonParams")
     fun `should be a valid Person`(id: PersonId?, name: String, email: String?, phone: String?) {
-        // given
-        val person = Person(id = id, name = name)
-        person.name = name
-        person.email = email
-        person.phoneNumber = phone
+        // when
+        val person = Person(id = id, name = name, email = email, phoneNumber = phone)
         // then
         assertEquals(id, person.id)
         assertEquals(name, person.name)
         assertEquals(email, person.email)
         assertEquals(phone, person.phoneNumber)
-        assertEquals("Person(id=$id, name='$name', email=$email, phoneNumber=$phone)", person.toString())
     }
 
     @ParameterizedTest
@@ -40,16 +74,12 @@ class PersonTest {
         phone: String?,
         propertyToMessage: Pair<String, String>
     ) {
-        // given & when
-        val exception = Assertions.assertThrows(ConstraintViolationException::class.java) {
+        // when
+        val exception = assertThrows(ConstraintViolationException::class.java) {
             Person(id = id, name = name, email = email, phoneNumber = phone)
         }
         // then
-        assertTrue(
-            exception.constraintViolations
-                .map { it.propertyPath.toString() to it.messageTemplate }.contains(propertyToMessage),
-            "Actual validations: ${exception.constraintViolations}"
-        )
+        exception.assert(propertyToMessage)
     }
 
     companion object {
