@@ -19,7 +19,7 @@ sealed class BaseIntegrationTest {
         private const val CONDO_MANAGER_APP_SERVICE_NAME = "condo-manager_1"
 
         @JvmStatic
-        private val environment: DockerComposeContainer<*> =
+        protected val environment: DockerComposeContainer<*> =
             DockerComposeContainer(File("../../docker/docker-compose-integration-test.yml"))
                 .withExposedService(
                     POSTGRE_SQL_SERVICE_NAME,
