@@ -242,16 +242,11 @@
                             <configuration>
                                 <haltOnFailure>true</haltOnFailure>
                                 <excludes>
-                                    <!--                                    <exclude>**/dto/**</exclude>-->
-                                    <!--                                    <exclude>**/exception/**</exclude>-->
                                     <exclude>**/CondominiumManagerSpringBootApplicationKt.*</exclude>
                                 </excludes>
                                 <rules>
                                     <rule>
                                         <element>CLASS</element>
-                                        <excludes>
-                                            <exclude>com.iliankm.demo.DemoApplication</exclude>
-                                        </excludes>
                                         <limits>
                                             <limit>
                                                 <counter>METHOD</counter>

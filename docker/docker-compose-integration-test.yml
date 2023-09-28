@@ -9,10 +9,13 @@ services:
       POSTGRES_DB: condo-manager
   condo-manager:
     image: condo-manager:${IMAGE_TAG}
+    user: "${UID}:${GID}"
     environment:
-      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      JAVA_TOOL_OPTIONS: -javaagent:/opt/jacoco/jacocoagent.jar=destfile=/workspace/jacoco/jacoco-IT.exec,append=false,output=file,address=*,port=6300
       SPRING_PROFILES_ACTIVE: integration-test
       SPRING_CONFIG_LOCATION: /config/
     volumes:
       - ../config:/config
       - ../logs/integration-test:/workspace/logs
+      - ./lib/jacocoagent.jar:/opt/jacoco/jacocoagent.jar
+      - ../condo-manager-test/condo-manager-integration-test/target:/workspace/jacoco
