@@ -17,9 +17,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>condo-manager-infrastructure</module>
         <module>condo-manager-core</module>
         <module>condo-manager-adapter</module>
-        <module>condo-manager-infrastructure</module>
         <module>condo-manager-spring-boot-app</module>
         <module>condo-manager-test</module>
     </modules>
