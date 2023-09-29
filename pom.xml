@@ -195,16 +195,10 @@
                     <version>${detekt-maven-plugin.version}</version>
                     <executions>
                         <execution>
-                            <phase>verify</phase>
+                            <phase>compile</phase>
                             <goals>
                                 <goal>check</goal>
                             </goals>
-                            <configuration>
-                                <report>
-                                    <report>txt:reports/detekt.txt</report>
-                                    <report>xml:reports/detekt.xml</report>
-                                </report>
-                            </configuration>
                         </execution>
                     </executions>
                     <dependencies>
@@ -228,7 +222,7 @@
                         </execution>
                         <execution>
                             <id>coverage-report</id>
-                            <phase>post-integration-test</phase>
+                            <phase>test</phase>
                             <goals>
                                 <goal>report</goal>
                             </goals>
@@ -236,6 +230,7 @@
                         <!-- Threshold -->
                         <execution>
                             <id>coverage-check</id>
+                            <phase>test</phase>
                             <goals>
                                 <goal>check</goal>
                             </goals>

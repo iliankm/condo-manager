@@ -18,7 +18,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Compile, code linting, package and build docker image
-      run: ./mvnw -B verify -DskipTests
+      run: ./mvnw -B package -DskipTests
     - name: Save docker image to file
       run: docker save condo-manager:latest > /tmp/condo-manager-image.tar
     - name: Upload docker image file
@@ -39,7 +39,7 @@ jobs:
             distribution: 'temurin'
             cache: maven
         - name: Run unit tests
-          run: ./mvnw -B verify -DskipITs -Ddetekt.skip -DskipBuildDocker
+          run: ./mvnw -B test -Ddetekt.skip
         - name: Add coverage to PR
           if: github.event_name == 'pull_request'
           uses: madrapps/jacoco-report@v1.6.1
