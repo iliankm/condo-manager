@@ -49,7 +49,7 @@ jobs:
             token: ${{ secrets.GITHUB_TOKEN }}
             min-coverage-overall: 80
             min-coverage-changed-files: 80
-            title: Code Coverage
+            title: Code Coverage for unit tests
             update-comment: true
 
   integration-tests:
@@ -72,6 +72,17 @@ jobs:
         run: docker load < /tmp/condo-manager-image.tar
       - name: Run integration tests
         run: ./mvnw -B verify -DskipUTs -Ddetekt.skip -DskipBuildDocker
+      - name: Add coverage to PR
+        if: github.event_name == 'pull_request'
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            ${{ github.workspace }}/**/target/site/jacoco/jacoco-IT.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+          title: Code Coverage for integration tests
+          update-comment: true
       - name: Collect docker logs on failure
         if: failure()
         uses: jwalton/gh-docker-logs@v2
