@@ -15,6 +15,17 @@ class Condominium(
     var address: CondominiumAddress,
     val id: CondominiumId? = null
 ) : SelfValidating<Condominium>() {
+
+    companion object {
+        /**
+         * Factory function for initial creating of [Condominium].
+         */
+        fun create(address: CondominiumAddress) =
+            Condominium(
+                address = address
+            )
+    }
+
     init {
         validate()
     }

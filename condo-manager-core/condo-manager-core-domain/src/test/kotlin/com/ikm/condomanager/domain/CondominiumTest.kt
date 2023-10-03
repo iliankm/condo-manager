@@ -18,7 +18,7 @@ class CondominiumTest {
             houseNumber = 1
         )
         // when
-        val condominium = Condominium(address)
+        val condominium = Condominium.create(address)
         // then
         assertEquals(condominium.address, address)
         assertNull(condominium.id)
@@ -40,7 +40,7 @@ class CondominiumTest {
         condominium.address = newAddress
         condominium.validate()
         // then
-        assertEquals(condominium.address.houseNumber, 10)
+        assertEquals(condominium.address, newAddress)
         assertEquals(id, condominium.id)
         assertEquals("Condominium(address=$newAddress, id=$id)", condominium.toString())
     }
