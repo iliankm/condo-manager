@@ -5,6 +5,7 @@ import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.port.person.DeletePersonPort
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -30,8 +31,12 @@ class DeletePersonPersistenceAdapterTest {
         // given
         val id = PersonId(UUID.randomUUID().toString(), 5)
         every { personRepository.deleteByDomainId(id) } returns Unit
-        // when & then
+        // when
         deletePersonPort.delete(id)
+        // then
+        verifyAll {
+            personRepository.deleteByDomainId(id)
+        }
     }
 
     @Test
