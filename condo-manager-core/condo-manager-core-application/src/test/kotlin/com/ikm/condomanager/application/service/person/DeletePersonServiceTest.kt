@@ -4,6 +4,7 @@ import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.port.person.DeletePersonPort
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
@@ -21,5 +22,8 @@ class DeletePersonServiceTest {
         every { deletePersonPort.delete(id) } returns Unit
         // when & then
         deletePersonUseCase.delete(id)
+        verifyAll {
+            deletePersonPort.delete(id)
+        }
     }
 }

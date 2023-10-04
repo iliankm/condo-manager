@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.spyk
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -45,5 +46,10 @@ class CreatePersonPersistenceAdapterTest {
         val result = createPersonPort.create(person)
         // then
         assertSame(savedPerson, result)
+        verifyAll {
+            person.convertToPersonEntity()
+            personRepository.save(personEntity)
+            savedPersonEntity.convertToPerson()
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -43,5 +44,10 @@ class CreateCondominiumPersistenceAdapterTest {
         val result = createCondominiumPort.create(createData)
         // then
         assertSame(createdCondominium, result)
+        verifyAll {
+            createData.convertToCondominiumEntity()
+            condominiumRepository.save(condominiumEntity)
+            condominiumEntity.convertToCondominium()
+        }
     }
 }

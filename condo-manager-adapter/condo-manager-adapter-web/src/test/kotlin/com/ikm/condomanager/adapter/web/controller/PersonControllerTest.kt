@@ -13,6 +13,7 @@ import com.ikm.condomanager.usecase.person.UpdatePersonUseCase
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.mockkStatic
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -70,6 +71,11 @@ class PersonControllerTest : BaseControllerTest() {
             andExpect(status().isCreated())
             andExpect(jsonPath("$.id.id").value(createdPersonDTO.id?.id))
         }
+        verifyAll {
+            personDTO.convertToPerson()
+            createPersonUseCase.create(person)
+            createdPerson.convertToPersonDTO()
+        }
     }
 
     @Test
@@ -96,6 +102,10 @@ class PersonControllerTest : BaseControllerTest() {
             andExpect(status().isOk)
             andExpect(jsonPath("$.id.id").value(personDTO.id?.id))
             andExpect(jsonPath("$.id.version").value(0))
+        }
+        verifyAll {
+            loadPersonUseCase.load(PersonId(id))
+            person.convertToPersonDTO()
         }
     }
 
@@ -125,6 +135,12 @@ class PersonControllerTest : BaseControllerTest() {
             andExpect(jsonPath("$.id.id").value(updatedPersonDTO.id?.id))
             andExpect(jsonPath("$.id.version").value(2))
         }
+        verifyAll {
+            loadPersonUseCase.load(id)
+            personDTO.mergeToPerson(person)
+            updatePersonUseCase.update(person)
+            updatedPerson.convertToPersonDTO()
+        }
     }
 
     @Test
@@ -139,5 +155,8 @@ class PersonControllerTest : BaseControllerTest() {
         )
         // then
         result.andExpect(status().isOk)
+        verifyAll {
+            deletePersonUseCase.delete(id)
+        }
     }
 }
