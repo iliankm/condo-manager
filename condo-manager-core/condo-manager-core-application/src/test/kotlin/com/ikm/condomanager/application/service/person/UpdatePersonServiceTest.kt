@@ -5,6 +5,7 @@ import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.port.person.UpdatePersonPort
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import java.util.UUID
@@ -27,5 +28,8 @@ class UpdatePersonServiceTest {
         val res = updatePersonService.update(person)
         // then
         assertSame(updatedPerson, res)
+        verifyAll {
+            updatePersonPort.update(person)
+        }
     }
 }

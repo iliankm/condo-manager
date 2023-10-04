@@ -5,6 +5,7 @@ import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.port.person.CreatePersonPort
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import java.util.UUID
@@ -26,5 +27,8 @@ class CreatePersonServiceTest {
         val res = createPersonUseCase.create(person)
         // then
         assertSame(createdPerson, res)
+        verifyAll {
+            createPersonPort.create(person)
+        }
     }
 }

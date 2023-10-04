@@ -11,6 +11,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -48,6 +49,12 @@ class UpdatePersonPersistenceAdapterTest {
         val result = updatePersonPort.update(person)
         // then
         assertSame(savedPerson, result)
+        verifyAll {
+            personRepository.getByDomainId(person.id!!)
+            person.mergeToPersonEntity(personEntity)
+            personRepository.saveAndFlush(personEntity)
+            savedPersonEntity.convertToPerson()
+        }
     }
 
     @Test
