@@ -50,6 +50,7 @@ https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
   ### condo-manager-integration-test
 Real integration tests for the REST api. </br> 
 All tests are run against a real environment and the docker image produced by the build: ``condo-manager:${image.tag}``. </br>
+The environment is described in this [docker compose](docker/docker-compose-integration-test.yml). </br>
 Tech stack: [Testcontainers](https://testcontainers.com/) with [REST Assured](https://rest-assured.io/).
   
 # Build and run
@@ -84,8 +85,6 @@ Continuous integration is introduced in [GitHub Actions](https://github.com/ilia
 Multibranch workflow triggered automatically on each branch push or pull request. </br>
 The code is being compiled, lint, tested (unit and integration tests), code coverage is reported in the PRs etc.
 - Compile, code linting, package and build docker image 
-- Save docker image to file
-- Upload docker image file
 - Unit tests
 - Integration tests
 - Publish docker image
