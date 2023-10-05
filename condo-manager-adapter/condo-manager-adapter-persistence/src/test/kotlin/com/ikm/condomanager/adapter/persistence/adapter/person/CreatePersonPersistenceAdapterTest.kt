@@ -35,7 +35,7 @@ class CreatePersonPersistenceAdapterTest {
     fun `should create Person`() {
         // given
         mockkStatic(Person::convertToPersonEntity, PersonEntity::convertToPerson)
-        val person = spyk(Person(id = null, name = "John Doe"))
+        val person = spyk(Person(id = null, name = "John Doe", email = null, phoneNumber = null))
         val personEntity = PersonEntity(name = "John Doe")
         every { person.convertToPersonEntity() } returns personEntity
         val savedPersonEntity = mockk<PersonEntity>()

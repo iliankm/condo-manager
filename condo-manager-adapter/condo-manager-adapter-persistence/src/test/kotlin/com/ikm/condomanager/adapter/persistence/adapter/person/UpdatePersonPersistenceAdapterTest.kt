@@ -37,14 +37,18 @@ class UpdatePersonPersistenceAdapterTest {
     fun `should update Person`() {
         // given
         mockkStatic(Person::mergeToPersonEntity, PersonEntity::convertToPerson)
-        val person = Person(id = PersonId(UUID.randomUUID().toString(), 0), name = "John Doe")
+        val person = Person(
+            id = PersonId(UUID.randomUUID().toString(), 1),
+            name = "John Doe",
+            email = null,
+            phoneNumber = null
+        )
         val personEntity = mockk<PersonEntity>()
         every { personRepository.getByDomainId(person.id!!) } returns personEntity
         every { person.mergeToPersonEntity(personEntity) } returns personEntity
-        val savedPersonEntity = mockk<PersonEntity>()
-        every { personRepository.saveAndFlush(personEntity) } returns savedPersonEntity
-        val savedPerson = Person(id = PersonId(UUID.randomUUID().toString(), 1), name = "John Doe")
-        every { savedPersonEntity.convertToPerson() } returns savedPerson
+        every { personRepository.saveAndFlush(personEntity) } returns personEntity
+        val savedPerson = mockk<Person>()
+        every { personEntity.convertToPerson() } returns savedPerson
         // when
         val result = updatePersonPort.update(person)
         // then
@@ -53,14 +57,14 @@ class UpdatePersonPersistenceAdapterTest {
             personRepository.getByDomainId(person.id!!)
             person.mergeToPersonEntity(personEntity)
             personRepository.saveAndFlush(personEntity)
-            savedPersonEntity.convertToPerson()
+            personEntity.convertToPerson()
         }
     }
 
     @Test
     fun `when Person#id is null, should throw IllegalStateException`() {
         // given
-        val person = Person(name = "John Doe")
+        val person = Person(id = null, name = "John Doe", email = null, phoneNumber = null)
         // when & then
         assertThrows<IllegalStateException> {
             updatePersonPort.update(person)
@@ -70,7 +74,8 @@ class UpdatePersonPersistenceAdapterTest {
     @Test
     fun `when Person#id#version is null, should throw IllegalStateException`() {
         // given
-        val person = Person(id = PersonId(UUID.randomUUID().toString()), name = "John Doe")
+        val person =
+            Person(id = PersonId(UUID.randomUUID().toString()), name = "John Doe", email = null, phoneNumber = null)
         // when & then
         assertThrows<IllegalStateException> {
             updatePersonPort.update(person)

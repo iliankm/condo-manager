@@ -25,10 +25,10 @@ class PersonDTOConverterTest {
         // when
         val person = personDTO.convertToPerson()
         // then
-        assertEquals(personDTO.id, person.id)
-        assertEquals(personDTO.name, person.name)
-        assertEquals(personDTO.email, person.email)
-        assertEquals(personDTO.phoneNumber, person.phoneNumber)
+        assertNull(person.id)
+        assertEquals("John Doe", person.name)
+        assertEquals("john.doe@company.com", person.email)
+        assertEquals("0888111222", person.phoneNumber)
     }
 
     @Test
@@ -75,7 +75,9 @@ class PersonDTOConverterTest {
         )
         val person = Person(
             id = PersonId(UUID.randomUUID().toString(), 0),
-            name = "John..."
+            name = "John...",
+            email = null,
+            phoneNumber = null
         )
         // when
         val mergedPerson = personDTO.mergeToPerson(person)

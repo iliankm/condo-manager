@@ -12,8 +12,8 @@ typealias CondominiumId = DomainId
  * @property id the id of the condominium. If null, it is still not persisted and is created only in the memory.
  */
 class Condominium(
-    var address: CondominiumAddress,
-    val id: CondominiumId? = null
+    val id: CondominiumId?,
+    var address: CondominiumAddress
 ) : SelfValidating<Condominium>() {
 
     companion object {
@@ -22,6 +22,7 @@ class Condominium(
          */
         fun create(address: CondominiumAddress) =
             Condominium(
+                id = null,
                 address = address
             )
     }
@@ -31,6 +32,6 @@ class Condominium(
     }
 
     override fun toString(): String {
-        return "Condominium(address=$address, id=$id)"
+        return "Condominium(id=$id, address=$address)"
     }
 }

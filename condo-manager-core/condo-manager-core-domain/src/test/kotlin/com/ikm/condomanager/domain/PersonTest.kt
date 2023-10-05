@@ -18,15 +18,22 @@ class PersonTest {
 
     @Test
     fun `should create Person`() {
-        // when
-        val person = Person("John Doe")
+        // given
+        val person = Person.create(
+            name = "John Doe",
+            email = "john.doe@company.com",
+            phoneNumber = "00888111222"
+        )
         // then
         with(person) {
             assertEquals(name, "John Doe")
             assertNull(id)
-            assertNull(email)
-            assertNull(phoneNumber)
-            assertEquals("Person(id=null, name='John Doe', email=null, phoneNumber=null)", person.toString())
+            assertEquals("john.doe@company.com", email)
+            assertEquals("00888111222", phoneNumber)
+            assertEquals(
+                "Person(id=null, name='John Doe', email=john.doe@company.com, phoneNumber=00888111222)",
+                person.toString()
+            )
         }
     }
 
@@ -34,7 +41,7 @@ class PersonTest {
     fun `should modify Person`() {
         // given
         val id = PersonId(UUID.randomUUID().toString(), 1)
-        val person = Person("John D.", id, "john.d@company.com", "00888111111")
+        val person = Person(id, "John D.", "john.d@company.com", "00888111111")
         // when
         person.name = "John Doe"
         person.email = "john.doe@company.com"
