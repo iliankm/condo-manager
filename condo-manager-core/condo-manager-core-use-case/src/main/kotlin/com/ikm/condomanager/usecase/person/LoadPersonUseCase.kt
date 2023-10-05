@@ -11,9 +11,9 @@ interface LoadPersonUseCase {
     /**
      * Finds and loads a [Person] by given [id].
      *
-     * @param id the id of the [Person] to be loaded.
-     * @return the requested [Person].
-     * @throws NotFoundException if the requested [Person] is not found.
+     * @param id the id of the [Person] to be loaded
+     * @return the requested [Person]
+     * @throws NotFoundException if the requested [Person] is not found
      */
     fun load(id: PersonId): Person
 }
