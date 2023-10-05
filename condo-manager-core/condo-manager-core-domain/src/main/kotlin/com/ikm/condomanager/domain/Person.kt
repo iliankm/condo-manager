@@ -24,21 +24,33 @@ typealias PersonId = DomainId
  * +359 894 991 153
  */
 class Person(
+    val id: PersonId?,
+
     @field:NotBlank
     @field:Size(max = 70)
     var name: String,
 
-    val id: PersonId? = null,
-
     @field:Email(regexp = ".+@.+\\..+")
-    var email: String? = null,
+    var email: String?,
 
     @field:Pattern(
         regexp = "\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}",
         message = "Must be a valid phone number"
     )
-    var phoneNumber: String? = null
+    var phoneNumber: String?
 ) : SelfValidating<Person>() {
+    companion object {
+        /**
+         * Factory function for initial creation of [Person].
+         */
+        fun create(name: String, email: String?, phoneNumber: String?) =
+            Person(
+                id = null,
+                name = name,
+                email = email,
+                phoneNumber = phoneNumber
+            )
+    }
     init {
         validate()
     }

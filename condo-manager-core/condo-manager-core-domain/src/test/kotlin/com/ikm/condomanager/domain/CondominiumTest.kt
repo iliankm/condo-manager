@@ -20,9 +20,9 @@ class CondominiumTest {
         // when
         val condominium = Condominium.create(address)
         // then
-        assertEquals(condominium.address, address)
         assertNull(condominium.id)
-        assertEquals("Condominium(address=$address, id=null)", condominium.toString())
+        assertEquals(condominium.address, address)
+        assertEquals("Condominium(id=null, address=$address)", condominium.toString())
     }
 
     @Test
@@ -34,14 +34,14 @@ class CondominiumTest {
             houseNumber = 1
         )
         val id = CondominiumId(UUID.randomUUID().toString(), 1)
-        val condominium = Condominium(address, id)
+        val condominium = Condominium(id, address)
         // when
         val newAddress = condominium.address.copy(houseNumber = 10)
         condominium.address = newAddress
         condominium.validate()
         // then
-        assertEquals(condominium.address, newAddress)
         assertEquals(id, condominium.id)
-        assertEquals("Condominium(address=$newAddress, id=$id)", condominium.toString())
+        assertEquals(condominium.address, newAddress)
+        assertEquals("Condominium(id=$id, address=$newAddress)", condominium.toString())
     }
 }

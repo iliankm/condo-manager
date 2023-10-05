@@ -9,8 +9,7 @@ import com.ikm.condomanager.domain.Person
  * @return converted instance of [Person]
  */
 fun PersonDTO.convertToPerson() =
-    Person(
-        id = id,
+    Person.create(
         name = name,
         email = email,
         phoneNumber = phoneNumber

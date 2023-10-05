@@ -37,7 +37,7 @@ class LoadPersonPersistenceAdapterTest {
         mockkStatic(PersonEntity::convertToPerson)
         val id = DomainId(UUID.randomUUID().toString(), 0)
         val personEntity = mockk<PersonEntity>()
-        val person = Person(id = id, name = "John Doe")
+        val person = Person(id = id, name = "John Doe", email = null, phoneNumber = null)
         every { personEntity.convertToPerson() } returns person
         every { personRepository.getByDomainId(id) } returns personEntity
         // when

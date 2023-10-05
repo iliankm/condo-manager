@@ -21,7 +21,7 @@ class LoadPersonServiceTest {
     fun `should load Person by id`() {
         // given
         val personId = PersonId(id = UUID.randomUUID().toString(), version = 2)
-        val person = Person(id = personId, name = "John Doe")
+        val person = mockk<Person>()
         every { loadPersonPort.load(personId) } returns person
         // when
         val res = loadPersonUseCase.load(personId)
