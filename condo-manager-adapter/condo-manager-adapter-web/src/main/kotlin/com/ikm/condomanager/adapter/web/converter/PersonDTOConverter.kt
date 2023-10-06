@@ -32,12 +32,11 @@ fun Person.convertToPersonDTO() =
  * Merges all possible data from this [PersonDTO] to the passed [Person].
  *
  * @param person the [Person] instance to be merged into
- * @return the merged instance passed in [person]
  */
-fun PersonDTO.mergeToPerson(person: Person) =
-    person.let {
+fun PersonDTO.mergeToPerson(person: Person) {
+    person.also {
         it.name = name
         it.email = email
         it.phoneNumber = phoneNumber
-        it
     }
+}

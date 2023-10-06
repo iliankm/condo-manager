@@ -6,7 +6,6 @@ import com.ikm.condomanager.domain.GeoLocation
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -52,12 +51,10 @@ class CondominiumAddressConverterTest {
             street = "",
             houseNumber = 0
         )
-
         // when
-        val merged = condominiumAddress.mergeToCondominiumAddressEntity(condominiumAddressEntity)
+        condominiumAddress.mergeToCondominiumAddressEntity(condominiumAddressEntity)
         // then
-        assertSame(condominiumAddressEntity, merged)
-        with(merged) {
+        with(condominiumAddressEntity) {
             assertEquals("City Name", city)
             assertEquals("Street Name", street)
             assertEquals(1, houseNumber)

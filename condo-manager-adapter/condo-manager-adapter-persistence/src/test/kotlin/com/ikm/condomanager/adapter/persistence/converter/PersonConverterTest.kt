@@ -5,7 +5,6 @@ import com.ikm.condomanager.domain.Person
 import com.ikm.condomanager.domain.PersonId
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
@@ -43,9 +42,8 @@ class PersonConverterTest {
             name = ""
         )
         // when
-        val merged = person.mergeToPersonEntity(personEntity)
+        person.mergeToPersonEntity(personEntity)
         // then
-        assertSame(personEntity, merged)
         assertEquals("John Doe", personEntity.name)
         assertEquals("john.doe@company.com", personEntity.email)
         assertEquals("0888111222", personEntity.phoneNumber)

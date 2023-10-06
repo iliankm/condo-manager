@@ -16,14 +16,13 @@ fun Condominium.convertToCondominiumEntity() =
 /**
  * Merges all possible data from this [Condominium] to the passed [CondominiumEntity].
  *
- * @param condominiumEntity the [CondominiumEntity] to be merged into.
- * @return the merged instance passed in [condominiumEntity].
+ * @param condominiumEntity the [CondominiumEntity] to be merged into
  */
-fun Condominium.mergeToCondominiumEntity(condominiumEntity: CondominiumEntity) =
-    condominiumEntity.let {
+fun Condominium.mergeToCondominiumEntity(condominiumEntity: CondominiumEntity) {
+    condominiumEntity.also {
         address.mergeToCondominiumAddressEntity(it.address)
-        it
     }
+}
 
 /**
  * Converts [CondominiumEntity] to [Condominium].

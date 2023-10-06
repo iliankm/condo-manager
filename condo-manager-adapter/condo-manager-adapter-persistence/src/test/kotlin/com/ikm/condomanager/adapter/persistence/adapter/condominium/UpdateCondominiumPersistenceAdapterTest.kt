@@ -49,7 +49,7 @@ class UpdateCondominiumPersistenceAdapterTest {
         val condominiumEntity = mockk<CondominiumEntity>()
         val updatedCondominium = mockk<Condominium>()
         every { condominiumRepository.getByDomainId(condominium.id!!) } returns condominiumEntity
-        every { condominium.mergeToCondominiumEntity(condominiumEntity) } returns condominiumEntity
+        every { condominium.mergeToCondominiumEntity(condominiumEntity) } returns Unit
         every { condominiumRepository.saveAndFlush(condominiumEntity) } returns condominiumEntity
         every { condominiumEntity.convertToCondominium() } returns updatedCondominium
         // when
