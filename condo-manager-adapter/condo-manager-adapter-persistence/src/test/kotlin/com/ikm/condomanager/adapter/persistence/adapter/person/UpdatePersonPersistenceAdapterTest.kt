@@ -45,7 +45,7 @@ class UpdatePersonPersistenceAdapterTest {
         )
         val personEntity = mockk<PersonEntity>()
         every { personRepository.getByDomainId(person.id!!) } returns personEntity
-        every { person.mergeToPersonEntity(personEntity) } returns personEntity
+        every { person.mergeToPersonEntity(personEntity) } returns Unit
         every { personRepository.saveAndFlush(personEntity) } returns personEntity
         val savedPerson = mockk<Person>()
         every { personEntity.convertToPerson() } returns savedPerson

@@ -175,13 +175,13 @@ class PersonController(
         @PathVariable("id") id: String,
         @RequestHeader(HttpHeaders.IF_MATCH) version: Long,
         @RequestBody personDTO: PersonDTO
-    ): ResponseEntity<PersonDTO> = loadPersonUseCase.load(PersonId(id, version)).let {
-        personDTO.mergeToPerson(it)
-    }.let {
-        updatePersonUseCase.update(it)
-    }.convertToPersonDTO().let {
-        ResponseEntity(it, OK)
-    }
+    ): ResponseEntity<PersonDTO> =
+        loadPersonUseCase.load(PersonId(id, version)).let {
+            personDTO.mergeToPerson(it)
+            updatePersonUseCase.update(it)
+        }.convertToPersonDTO().let {
+            ResponseEntity(it, OK)
+        }
 
     /**
      * DELETE endpoint for deleting a person resource.

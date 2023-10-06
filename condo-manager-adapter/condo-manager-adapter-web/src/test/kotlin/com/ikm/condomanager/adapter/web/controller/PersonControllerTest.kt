@@ -121,7 +121,7 @@ class PersonControllerTest : BaseControllerTest() {
         val person = Person(id = id, name = "J..", email = null, phoneNumber = null)
         every { loadPersonUseCase.load(id) } returns person
         val personDTO = PersonDTO(name = "John Doe")
-        every { personDTO.mergeToPerson(person) } returns person
+        every { personDTO.mergeToPerson(person) } returns Unit
         val updatedPerson = Person(id = PersonId(id.id, 2), name = "John Doe", email = null, phoneNumber = null)
         every { updatePersonUseCase.update(person) } returns updatedPerson
         val updatedPersonDTO = PersonDTO(id = PersonId(UUID.randomUUID().toString(), 2), name = "John Doe")

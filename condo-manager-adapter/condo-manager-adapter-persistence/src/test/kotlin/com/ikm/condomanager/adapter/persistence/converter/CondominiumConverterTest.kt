@@ -49,12 +49,10 @@ class CondominiumConverterTest {
         val condominiumEntity = CondominiumEntity(
             address = mockk<CondominiumAddressEntity>()
         )
-        every { condominium.address.mergeToCondominiumAddressEntity(condominiumEntity.address) }
-            .returns(condominiumEntity.address)
+        every { condominium.address.mergeToCondominiumAddressEntity(condominiumEntity.address) } returns Unit
         // when
-        val merged = condominium.mergeToCondominiumEntity(condominiumEntity)
+        condominium.mergeToCondominiumEntity(condominiumEntity)
         // then
-        assertSame(condominiumEntity, merged)
         verifyAll {
             condominium.address.mergeToCondominiumAddressEntity(condominiumEntity.address)
         }

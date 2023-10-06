@@ -23,7 +23,6 @@ class UpdatePersonPersistenceAdapter(
             personRepository.getByDomainId(it.id!!)
         }.let {
             person.mergeToPersonEntity(it)
-        }.let {
             personRepository.saveAndFlush(it).convertToPerson()
         }
 }
