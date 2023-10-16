@@ -90,7 +90,9 @@ jobs:
         with:
           key: docker-cache-for-integration-tests-${{ hashFiles('pom.xml') }}-${{ hashFiles('docker/docker-compose-integration-test.yml') }}
       - name: Run integration tests
-        run: ./mvnw -B verify -pl condo-manager-test/condo-manager-integration-test/ -DskipUTs -Ddetekt.skip -DskipBuildDocker
+        run: |
+          ./mvnw compile -pl condo-manager-adapter/condo-manager-adapter-web/
+          ./mvnw -B verify -pl condo-manager-test/condo-manager-integration-test/ -DskipUTs -Ddetekt.skip -DskipBuildDocker
       - name: Add coverage to PR
         if: github.event_name == 'pull_request'
         uses: madrapps/jacoco-report@v1.6.1
