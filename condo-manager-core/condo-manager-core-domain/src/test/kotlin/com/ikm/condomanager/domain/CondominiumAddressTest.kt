@@ -2,15 +2,14 @@ package com.ikm.condomanager.domain
 
 import jakarta.validation.ConstraintViolationException
 import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 /**
  * Unit test for [CondominiumAddress].
@@ -22,13 +21,15 @@ class CondominiumAddressTest {
         val address = CondominiumAddress(
             city = "City Name",
             street = "Street Name",
-            houseNumber = 1
+            houseNumber = 1,
+            location = GeoLocation(BigDecimal.ZERO, BigDecimal.ONE)
         )
         // then
         assertEquals("City Name", address.city)
         assertEquals("Street Name", address.street)
         assertEquals(1, address.houseNumber)
-        assertNull(address.location)
+        assertEquals(BigDecimal.ZERO, address.location?.lat)
+        assertEquals(BigDecimal.ONE, address.location?.lon)
     }
 
     @ParameterizedTest

@@ -15,7 +15,8 @@ class CondominiumTest {
         val address = CondominiumAddress(
             city = "City Name",
             street = "Street Name",
-            houseNumber = 1
+            houseNumber = 1,
+            location = null
         )
         // when
         val condominium = Condominium.create(address)
@@ -31,7 +32,8 @@ class CondominiumTest {
         val address = CondominiumAddress(
             city = "City Name",
             street = "Street Name",
-            houseNumber = 1
+            houseNumber = 1,
+            location = null
         )
         val id = CondominiumId(UUID.randomUUID().toString(), 1)
         val condominium = Condominium(id, address)

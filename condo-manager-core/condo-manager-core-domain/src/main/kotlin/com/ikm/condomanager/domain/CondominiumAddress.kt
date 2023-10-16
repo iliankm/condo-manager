@@ -21,7 +21,7 @@ data class CondominiumAddress(
     val street: String,
     @field:Positive
     val houseNumber: Short,
-    val location: GeoLocation? = null
+    val location: GeoLocation?
 ) : SelfValidating<CondominiumAddress>() {
     init {
         validate()
