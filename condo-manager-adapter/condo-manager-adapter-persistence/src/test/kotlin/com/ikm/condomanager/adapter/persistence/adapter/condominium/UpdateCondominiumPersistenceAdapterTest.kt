@@ -42,7 +42,8 @@ class UpdateCondominiumPersistenceAdapterTest {
             address = CondominiumAddress(
                 city = "City Name",
                 street = "Street Name",
-                houseNumber = 1
+                houseNumber = 1,
+                location = null
             ),
             id = CondominiumId(UUID.randomUUID().toString(), 1)
         )
@@ -71,7 +72,8 @@ class UpdateCondominiumPersistenceAdapterTest {
             address = CondominiumAddress(
                 city = "City Name",
                 street = "Street Name",
-                houseNumber = 1
+                houseNumber = 1,
+                location = null
             ),
             id = null
         )
@@ -88,7 +90,8 @@ class UpdateCondominiumPersistenceAdapterTest {
             address = CondominiumAddress(
                 city = "City Name",
                 street = "Street Name",
-                houseNumber = 1
+                houseNumber = 1,
+                location = null
             ),
             id = CondominiumId(UUID.randomUUID().toString(), null)
         )
