@@ -54,7 +54,7 @@
                 <executions>
                     <execution>
                         <id>copy-compiled-classes-from-condo-manager-adapter-web</id>
-                        <phase>compile</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
