@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.PRECONDITION_FAILED
 import org.springframework.http.ProblemDetail
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -41,7 +42,7 @@ class ResponseExceptionAdviceTest : BaseControllerTest() {
     fun `should return 404 HTTP code`() {
         // when
         val result = mvc.perform(
-            get("/api/v1/test/nfe")
+            get("/api/v1/test/nfe").with(jwt())
         )
         // then
         result.andExpect(status().isNotFound)
@@ -62,7 +63,7 @@ class ResponseExceptionAdviceTest : BaseControllerTest() {
     fun `should return 412 HTTP code`() {
         // when
         val result = mvc.perform(
-            get("/api/v1/test/vne")
+            get("/api/v1/test/vne").with(jwt())
         )
         // then
         result.andExpect(status().isPreconditionFailed)
@@ -105,7 +106,7 @@ class ResponseExceptionAdviceTest : BaseControllerTest() {
     fun `should return 400 HTTP code`() {
         // when
         val result = mvc.perform(
-            get("/api/v1/test/cve")
+            get("/api/v1/test/cve").with(jwt())
         )
         // then
         result.andExpect(status().isBadRequest)

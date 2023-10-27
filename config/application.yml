@@ -5,6 +5,11 @@ spring:
     url: jdbc:postgresql://${condomanager.db.host}:${condomanager.db.port}/${condomanager.db.dbname}
     username: ${condomanager.db.username}
     password: ${condomanager.db.password}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${condomanager.keycloak.host}/realms/condo-manager
 
 springdoc:
   api-docs:

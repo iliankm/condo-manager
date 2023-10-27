@@ -17,6 +17,7 @@ import io.mockk.verifyAll
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -65,6 +66,7 @@ class PersonControllerTest : BaseControllerTest() {
         // when
         val result = mvc.perform(
             post("/api/v1/persons")
+                .with(jwt())
                 .content(personDTO.toJsonString())
                 .contentType(APPLICATION_JSON)
         )
@@ -99,7 +101,7 @@ class PersonControllerTest : BaseControllerTest() {
         every { person.convertToPersonDTO() } returns personDTO
         // when
         val result = mvc.perform(
-            get("/api/v1/persons/{id}", id)
+            get("/api/v1/persons/{id}", id).with(jwt())
         )
         // then
         with(result) {
@@ -129,6 +131,7 @@ class PersonControllerTest : BaseControllerTest() {
         // when
         val result = mvc.perform(
             put("/api/v1/persons/{id}", id.id)
+                .with(jwt())
                 .content(personDTO.toJsonString())
                 .contentType(APPLICATION_JSON)
                 .header(HttpHeaders.IF_MATCH, 1)
@@ -155,6 +158,7 @@ class PersonControllerTest : BaseControllerTest() {
         // when
         val result = mvc.perform(
             delete("/api/v1/persons/{id}", id.id)
+                .with(jwt())
                 .header(HttpHeaders.IF_MATCH, 1)
         )
         // then
