@@ -5,3 +5,5 @@ condomanager:
     dbname: condo-manager
     username: postgres
     password: postgres
+  keycloak:
+    host: http://localhost:8081

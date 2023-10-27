@@ -21,8 +21,12 @@ import io.mockk.verifyAll
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.UUID
@@ -71,7 +75,8 @@ class CondominiumControllerTest : BaseControllerTest() {
         every { condominium.convertToCondominiumDTO() } returns createdCondominiumDTO
         // when
         val result = mvc.perform(
-            MockMvcRequestBuilders.post("/api/v1/condominiums")
+            post("/api/v1/condominiums")
+                .with(jwt())
                 .content(condominiumCreateDTO.toJsonString())
                 .contentType(MediaType.APPLICATION_JSON)
         )
@@ -106,7 +111,7 @@ class CondominiumControllerTest : BaseControllerTest() {
         every { condominium.convertToCondominiumDTO() } returns condominiumDTO
         // when
         val result = mvc.perform(
-            MockMvcRequestBuilders.get("/api/v1/condominiums/{id}", id)
+            get("/api/v1/condominiums/{id}", id).with(jwt())
         )
         // then
         with(result) {
@@ -145,7 +150,8 @@ class CondominiumControllerTest : BaseControllerTest() {
         every { updatedCondominium.convertToCondominiumDTO() } returns condominiumDTO
         // when
         val result = mvc.perform(
-            MockMvcRequestBuilders.put("/api/v1/condominiums/{id}", id.id)
+            put("/api/v1/condominiums/{id}", id.id)
+                .with(jwt())
                 .content(condominiumUpdateDTO.toJsonString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.IF_MATCH, id.version)
@@ -171,7 +177,8 @@ class CondominiumControllerTest : BaseControllerTest() {
         every { deleteCondominiumUseCase.delete(id) } returns Unit
         // when
         val result = mvc.perform(
-            MockMvcRequestBuilders.delete("/api/v1/condominiums/{id}", id.id)
+            delete("/api/v1/condominiums/{id}", id.id)
+                .with(jwt())
                 .header(HttpHeaders.IF_MATCH, id.version)
         )
         // then
