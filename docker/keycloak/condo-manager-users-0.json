@@ -1,0 +1,96 @@
+{
+  "realm" : "condo-manager",
+  "users" : [ {
+    "id" : "84d69dcd-3a0b-466f-bca9-6da1d2ae547f",
+    "createdTimestamp" : 1698150396952,
+    "username" : "admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "",
+    "lastName" : "",
+    "email" : "admin@condo-manager.com",
+    "credentials" : [ {
+      "id" : "ef22ad4e-739e-4e25-a975-d88c104bcefa",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1698150424568,
+      "secretData" : "{\"value\":\"csGbykuFXE/LqQFXySN0StNqkPhFLQFDAZOAM/78TJY=\",\"salt\":\"LeKqxxuoyygvUcYxrtpPwg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "admin", "default-roles-condo-manager" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "376f293b-b2d3-4dba-a725-cfe1d3fa7532",
+    "createdTimestamp" : 1698151404440,
+    "username" : "condominium_admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "",
+    "lastName" : "",
+    "email" : "condo.admin@condo-manager.com",
+    "credentials" : [ {
+      "id" : "83646ed9-8878-4c32-9b5b-f1a2d25b832d",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1698151416037,
+      "secretData" : "{\"value\":\"y+m0ig3BgWVjLl+hwkDAD9TYFDa3NpoJuDkIHMxdxW0=\",\"salt\":\"WnYCj6E4vavqJgsSupwAhQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "condominium_admin", "default-roles-condo-manager" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "c6877b4d-4436-4836-a0a4-69a72f220327",
+    "createdTimestamp" : 1698151345590,
+    "username" : "person_admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "",
+    "lastName" : "",
+    "email" : "person.admin@condo-manager.com",
+    "credentials" : [ {
+      "id" : "5169292c-175b-4c37-b289-f37ccb0a0b68",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1698151363691,
+      "secretData" : "{\"value\":\"v+bmdnz+DKCosFZDC0cUWiZ8wqMg86Yavio4/fAAvOM=\",\"salt\":\"dsiHTL46x/ePu/wb6UNJyQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "person_admin", "default-roles-condo-manager" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "76fbfef5-79da-4172-9aef-54cccf1f9f91",
+    "createdTimestamp" : 1698150771052,
+    "username" : "user",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "",
+    "lastName" : "",
+    "email" : "user@condo-manager.com",
+    "credentials" : [ {
+      "id" : "4e702bb7-d356-4056-8898-e338c551c82a",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1698150796223,
+      "secretData" : "{\"value\":\"1PFO/fm9SeXRENu1n0rzUTglBwdSSClisb/w8SGcKdw=\",\"salt\":\"rkpeqxIt7Kw2E9iWjwwEYg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-condo-manager" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
