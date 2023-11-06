@@ -24,49 +24,23 @@
     "notBefore" : 0,
     "groups" : [ ]
   }, {
-    "id" : "376f293b-b2d3-4dba-a725-cfe1d3fa7532",
-    "createdTimestamp" : 1698151404440,
-    "username" : "condominium_admin",
+    "id" : "c156777d-f27b-4595-ad86-7a4794c978ea",
+    "createdTimestamp" : 1699093990434,
+    "username" : "dummy",
     "enabled" : true,
     "totp" : false,
     "emailVerified" : false,
-    "firstName" : "",
-    "lastName" : "",
-    "email" : "condo.admin@condo-manager.com",
+    "email" : "dummy.user@mail.com",
     "credentials" : [ {
-      "id" : "83646ed9-8878-4c32-9b5b-f1a2d25b832d",
+      "id" : "dc16b490-7a75-462f-8e75-faa9abe42c75",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1698151416037,
-      "secretData" : "{\"value\":\"y+m0ig3BgWVjLl+hwkDAD9TYFDa3NpoJuDkIHMxdxW0=\",\"salt\":\"WnYCj6E4vavqJgsSupwAhQ==\",\"additionalParameters\":{}}",
+      "createdDate" : 1699094026619,
+      "secretData" : "{\"value\":\"xKsZMWqB9rBOnhUx6F/60vLT8gemO2f/zcnfkS78ZDE=\",\"salt\":\"0xyjpWhPvN6oXPSb2IXWbQ==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "condominium_admin", "default-roles-condo-manager" ],
-    "notBefore" : 0,
-    "groups" : [ ]
-  }, {
-    "id" : "c6877b4d-4436-4836-a0a4-69a72f220327",
-    "createdTimestamp" : 1698151345590,
-    "username" : "person_admin",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
-    "firstName" : "",
-    "lastName" : "",
-    "email" : "person.admin@condo-manager.com",
-    "credentials" : [ {
-      "id" : "5169292c-175b-4c37-b289-f37ccb0a0b68",
-      "type" : "password",
-      "userLabel" : "My password",
-      "createdDate" : 1698151363691,
-      "secretData" : "{\"value\":\"v+bmdnz+DKCosFZDC0cUWiZ8wqMg86Yavio4/fAAvOM=\",\"salt\":\"dsiHTL46x/ePu/wb6UNJyQ==\",\"additionalParameters\":{}}",
-      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
-    } ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "person_admin", "default-roles-condo-manager" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {

@@ -1,10 +1,12 @@
 condomanager:
   db:
-    host: postgres
+    host: postgres-it
     port: 5432
     dbname: condo-manager
     username: postgres
     password: postgres
+  keycloak:
+    host: http://keycloak-it:8081
 
 logging:
   level.root: INFO

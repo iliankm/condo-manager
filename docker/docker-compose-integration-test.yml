@@ -1,13 +1,38 @@
 version: '2'
 services:
-  postgres:
+  postgres-it:
     image: postgres:15.3
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: condo-manager
-  condo-manager:
+  postgres-keycloak-it:
+    image: postgres:15.3
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: keycloak
+  keycloak-it:
+    image: quay.io/keycloak/keycloak:22.0.5
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_PORT: 8081
+      KC_HOSTNAME_URL: http://keycloak-it:8081
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres-keycloak-it
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+    command:
+      - start-dev
+      - --import-realm
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+    depends_on:
+      - postgres-keycloak-it
+  condo-manager-it:
     image: condo-manager:${IMAGE_TAG}
     user: "${UID}:${GID}"
     environment:
@@ -19,3 +44,7 @@ services:
       - ../logs/integration-test:/workspace/logs
       - ./lib/jacocoagent.jar:/opt/jacoco/jacocoagent.jar
       - ../condo-manager-test/condo-manager-integration-test/target:/workspace/jacoco
+    depends_on:
+      - postgres-it
+      - postgres-keycloak-it
+      - keycloak-it

@@ -22,7 +22,7 @@ services:
     volumes:
       - ./data/postgresql-keycloak:/var/lib/postgresql/data
   keycloak-export-configuration:
-    image: quay.io/keycloak/keycloak:22.0.4
+    image: quay.io/keycloak/keycloak:22.0.5
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -41,7 +41,7 @@ services:
     volumes:
       - ./keycloak:/opt/keycloak/data/import
   keycloak-import-configuration:
-    image: quay.io/keycloak/keycloak:22.0.4
+    image: quay.io/keycloak/keycloak:22.0.5
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -55,27 +55,33 @@ services:
       - --override=true
     depends_on:
       - postgres-keycloak
+    # noinspection ComposeUnknownKeys
+    profiles: [ "keycloak-import-configuration"]
     volumes:
       - ./keycloak:/opt/keycloak/data/import
   keycloak:
-    image: quay.io/keycloak/keycloak:22.0.4
+    image: quay.io/keycloak/keycloak:22.0.5
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_URL: http://localhost:8081
+      #KC_HOSTNAME_URL: http://keycloak:8080
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres-keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
     command:
       - start-dev
+      - --import-realm
       #- --hostname-strict=false
       #- --hostname-strict-https=false
       #- --http-enabled=true
-      - --db=postgres
-      - --db-url-host=postgres-keycloak
-      - --db-username=postgres
-      - --db-password=postgres
     ports:
       - "8081:8080"
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
     depends_on:
       - postgres-keycloak
-      - keycloak-import-configuration
   condo-manager:
     image: condo-manager:latest
     ports:
@@ -90,5 +96,4 @@ services:
     depends_on:
       - postgres
       - postgres-keycloak
-      - keycloak-import-configuration
       - keycloak

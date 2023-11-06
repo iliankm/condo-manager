@@ -70,6 +70,14 @@ class PersonController(
                         schema = Schema(implementation = ProblemDetail::class)
                     )
                 ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden."
             )
         ]
     )
@@ -98,6 +106,14 @@ class PersonController(
                         schema = Schema(implementation = PersonDTO::class)
                     )
                 ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden."
             ),
             ApiResponse(
                 responseCode = "404",
@@ -147,6 +163,14 @@ class PersonController(
                         schema = Schema(implementation = ProblemDetail::class)
                     )
                 ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden."
             ),
             ApiResponse(
                 responseCode = "404",
@@ -201,6 +225,14 @@ class PersonController(
                         schema = Schema(implementation = PersonDTO::class)
                     )
                 ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden."
             ),
             ApiResponse(
                 responseCode = "404",
