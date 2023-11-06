@@ -72,6 +72,14 @@ class CondominiumController(
                         schema = Schema(implementation = ProblemDetail::class)
                     )
                 ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden."
             )
         ]
     )
@@ -101,6 +109,14 @@ class CondominiumController(
                         schema = Schema(implementation = CondominiumDTO::class)
                     )
                 ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden."
             ),
             ApiResponse(
                 responseCode = "404",
@@ -150,6 +166,14 @@ class CondominiumController(
                         schema = Schema(implementation = ProblemDetail::class)
                     )
                 ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden."
             ),
             ApiResponse(
                 responseCode = "404",
@@ -204,6 +228,14 @@ class CondominiumController(
                         schema = Schema(implementation = Unit::class)
                     )
                 ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden."
             ),
             ApiResponse(
                 responseCode = "404",

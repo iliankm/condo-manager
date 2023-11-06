@@ -6,4 +6,4 @@ condomanager:
     username: postgres
     password: postgres
   keycloak:
-    host: http://localhost:8081
+    host: http://keycloak:8081
