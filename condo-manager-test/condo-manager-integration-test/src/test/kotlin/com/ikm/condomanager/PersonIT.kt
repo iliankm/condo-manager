@@ -36,7 +36,7 @@ class PersonIT : BaseIntegrationTest() {
         private fun whenCreatePerson(user: KeycloakUser? = condoManagerUser, name: String = randomAlphabetic(20)) =
             Given {
                 contentType(JSON)
-                oauth2(user.issueAccessToken())
+                oauth2(user)
                 body(
                     PersonDTO(
                         name = name
@@ -48,7 +48,7 @@ class PersonIT : BaseIntegrationTest() {
 
         private fun whenGetPerson(user: KeycloakUser?, id: String) =
             Given {
-                oauth2(user.issueAccessToken())
+                oauth2(user)
                 pathParam("id", id)
             } When {
                 get("$PERSONS_URI/{id}")
@@ -57,7 +57,7 @@ class PersonIT : BaseIntegrationTest() {
         private fun whenUpdatePerson(user: KeycloakUser?, id: PersonId, person: PersonDTO) =
             Given {
                 contentType(JSON)
-                oauth2(user.issueAccessToken())
+                oauth2(user)
                 pathParam("id", id.id)
                 header(HttpHeaders.IF_MATCH, id.version)
                 body(person)
@@ -67,7 +67,7 @@ class PersonIT : BaseIntegrationTest() {
 
         private fun whenDeletePerson(user: KeycloakUser?, id: PersonId) =
             Given {
-                oauth2(user.issueAccessToken())
+                oauth2(user)
                 pathParam("id", id.id)
                 header(HttpHeaders.IF_MATCH, id.version)
             } When {

@@ -13,6 +13,7 @@ import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
 import java.time.Instant
 import java.util.UUID
+import kotlin.reflect.KProperty
 
 /**
  * Utility class for Keycloak.
@@ -20,22 +21,10 @@ import java.util.UUID
 class Keycloak(
     private val host: String
 ) {
-    @Volatile
-    private var adminAccessTokenIssuedAt: Instant = Instant.MIN
 
-    @Volatile
-    private var adminAccessToken: String = ""
-        get() {
-            if (shouldIssueAdminAccessToken(field, adminAccessTokenIssuedAt)) {
-                synchronized(this) {
-                    if (shouldIssueAdminAccessToken(field, adminAccessTokenIssuedAt)) {
-                        field = issueKeycloakAdminAccessToken()
-                        adminAccessTokenIssuedAt = Instant.now()
-                    }
-                }
-            }
-            return field
-        }
+    private val adminAccessToken: String by timeout(Duration.ofSeconds(58)) {
+        issueKeycloakAdminAccessToken()
+    }
 
     private val realmRoles: Map<String, String> by lazy { loadRealmRoles() }
 
@@ -57,10 +46,6 @@ class Keycloak(
         private const val KEYCLOAK_ADMIN_CLIENT = "admin-cli"
         private const val KEYCLOAK_ADMIN_USER = "admin"
         private const val KEYCLOAK_ADMIN_PASSWORD = "admin"
-
-        @JvmStatic
-        private fun shouldIssueAdminAccessToken(token: String, issuedAt: Instant) =
-            token.isEmpty() || Duration.between(issuedAt, Instant.now()).seconds > 58
     }
 
     /**
@@ -192,6 +177,10 @@ class Keycloak(
             statusCode(SC_NO_CONTENT)
         }
     }
+
+    override fun toString(): String {
+        return "Keycloak(host='$host')"
+    }
 }
 
 data class KeycloakUser(
@@ -200,7 +189,43 @@ data class KeycloakUser(
     val username: String,
     val password: String,
     val roles: List<Role>
-)
+) {
+    val token by timeout(Duration.ofSeconds(298)) {
+        keycloak.issueAccessToken(username)
+    }
 
-internal fun KeycloakUser?.issueAccessToken() =
-    this?.let { keycloak.issueAccessToken(username) }
+    override fun toString(): String {
+        return "KeycloakUser(keycloak=$keycloak, username='$username', roles=$roles)"
+    }
+}
+
+/**
+ * Property delegate for timeout properties.
+ */
+class TimeoutPropertyDelegate<T>(
+    private val timeout: Duration,
+    private val initializer: () -> T
+) {
+    @Volatile
+    private var initializedAt: Instant = Instant.MIN
+
+    @Volatile
+    private var value: T? = null
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        if (shouldInitialize()) {
+            synchronized(this) {
+                if (shouldInitialize()) {
+                    value = initializer()
+                    initializedAt = Instant.now()
+                }
+            }
+        }
+        return value!!
+    }
+
+    private fun shouldInitialize(): Boolean =
+        value == null || Duration.between(initializedAt, Instant.now()).seconds >= timeout.seconds
+}
+
+fun <T> timeout(timeout: Duration, initializer: () -> T) =
+    TimeoutPropertyDelegate(timeout, initializer)

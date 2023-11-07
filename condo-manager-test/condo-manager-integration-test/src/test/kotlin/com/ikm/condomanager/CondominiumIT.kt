@@ -49,7 +49,7 @@ class CondominiumIT : BaseIntegrationTest() {
         ) =
             Given {
                 contentType(JSON)
-                oauth2(user.issueAccessToken())
+                oauth2(user)
                 body(createDTO)
             } When {
                 post(CONDOMINIUMS_URI)
@@ -57,7 +57,7 @@ class CondominiumIT : BaseIntegrationTest() {
 
         fun whenGetCondominium(user: KeycloakUser?, id: String) =
             Given {
-                oauth2(user.issueAccessToken())
+                oauth2(user)
                 pathParam("id", id)
             } When {
                 get("$CONDOMINIUMS_URI/{id}")
@@ -66,7 +66,7 @@ class CondominiumIT : BaseIntegrationTest() {
         fun whenUpdateCondominium(user: KeycloakUser?, id: CondominiumId, updateData: CondominiumUpdateDTO) =
             Given {
                 contentType(JSON)
-                oauth2(user.issueAccessToken())
+                oauth2(user)
                 pathParam("id", id.id)
                 header(HttpHeaders.IF_MATCH, id.version)
                 body(updateData)
@@ -76,7 +76,7 @@ class CondominiumIT : BaseIntegrationTest() {
 
         fun whenDeleteCondominium(user: KeycloakUser?, id: CondominiumId) =
             Given {
-                oauth2(user.issueAccessToken())
+                oauth2(user)
                 pathParam("id", id.id)
                 header(HttpHeaders.IF_MATCH, id.version)
             } When {
