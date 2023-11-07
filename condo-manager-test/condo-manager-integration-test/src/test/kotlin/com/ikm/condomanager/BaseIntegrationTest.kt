@@ -82,3 +82,10 @@ internal fun RequestSpecification.oauth2(accessToken: String?): RequestSpecifica
     }
     return this
 }
+
+internal fun RequestSpecification.oauth2(user: KeycloakUser?): RequestSpecification {
+    if (user != null) {
+        header(AUTHORIZATION, "Bearer ${user.token}")
+    }
+    return this
+}
