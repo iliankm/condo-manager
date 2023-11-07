@@ -28,17 +28,13 @@ class Keycloak(
 
     private val realmRoles: Map<String, String> by lazy { loadRealmRoles() }
 
-    private val users: MutableMap<String, KeycloakUser> = mutableMapOf(
-        "dummy" to KeycloakUser(
-            keycloak = this,
-            id = "",
-            username = "dummy",
-            password = "dummy",
-            roles = emptyList()
-        )
+    internal val dummyUser = KeycloakUser(
+        keycloak = this,
+        id = "",
+        username = "dummy",
+        password = "dummy",
+        roles = emptyList()
     )
-
-    internal val dummyUser = users["dummy"]!!
 
     companion object {
         private const val KEYCLOAK_REALM = "condo-manager"
@@ -84,32 +80,27 @@ class Keycloak(
 
         mapRolesToUser(userId, *roles)
 
-        val user = KeycloakUser(
+        return KeycloakUser(
             this,
             id = userId,
             username = username,
             password = password,
             roles = roles.asList()
         )
-
-        users[username] = user
-
-        return user
     }
 
     /**
      * Issues access token for a user.
      *
-     * @param username
+     * @param user registered Keycloak user
      * @return the issued access token
      */
-    fun issueAccessToken(username: String): String =
+    fun issueAccessToken(user: KeycloakUser): String =
         Given {
-            check(users.containsKey(username)) { "User $username doesn't exist in the current state" }
             contentType(ContentType.URLENC)
             basicAuth(KEYCLOAK_CLIENT, "")
-            formParam("username", username)
-            formParam("password", users[username]!!.password)
+            formParam("username", user.username)
+            formParam("password", user.password)
             formParam("grant_type", "password")
             formParam("scope", "openid")
         } When {
@@ -191,7 +182,7 @@ data class KeycloakUser(
     val roles: List<Role>
 ) {
     val token by timeout(Duration.ofSeconds(298)) {
-        keycloak.issueAccessToken(username)
+        keycloak.issueAccessToken(this)
     }
 
     override fun toString(): String {
