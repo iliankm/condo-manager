@@ -1,9 +1,9 @@
 condomanager:
   db:
-    host: postgres
+    host: localhost
     port: 5432
     dbname: condo-manager
     username: postgres
     password: postgres
   keycloak:
-    host: http://keycloak:8081
+    host: http://localhost:8081
