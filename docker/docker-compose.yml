@@ -64,7 +64,7 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_HOSTNAME_URL: http://localhost:8081
+      #KC_HOSTNAME_URL: http://localhost:8081
       #KC_HOSTNAME_URL: http://keycloak:8080
       KC_DB: postgres
       KC_DB_URL_HOST: postgres-keycloak
@@ -84,9 +84,10 @@ services:
       - postgres-keycloak
   condo-manager:
     image: condo-manager:latest
-    ports:
-      - "8080:8080"
-      - "5005:5005"
+    #ports:
+    #  - "8080:8080"
+    #  - "5005:5005"
+    network_mode: host
     environment:
       JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       SPRING_PROFILES_ACTIVE: local-docker
