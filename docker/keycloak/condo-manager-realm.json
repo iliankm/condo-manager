@@ -47,28 +47,20 @@
   "failureFactor" : 30,
   "roles" : {
     "realm" : [ {
-      "id" : "cb9ba093-e8a7-46ef-bce1-072137bbab17",
-      "name" : "read_person",
-      "description" : "",
-      "composite" : false,
-      "clientRole" : false,
-      "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
-      "attributes" : { }
-    }, {
       "id" : "b2f7a7c2-9be6-4935-8d58-11aca7fa0949",
       "name" : "admin",
       "description" : "",
       "composite" : true,
       "composites" : {
-        "realm" : [ "condominium_admin", "person_admin" ]
+        "realm" : [ "condominium_read", "condo_manager_user", "condominium_manage" ]
       },
       "clientRole" : false,
       "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
       "attributes" : { }
     }, {
-      "id" : "80532d76-36c4-4ef1-990e-b8ed14c92ca6",
-      "name" : "update_condominium",
-      "description" : "",
+      "id" : "b53bcf4f-5736-4273-9fd2-e542a1a869b7",
+      "name" : "uma_authorization",
+      "description" : "${role_uma_authorization}",
       "composite" : false,
       "clientRole" : false,
       "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
@@ -90,30 +82,6 @@
       "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
       "attributes" : { }
     }, {
-      "id" : "441cc994-4c53-4783-aa82-8ffe9503e130",
-      "name" : "create_condominium",
-      "description" : "",
-      "composite" : false,
-      "clientRole" : false,
-      "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
-      "attributes" : { }
-    }, {
-      "id" : "5f3b1bc0-19a1-4375-9e40-40bf0193fa07",
-      "name" : "delete_person",
-      "description" : "",
-      "composite" : false,
-      "clientRole" : false,
-      "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
-      "attributes" : { }
-    }, {
-      "id" : "7fc00313-f6ae-4e28-a330-0045982480a5",
-      "name" : "update_person",
-      "description" : "",
-      "composite" : false,
-      "clientRole" : false,
-      "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
-      "attributes" : { }
-    }, {
       "id" : "a8d18fdc-9917-4456-b77f-5d06b0f407e6",
       "name" : "default-roles-condo-manager",
       "description" : "${role_default-roles}",
@@ -128,54 +96,16 @@
       "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
       "attributes" : { }
     }, {
-      "id" : "43a5146d-74c6-4d6e-9917-ab4e0082ca5c",
-      "name" : "delete_condominium",
+      "id" : "6d6b3d84-5aaf-4092-b734-60962f152e55",
+      "name" : "condominium_manage",
       "description" : "",
       "composite" : false,
       "clientRole" : false,
       "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
       "attributes" : { }
     }, {
-      "id" : "4c75e92b-7c83-415c-af35-2f322e575f73",
-      "name" : "condominium_admin",
-      "description" : "",
-      "composite" : true,
-      "composites" : {
-        "realm" : [ "delete_condominium", "update_condominium", "create_condominium", "read_condominium" ]
-      },
-      "clientRole" : false,
-      "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
-      "attributes" : { }
-    }, {
-      "id" : "879d46d9-4cc1-4659-8ee9-2785320786d5",
-      "name" : "read_condominium",
-      "description" : "",
-      "composite" : false,
-      "clientRole" : false,
-      "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
-      "attributes" : { }
-    }, {
-      "id" : "e7d3c9b1-bfdf-476d-82d7-313bad95fbda",
-      "name" : "person_admin",
-      "description" : "",
-      "composite" : true,
-      "composites" : {
-        "realm" : [ "read_person", "create_person", "update_person", "delete_person" ]
-      },
-      "clientRole" : false,
-      "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
-      "attributes" : { }
-    }, {
-      "id" : "b53bcf4f-5736-4273-9fd2-e542a1a869b7",
-      "name" : "uma_authorization",
-      "description" : "${role_uma_authorization}",
-      "composite" : false,
-      "clientRole" : false,
-      "containerId" : "39b0ca89-060b-492f-a309-c59b6d5d1738",
-      "attributes" : { }
-    }, {
-      "id" : "546b436a-318c-4abb-a4e2-5b3b9929e864",
-      "name" : "create_person",
+      "id" : "89906cc2-5e05-44b0-a723-6eacee338a81",
+      "name" : "condominium_read",
       "description" : "",
       "composite" : false,
       "clientRole" : false,
@@ -458,7 +388,7 @@
   "otpPolicyLookAheadWindow" : 1,
   "otpPolicyPeriod" : 30,
   "otpPolicyCodeReusable" : false,
-  "otpSupportedApplications" : [ "totpAppMicrosoftAuthenticatorName", "totpAppFreeOTPName", "totpAppGoogleName" ],
+  "otpSupportedApplications" : [ "totpAppFreeOTPName", "totpAppGoogleName", "totpAppMicrosoftAuthenticatorName" ],
   "webAuthnPolicyRpEntityName" : "keycloak",
   "webAuthnPolicySignatureAlgorithms" : [ "ES256" ],
   "webAuthnPolicyRpId" : "",
@@ -629,14 +559,20 @@
     "frontchannelLogout" : true,
     "protocol" : "openid-connect",
     "attributes" : {
-      "oidc.ciba.grant.enabled" : "false",
       "client.secret.creation.time" : "1698145392",
-      "backchannel.logout.session.required" : "true",
       "post.logout.redirect.uris" : "+",
-      "display.on.consent.screen" : "false",
       "oauth2.device.authorization.grant.enabled" : "false",
+      "backchannel.logout.revoke.offline.tokens" : "false",
+      "use.refresh.tokens" : "true",
+      "oidc.ciba.grant.enabled" : "false",
+      "backchannel.logout.session.required" : "true",
+      "client_credentials.use_refresh_token" : "false",
+      "acr.loa.map" : "{}",
+      "require.pushed.authorization.requests" : "false",
+      "tls.client.certificate.bound.access.tokens" : "false",
+      "display.on.consent.screen" : "false",
       "x509.allow.regex.pattern.comparison" : "false",
-      "backchannel.logout.revoke.offline.tokens" : "false"
+      "token.response.type.bearer.lower-case" : "false"
     },
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : true,
