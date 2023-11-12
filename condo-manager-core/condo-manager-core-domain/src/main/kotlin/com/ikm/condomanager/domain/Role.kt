@@ -10,13 +10,21 @@ enum class Role(
 ) {
     CONDO_MANAGER_USER("condo_manager_user"),
 
-    CREATE_PERSON("create_person"),
-    READ_PERSON("read_person"),
-    UPDATE_PERSON("update_person"),
-    DELETE_PERSON("delete_person"),
+    CONDOMINIUM_MANAGE("condominium_manage"),
+    CONDOMINIUM_READ("condominium_read");
 
-    CREATE_CONDOMINIUM("create_condominium"),
-    READ_CONDOMINIUM("read_condominium"),
-    UPDATE_CONDOMINIUM("update_condominium"),
-    DELETE_CONDOMINIUM("delete_condominium")
+    companion object {
+        /**
+         * @return true if Role with [value] exists, false otherwise
+         */
+        fun hasValue(value: String): Boolean =
+            entries.any { it.value == value }
+
+        /**
+         * @return [Role] by given [value]
+         * @throws [NoSuchElementException] if [Role] with such value doesn't exist
+         */
+        fun fromValue(value: String): Role =
+            entries.first { it.value == value }
+    }
 }
