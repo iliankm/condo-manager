@@ -34,6 +34,10 @@
             <artifactId>condo-manager-core-domain</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.ikm.condo-manager</groupId>
+            <artifactId>condo-manager-core-out-port</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>

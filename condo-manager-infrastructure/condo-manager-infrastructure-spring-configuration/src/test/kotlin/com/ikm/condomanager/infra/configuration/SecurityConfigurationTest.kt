@@ -2,18 +2,29 @@ package com.ikm.condomanager.infra.configuration
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.ikm.condomanager.domain.Role
+import com.ikm.condomanager.domain.AuthenticatedUser
+import com.ikm.condomanager.domain.Role.CONDO_MANAGER_USER
+import com.ikm.condomanager.infra.user.LoadCurrentUserAdapter
+import com.ikm.condomanager.port.user.LoadCurrentUserPort
+import jakarta.annotation.security.RolesAllowed
+import org.hamcrest.CoreMatchers.hasItems
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.stereotype.Component
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -34,7 +45,7 @@ import java.util.UUID
  */
 @WebMvcTest
 @Import(SecurityConfiguration::class)
-@ContextConfiguration(classes = [TestController::class])
+@ContextConfiguration(classes = [TestComponent::class, TestController::class, LoadCurrentUserAdapter::class])
 @ActiveProfiles("test-infra-spring")
 class SecurityConfigurationTest {
     @Autowired
@@ -76,14 +87,25 @@ class SecurityConfigurationTest {
         result.andExpect(status().isUnauthorized)
     }
 
-    @Test
-    fun `should return 403 Forbidden`() {
+    @ParameterizedTest
+    @CsvSource(
+        "invalid_role",
+        "condo_manager_user",
+        "TEST1",
+        "TEST2",
+        "TEST3",
+        "TEST1;TEST2;TEST3",
+        "condo_manager_user;TEST2;TEST3",
+        "condo_manager_user;TEST1;TEST3",
+        "condo_manager_user;TEST1;TEST2"
+    )
+    fun `should return 403 Forbidden`(roles: String) {
         // given
         val jwt = JWT.create()
             .withNotBefore(Instant.now())
             .withExpiresAt(Instant.now().plusSeconds(60))
             .withSubject(UUID.randomUUID().toString())
-            .withArrayClaim("roles", arrayOf("invalid_role"))
+            .withArrayClaim("roles", roles.split(";").toTypedArray())
             .sign(Algorithm.RSA256(publicKey, privateKey))
         // when
         val result = mvc.perform(
@@ -100,7 +122,7 @@ class SecurityConfigurationTest {
             .withNotBefore(Instant.now())
             .withExpiresAt(Instant.now().plusSeconds(60))
             .withSubject(UUID.randomUUID().toString())
-            .withArrayClaim("roles", arrayOf(Role.CONDO_MANAGER_USER.value))
+            .withArrayClaim("roles", arrayOf(CONDO_MANAGER_USER.value, "TEST1", "TEST2", "TEST3"))
             .sign(Algorithm.RSA256(publicKey, privateKey))
         // when
         val result = mvc.perform(
@@ -119,12 +141,61 @@ class SecurityConfigurationTest {
         // then
         result.andExpect(status().isOk)
     }
+
+    @Test
+    fun `should get current user`() {
+        // given
+        val jwt = JWT.create()
+            .withNotBefore(Instant.now())
+            .withExpiresAt(Instant.now().plusSeconds(60))
+            .withSubject(UUID.randomUUID().toString())
+            .withClaim("preferred_username", "user")
+            .withClaim("email", "user@domain.com")
+            .withClaim("given_name", "John")
+            .withClaim("family_name", "Doe")
+            .withArrayClaim("roles", arrayOf(CONDO_MANAGER_USER.value))
+            .sign(Algorithm.RSA256(publicKey, privateKey))
+        // when
+        val result = mvc.perform(
+            get("/api/v1/test/user").header(AUTHORIZATION, "Bearer $jwt")
+        )
+        // then
+        result.andExpect(status().isOk)
+        result.andExpect(jsonPath("$.username").value("user"))
+        result.andExpect(jsonPath("$.email").value("user@domain.com"))
+        result.andExpect(jsonPath("$.firstName").value("John"))
+        result.andExpect(jsonPath("$.lastName").value("Doe"))
+        result.andExpect(jsonPath("$.roles", hasItems(CONDO_MANAGER_USER.name)))
+    }
 }
 
 @RestController
 @RequestMapping("api/v1/test")
-class TestController {
+class TestController(
+    val testComponent: TestComponent,
+    val loadCurrentUserPort: LoadCurrentUserPort
+) {
     @GetMapping("{value}")
-    fun echo(@PathVariable("value") value: String) =
-        value
+    fun echo(@PathVariable("value") value: String): String {
+        testComponent.test1()
+        testComponent.test2()
+        testComponent.test3()
+        return value
+    }
+
+    @GetMapping("user")
+    fun getUser(): AuthenticatedUser? =
+        loadCurrentUserPort.load()
+}
+
+@Component
+class TestComponent {
+    @RolesAllowed("TEST1")
+    fun test1() = Unit
+
+    @Secured("ROLE_TEST2")
+    fun test2() = Unit
+
+    @PreAuthorize("hasRole('TEST3')")
+    fun test3() = Unit
 }
