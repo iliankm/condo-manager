@@ -1,6 +1,7 @@
 package com.ikm.condomanager.usecase.condominium
 
 import com.ikm.condomanager.domain.Condominium
+import com.ikm.condomanager.domain.Role.CONDOMINIUM_MANAGE
 import com.ikm.condomanager.exception.NotFoundException
 import com.ikm.condomanager.exception.VersionNotMatchedException
 
@@ -14,6 +15,7 @@ interface UpdateCondominiumUseCase {
      *
      * @param condominium the [Condominium] to be updated
      * @return the updated [Condominium]
+     * @throws AccessDeniedException if the current user doesn't have [CONDOMINIUM_MANAGE] role
      * @throws IllegalStateException if [condominium#id] or [condominium#id#version] are not provided
      * @throws NotFoundException if the [Condominium] to be updated is not found in the db
      * @throws VersionNotMatchedException if [condominium#id#version] doesn't match the actual version of the object

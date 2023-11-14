@@ -5,6 +5,8 @@ import com.ikm.condomanager.adapter.web.dto.CondominiumCreateDTO
 import com.ikm.condomanager.adapter.web.dto.CondominiumDTO
 import com.ikm.condomanager.adapter.web.dto.CondominiumUpdateDTO
 import com.ikm.condomanager.domain.CondominiumId
+import com.ikm.condomanager.domain.Role.CONDOMINIUM_MANAGE
+import com.ikm.condomanager.domain.Role.CONDOMINIUM_READ
 import com.ikm.condomanager.domain.Role.CONDO_MANAGER_USER
 import io.restassured.http.ContentType.JSON
 import io.restassured.module.kotlin.extensions.Extract
@@ -20,7 +22,6 @@ import org.apache.http.HttpStatus.SC_NOT_FOUND
 import org.apache.http.HttpStatus.SC_OK
 import org.apache.http.HttpStatus.SC_PRECONDITION_FAILED
 import org.apache.http.HttpStatus.SC_UNAUTHORIZED
-import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -35,6 +36,8 @@ class CondominiumIT : BaseIntegrationTest() {
         private const val CONDOMINIUMS_URI = "api/v1/condominiums"
 
         private val condoManagerUser = keycloak.createUser(CONDO_MANAGER_USER)
+        private val condominiumManageUser = keycloak.createUser(CONDOMINIUM_READ, CONDOMINIUM_MANAGE)
+        private val condominiumReadUser = keycloak.createUser(CONDOMINIUM_READ)
 
         private fun whenCreateCondominium(
             user: KeycloakUser?,
@@ -84,24 +87,45 @@ class CondominiumIT : BaseIntegrationTest() {
             }
 
         @JvmStatic
-        fun condominiumSecurityTestParameters() =
+        fun createCondominiumTestParameters() =
             listOf(
                 Arguments.of(null, SC_UNAUTHORIZED),
-                Arguments.of(keycloak.dummyUser, SC_FORBIDDEN)
+                Arguments.of(keycloak.dummyUser, SC_FORBIDDEN),
+                Arguments.of(condoManagerUser, SC_FORBIDDEN),
+                Arguments.of(condominiumManageUser, SC_CREATED),
+            )
+
+        @JvmStatic
+        fun getCondominiumTestParameters() =
+            listOf(
+                Arguments.of(null, SC_UNAUTHORIZED),
+                Arguments.of(keycloak.dummyUser, SC_FORBIDDEN),
+                Arguments.of(condoManagerUser, SC_FORBIDDEN),
+                Arguments.of(condominiumReadUser, SC_OK),
+            )
+
+        @JvmStatic
+        fun updateSecurityTestParameters() =
+            listOf(
+                Arguments.of(null, SC_UNAUTHORIZED),
+                Arguments.of(keycloak.dummyUser, SC_FORBIDDEN),
+                Arguments.of(condoManagerUser, SC_FORBIDDEN),
+                Arguments.of(condominiumManageUser, SC_OK),
             )
     }
 
-    @Test
-    fun `should create Condominium`() {
-        whenCreateCondominium(condoManagerUser) Then {
-            statusCode(SC_CREATED)
+    @ParameterizedTest
+    @MethodSource("createCondominiumTestParameters")
+    fun `create Condominium test`(user: KeycloakUser?, statusCode: Int) {
+        whenCreateCondominium(user) Then {
+            statusCode(statusCode)
         }
     }
 
     @Test
     fun `given not valid payload, when create Condominium, should return 400`() {
         whenCreateCondominium(
-            condoManagerUser,
+            condominiumManageUser,
             CondominiumCreateDTO(
                 address = CondominiumAddressDTO(
                     city = "",
@@ -116,81 +140,34 @@ class CondominiumIT : BaseIntegrationTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("condominiumSecurityTestParameters")
-    fun `create Condominium security test`(user: KeycloakUser?, statusCode: Int) {
-        whenCreateCondominium(user) Then {
-            statusCode(statusCode)
-        }
-    }
-
-    @Test
-    fun `should get Condominium by id`() {
-        val id = whenCreateCondominium(condoManagerUser) Extract {
+    @MethodSource("getCondominiumTestParameters")
+    fun `get Condominium by id test`(user: KeycloakUser?, statusCode: Int) {
+        val id = whenCreateCondominium(condominiumManageUser) Extract {
             path<String>("id.id")
         }
 
-        whenGetCondominium(condoManagerUser, id) Then {
-            statusCode(SC_OK)
-            body("id.id", equalTo(id))
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("condominiumSecurityTestParameters")
-    fun `get Condominium security test`(user: KeycloakUser?, statusCode: Int) {
-        whenGetCondominium(user, UUID.randomUUID().toString()) Then {
+        whenGetCondominium(user, id) Then {
             statusCode(statusCode)
         }
     }
 
     @Test
     fun `when try getting not existing Condominium, should return 404`() {
-        whenGetCondominium(condoManagerUser, UUID.randomUUID().toString()) Then {
+        whenGetCondominium(condominiumReadUser, UUID.randomUUID().toString()) Then {
             statusCode(SC_NOT_FOUND)
         }
     }
 
-    @Test
-    fun `should update existing Condominium`() {
-        val condominiumDTO = whenCreateCondominium(condoManagerUser) Extract {
-            `as`(CondominiumDTO::class.java)
-        }
-
-        whenUpdateCondominium(
-            user = condoManagerUser,
-            id = condominiumDTO.id,
-            updateData = CondominiumUpdateDTO(
-                address = condominiumDTO.address.copy(city = "Some City")
-            )
-        ) Then {
-            statusCode(SC_OK)
-            body("address.city", equalTo("Some City"))
-        }
-    }
-
-    @Test
-    fun `given not valid payload, when update Condominium, should return 400`() {
-        val condominiumDTO = whenCreateCondominium(condoManagerUser) Extract {
-            `as`(CondominiumDTO::class.java)
-        }
-
-        whenUpdateCondominium(
-            user = condoManagerUser,
-            id = condominiumDTO.id,
-            updateData = CondominiumUpdateDTO(
-                address = condominiumDTO.address.copy(city = "")
-            )
-        ) Then {
-            statusCode(SC_BAD_REQUEST)
-        }
-    }
-
     @ParameterizedTest
-    @MethodSource("condominiumSecurityTestParameters")
-    fun `update Condominium security test`(user: KeycloakUser?, statusCode: Int) {
+    @MethodSource("updateSecurityTestParameters")
+    fun `update existing Condominium test`(user: KeycloakUser?, statusCode: Int) {
+        val condominiumDTO = whenCreateCondominium(condominiumManageUser) Extract {
+            `as`(CondominiumDTO::class.java)
+        }
+
         whenUpdateCondominium(
             user = user,
-            id = CondominiumId(UUID.randomUUID().toString(), 1),
+            id = condominiumDTO.id,
             updateData = CondominiumUpdateDTO(
                 address = CondominiumAddressDTO(
                     city = randomAlphabetic(20),
@@ -205,9 +182,26 @@ class CondominiumIT : BaseIntegrationTest() {
     }
 
     @Test
+    fun `given not valid payload, when update Condominium, should return 400`() {
+        val condominiumDTO = whenCreateCondominium(condominiumManageUser) Extract {
+            `as`(CondominiumDTO::class.java)
+        }
+
+        whenUpdateCondominium(
+            user = condominiumManageUser,
+            id = condominiumDTO.id,
+            updateData = CondominiumUpdateDTO(
+                address = condominiumDTO.address.copy(city = "")
+            )
+        ) Then {
+            statusCode(SC_BAD_REQUEST)
+        }
+    }
+
+    @Test
     fun `when try updating not existing Condominium, should return 404`() {
         whenUpdateCondominium(
-            user = condoManagerUser,
+            user = condominiumManageUser,
             id = CondominiumId(UUID.randomUUID().toString(), 1),
             updateData = CondominiumUpdateDTO(
                 address = CondominiumAddressDTO(
@@ -224,12 +218,12 @@ class CondominiumIT : BaseIntegrationTest() {
 
     @Test
     fun `when try updating a Condominium with wrong version, should return 412`() {
-        val condominiumDTO = whenCreateCondominium(condoManagerUser) Extract {
+        val condominiumDTO = whenCreateCondominium(condominiumManageUser) Extract {
             `as`(CondominiumDTO::class.java)
         }
 
         whenUpdateCondominium(
-            user = condoManagerUser,
+            user = condominiumManageUser,
             id = CondominiumId(condominiumDTO.id.id, 100),
             updateData = CondominiumUpdateDTO(
                 address = condominiumDTO.address.copy()
@@ -239,39 +233,32 @@ class CondominiumIT : BaseIntegrationTest() {
         }
     }
 
-    @Test
-    fun `should delete Condominium`() {
-        val condominiumDTO = whenCreateCondominium(condoManagerUser) Extract {
+    @ParameterizedTest
+    @MethodSource("updateSecurityTestParameters")
+    fun `delete Condominium test`(user: KeycloakUser?, statusCode: Int) {
+        val condominiumDTO = whenCreateCondominium(condominiumManageUser) Extract {
             `as`(CondominiumDTO::class.java)
         }
 
-        whenDeleteCondominium(condoManagerUser, condominiumDTO.id) Then {
-            statusCode(SC_OK)
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("condominiumSecurityTestParameters")
-    fun `delete Condominium security test`(user: KeycloakUser?, statusCode: Int) {
-        whenDeleteCondominium(user, CondominiumId(UUID.randomUUID().toString(), 1)) Then {
+        whenDeleteCondominium(user, condominiumDTO.id) Then {
             statusCode(statusCode)
         }
     }
 
     @Test
     fun `when try deleting not existing Condominium, should return 404`() {
-        whenDeleteCondominium(condoManagerUser, CondominiumId(UUID.randomUUID().toString(), 1)) Then {
+        whenDeleteCondominium(condominiumManageUser, CondominiumId(UUID.randomUUID().toString(), 1)) Then {
             statusCode(SC_NOT_FOUND)
         }
     }
 
     @Test
     fun `when try deleting a Condominium with wrong version, should return 412`() {
-        val condominiumDTO = whenCreateCondominium(condoManagerUser) Extract {
+        val condominiumDTO = whenCreateCondominium(condominiumManageUser) Extract {
             `as`(CondominiumDTO::class.java)
         }
 
-        whenDeleteCondominium(condoManagerUser, CondominiumId(condominiumDTO.id.id, 100)) Then {
+        whenDeleteCondominium(condominiumManageUser, CondominiumId(condominiumDTO.id.id, 100)) Then {
             statusCode(SC_PRECONDITION_FAILED)
         }
     }
