@@ -17,7 +17,6 @@ import org.apache.http.HttpStatus.SC_NOT_FOUND
 import org.apache.http.HttpStatus.SC_OK
 import org.apache.http.HttpStatus.SC_PRECONDITION_FAILED
 import org.apache.http.HttpStatus.SC_UNAUTHORIZED
-import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -75,17 +74,27 @@ class PersonIT : BaseIntegrationTest() {
             }
 
         @JvmStatic
-        fun personSecurityTestParameters() =
+        fun createPersonTestParameters() =
             listOf(
                 Arguments.of(null, SC_UNAUTHORIZED),
-                Arguments.of(keycloak.dummyUser, SC_FORBIDDEN)
+                Arguments.of(keycloak.dummyUser, SC_FORBIDDEN),
+                Arguments.of(condoManagerUser, SC_CREATED)
+            )
+
+        @JvmStatic
+        fun getPersonTestParameters() =
+            listOf(
+                Arguments.of(null, SC_UNAUTHORIZED),
+                Arguments.of(keycloak.dummyUser, SC_FORBIDDEN),
+                Arguments.of(condoManagerUser, SC_OK)
             )
     }
 
-    @Test
-    fun `should create Person`() {
-        whenCreatePerson() Then {
-            statusCode(SC_CREATED)
+    @ParameterizedTest
+    @MethodSource("createPersonTestParameters")
+    fun `should create Person`(user: KeycloakUser?, statusCode: Int) {
+        whenCreatePerson(user = user) Then {
+            statusCode(statusCode)
         }
     }
 
@@ -97,29 +106,13 @@ class PersonIT : BaseIntegrationTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("personSecurityTestParameters")
-    fun `create Person security test`(user: KeycloakUser?, statusCode: Int) {
-        whenCreatePerson(user = user) Then {
-            statusCode(statusCode)
-        }
-    }
-
-    @Test
-    fun `should get Person by id`() {
-        val id = whenCreatePerson() Extract {
-            path<String>("id.id")
+    @MethodSource("getPersonTestParameters")
+    fun `get Person by id test`(user: KeycloakUser?, statusCode: Int) {
+        val person = whenCreatePerson() Extract {
+            `as`(PersonDTO::class.java)
         }
 
-        whenGetPerson(condoManagerUser, id) Then {
-            statusCode(SC_OK)
-            body("id.id", equalTo(id))
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("personSecurityTestParameters")
-    fun `get Person security test`(user: KeycloakUser?, statusCode: Int) {
-        whenGetPerson(user, UUID.randomUUID().toString()) Then {
+        whenGetPerson(user, person.id!!.id) Then {
             statusCode(statusCode)
         }
     }
@@ -131,15 +124,19 @@ class PersonIT : BaseIntegrationTest() {
         }
     }
 
-    @Test
-    fun `should update existing Person`() {
+    @ParameterizedTest
+    @MethodSource("getPersonTestParameters")
+    fun `update Person test`(user: KeycloakUser?, statusCode: Int) {
         val person = whenCreatePerson() Extract {
             `as`(PersonDTO::class.java)
         }
 
-        whenUpdatePerson(condoManagerUser, person.id!!, person.copy(name = "John Doe")) Then {
-            statusCode(SC_OK)
-            body("name", equalTo("John Doe"))
+        whenUpdatePerson(
+            user = user,
+            id = person.id!!,
+            person = PersonDTO(name = "John Doe")
+        ) Then {
+            statusCode(statusCode)
         }
     }
 
@@ -151,18 +148,6 @@ class PersonIT : BaseIntegrationTest() {
 
         whenUpdatePerson(condoManagerUser, person.id!!, person.copy(name = "")) Then {
             statusCode(SC_BAD_REQUEST)
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("personSecurityTestParameters")
-    fun `update Person security test`(user: KeycloakUser?, statusCode: Int) {
-        whenUpdatePerson(
-            user = user,
-            id = PersonId(UUID.randomUUID().toString(), 1),
-            person = PersonDTO(name = "John Doe")
-        ) Then {
-            statusCode(statusCode)
         }
     }
 
@@ -192,21 +177,14 @@ class PersonIT : BaseIntegrationTest() {
         }
     }
 
-    @Test
-    fun `should delete Person`() {
+    @ParameterizedTest
+    @MethodSource("getPersonTestParameters")
+    fun `delete Person test`(user: KeycloakUser?, statusCode: Int) {
         val person = whenCreatePerson() Extract {
             `as`(PersonDTO::class.java)
         }
 
-        whenDeletePerson(condoManagerUser, person.id!!) Then {
-            statusCode(SC_OK)
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("personSecurityTestParameters")
-    fun `delete Person security test`(user: KeycloakUser?, statusCode: Int) {
-        whenDeletePerson(user, PersonId(UUID.randomUUID().toString(), 1)) Then {
+        whenDeletePerson(user, person.id!!) Then {
             statusCode(statusCode)
         }
     }

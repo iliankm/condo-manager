@@ -33,7 +33,7 @@ services:
     depends_on:
       - postgres-keycloak-it
   condo-manager-it:
-    image: condo-manager:${IMAGE_TAG}
+    image: condo-manager:latest
     user: "${UID}:${GID}"
     environment:
       JAVA_TOOL_OPTIONS: -javaagent:/opt/jacoco/jacocoagent.jar=destfile=/workspace/jacoco/jacoco-IT.exec,append=false,output=file,address=*,port=6300

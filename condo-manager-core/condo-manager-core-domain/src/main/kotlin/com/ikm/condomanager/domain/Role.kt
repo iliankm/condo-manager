@@ -8,10 +8,19 @@ package com.ikm.condomanager.domain
 enum class Role(
     val value: String
 ) {
-    CONDO_MANAGER_USER("condo_manager_user"),
+    CONDO_MANAGER_USER(Names.CONDO_MANAGER_USER),
 
-    CONDOMINIUM_MANAGE("condominium_manage"),
-    CONDOMINIUM_READ("condominium_read");
+    CONDOMINIUM_MANAGE(Names.CONDOMINIUM_MANAGE),
+    CONDOMINIUM_READ(Names.CONDOMINIUM_READ);
+
+    /**
+     * Auth. server role names.
+     */
+    object Names {
+        const val CONDO_MANAGER_USER = "condo_manager_user"
+        const val CONDOMINIUM_MANAGE = "condominium_manage"
+        const val CONDOMINIUM_READ = "condominium_read"
+    }
 
     companion object {
         /**
