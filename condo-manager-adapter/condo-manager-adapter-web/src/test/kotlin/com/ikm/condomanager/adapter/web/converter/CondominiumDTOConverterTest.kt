@@ -1,9 +1,7 @@
 package com.ikm.condomanager.adapter.web.converter
 
 import com.ikm.condomanager.adapter.web.dto.CondominiumAddressDTO
-import com.ikm.condomanager.adapter.web.dto.CondominiumCreateDTO
 import com.ikm.condomanager.adapter.web.dto.CondominiumDTO
-import com.ikm.condomanager.adapter.web.dto.CondominiumUpdateDTO
 import com.ikm.condomanager.domain.Condominium
 import com.ikm.condomanager.domain.CondominiumAddress
 import com.ikm.condomanager.domain.CondominiumId
@@ -25,13 +23,14 @@ class CondominiumDTOConverterTest {
         // given
         mockkStatic(CondominiumAddressDTO::convertToCondominiumAddress)
         val condominiumAddressDTO = mockk<CondominiumAddressDTO>()
-        val condominiumCreateDTO = CondominiumCreateDTO(
+        val condominiumDTO = CondominiumDTO(
+            id = null,
             address = condominiumAddressDTO
         )
         val condominiumAddress = mockk<CondominiumAddress>()
         every { condominiumAddressDTO.convertToCondominiumAddress() } returns condominiumAddress
         // when
-        val condominium = condominiumCreateDTO.convertToCondominium()
+        val condominium = condominiumDTO.convertToCondominium()
         // then
         assertNull(condominium.id)
         assertSame(condominiumAddress, condominium.address)
@@ -62,25 +61,19 @@ class CondominiumDTOConverterTest {
     }
 
     @Test
-    fun `should merge CondominiumUpdateDTO to Condominium`() {
+    fun `should convert CondominiumDTO to UpdateCondominiumData`() {
         // given
         mockkStatic(CondominiumAddressDTO::convertToCondominiumAddress)
         val condominiumAddressDTO = mockk<CondominiumAddressDTO>()
-        val condominiumUpdateDTO = CondominiumUpdateDTO(
+        val condominiumDTO = CondominiumDTO(
+            id = CondominiumId(UUID.randomUUID().toString(), 0),
             address = condominiumAddressDTO
-        )
-        val condominium = Condominium(
-            id = CondominiumId(UUID.randomUUID().toString()),
-            address = mockk<CondominiumAddress>()
         )
         val condominiumAddress = mockk<CondominiumAddress>()
         every { condominiumAddressDTO.convertToCondominiumAddress() } returns condominiumAddress
         // when
-        condominiumUpdateDTO.mergeToCondominium(condominium)
+        val updateCondominiumData = condominiumDTO.convertToUpdateCondominiumData()
         // then
-        assertSame(condominiumAddress, condominium.address)
-        verifyAll {
-            condominiumAddressDTO.convertToCondominiumAddress()
-        }
+        assertSame(condominiumAddress, updateCondominiumData.address)
     }
 }

@@ -2,10 +2,8 @@ package com.ikm.condomanager.adapter.web.controller
 
 import com.ikm.condomanager.adapter.web.converter.convertToCondominium
 import com.ikm.condomanager.adapter.web.converter.convertToCondominiumDTO
-import com.ikm.condomanager.adapter.web.converter.mergeToCondominium
-import com.ikm.condomanager.adapter.web.dto.CondominiumCreateDTO
+import com.ikm.condomanager.adapter.web.converter.convertToUpdateCondominiumData
 import com.ikm.condomanager.adapter.web.dto.CondominiumDTO
-import com.ikm.condomanager.adapter.web.dto.CondominiumUpdateDTO
 import com.ikm.condomanager.domain.CondominiumId
 import com.ikm.condomanager.domain.PersonId
 import com.ikm.condomanager.usecase.condominium.CreateCondominiumUseCase
@@ -84,7 +82,7 @@ class CondominiumController(
         ]
     )
     @PostMapping
-    fun createCondominium(@RequestBody condominiumDTO: CondominiumCreateDTO): ResponseEntity<CondominiumDTO> =
+    fun createCondominium(@RequestBody condominiumDTO: CondominiumDTO): ResponseEntity<CondominiumDTO> =
         condominiumDTO.convertToCondominium().let {
             createCondominiumUseCase.create(it)
         }.convertToCondominiumDTO().let {
@@ -141,7 +139,7 @@ class CondominiumController(
      *
      * @param id condominium resource id
      * @param version condominium resource version
-     * @param condominiumUpdateDTO update data
+     * @param condominiumDTO update data
      * @return the updated condominium resource
      */
     @Operation(summary = "Update a condominium resource by its id and version.")
@@ -201,11 +199,10 @@ class CondominiumController(
     fun updateCondominium(
         @PathVariable("id") id: String,
         @RequestHeader(HttpHeaders.IF_MATCH) version: Long,
-        @RequestBody condominiumUpdateDTO: CondominiumUpdateDTO
+        @RequestBody condominiumDTO: CondominiumDTO
     ): ResponseEntity<CondominiumDTO> =
-        loadCondominiumUseCase.load(CondominiumId(id, version)).let {
-            condominiumUpdateDTO.mergeToCondominium(it)
-            updateCondominiumUseCase.update(it)
+        condominiumDTO.convertToUpdateCondominiumData().let {
+            updateCondominiumUseCase.update(CondominiumId(id, version), it)
         }.convertToCondominiumDTO().let {
             ResponseEntity(it, OK)
         }
