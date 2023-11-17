@@ -16,6 +16,7 @@ class DeleteCondominiumService(
 ) : DeleteCondominiumUseCase {
     @RolesAllowed(CONDOMINIUM_MANAGE)
     override fun delete(id: CondominiumId) {
+        checkNotNull(id.version)
         deleteCondominiumPort.delete(id)
     }
 }

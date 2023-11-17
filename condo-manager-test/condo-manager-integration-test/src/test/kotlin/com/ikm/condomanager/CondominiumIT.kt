@@ -1,9 +1,7 @@
 package com.ikm.condomanager
 
 import com.ikm.condomanager.adapter.web.dto.CondominiumAddressDTO
-import com.ikm.condomanager.adapter.web.dto.CondominiumCreateDTO
 import com.ikm.condomanager.adapter.web.dto.CondominiumDTO
-import com.ikm.condomanager.adapter.web.dto.CondominiumUpdateDTO
 import com.ikm.condomanager.domain.CondominiumId
 import com.ikm.condomanager.domain.Role.CONDOMINIUM_MANAGE
 import com.ikm.condomanager.domain.Role.CONDOMINIUM_READ
@@ -41,7 +39,8 @@ class CondominiumIT : BaseIntegrationTest() {
 
         private fun whenCreateCondominium(
             user: KeycloakUser?,
-            createDTO: CondominiumCreateDTO = CondominiumCreateDTO(
+            createDTO: CondominiumDTO = CondominiumDTO(
+                id = null,
                 address = CondominiumAddressDTO(
                     city = randomAlphabetic(20),
                     street = randomAlphabetic(20),
@@ -66,13 +65,13 @@ class CondominiumIT : BaseIntegrationTest() {
                 get("$CONDOMINIUMS_URI/{id}")
             }
 
-        fun whenUpdateCondominium(user: KeycloakUser?, id: CondominiumId, updateData: CondominiumUpdateDTO) =
+        fun whenUpdateCondominium(user: KeycloakUser?, id: CondominiumId, condominium: CondominiumDTO) =
             Given {
                 contentType(JSON)
                 oauth2(user)
                 pathParam("id", id.id)
                 header(HttpHeaders.IF_MATCH, id.version)
-                body(updateData)
+                body(condominium)
             } When {
                 put("$CONDOMINIUMS_URI/{id}")
             }
@@ -126,7 +125,8 @@ class CondominiumIT : BaseIntegrationTest() {
     fun `given not valid payload, when create Condominium, should return 400`() {
         whenCreateCondominium(
             condominiumManageUser,
-            CondominiumCreateDTO(
+            CondominiumDTO(
+                id = null,
                 address = CondominiumAddressDTO(
                     city = "",
                     street = "",
@@ -167,8 +167,8 @@ class CondominiumIT : BaseIntegrationTest() {
 
         whenUpdateCondominium(
             user = user,
-            id = condominiumDTO.id,
-            updateData = CondominiumUpdateDTO(
+            id = condominiumDTO.id!!,
+            condominium = condominiumDTO.copy(
                 address = CondominiumAddressDTO(
                     city = randomAlphabetic(20),
                     street = randomAlphabetic(20),
@@ -189,8 +189,8 @@ class CondominiumIT : BaseIntegrationTest() {
 
         whenUpdateCondominium(
             user = condominiumManageUser,
-            id = condominiumDTO.id,
-            updateData = CondominiumUpdateDTO(
+            id = condominiumDTO.id!!,
+            condominium = condominiumDTO.copy(
                 address = condominiumDTO.address.copy(city = "")
             )
         ) Then {
@@ -203,7 +203,8 @@ class CondominiumIT : BaseIntegrationTest() {
         whenUpdateCondominium(
             user = condominiumManageUser,
             id = CondominiumId(UUID.randomUUID().toString(), 1),
-            updateData = CondominiumUpdateDTO(
+            condominium = CondominiumDTO(
+                id = CondominiumId(UUID.randomUUID().toString(), 1),
                 address = CondominiumAddressDTO(
                     city = randomAlphabetic(20),
                     street = randomAlphabetic(20),
@@ -224,10 +225,8 @@ class CondominiumIT : BaseIntegrationTest() {
 
         whenUpdateCondominium(
             user = condominiumManageUser,
-            id = CondominiumId(condominiumDTO.id.id, 100),
-            updateData = CondominiumUpdateDTO(
-                address = condominiumDTO.address.copy()
-            )
+            id = CondominiumId(condominiumDTO.id!!.id, 100),
+            condominium = condominiumDTO
         ) Then {
             statusCode(SC_PRECONDITION_FAILED)
         }
@@ -240,7 +239,7 @@ class CondominiumIT : BaseIntegrationTest() {
             `as`(CondominiumDTO::class.java)
         }
 
-        whenDeleteCondominium(user, condominiumDTO.id) Then {
+        whenDeleteCondominium(user, condominiumDTO.id!!) Then {
             statusCode(statusCode)
         }
     }
@@ -258,7 +257,7 @@ class CondominiumIT : BaseIntegrationTest() {
             `as`(CondominiumDTO::class.java)
         }
 
-        whenDeleteCondominium(condominiumManageUser, CondominiumId(condominiumDTO.id.id, 100)) Then {
+        whenDeleteCondominium(condominiumManageUser, CondominiumId(condominiumDTO.id!!.id, 100)) Then {
             statusCode(SC_PRECONDITION_FAILED)
         }
     }

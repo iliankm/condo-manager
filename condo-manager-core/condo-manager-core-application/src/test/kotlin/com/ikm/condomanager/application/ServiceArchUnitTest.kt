@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 /**
  * Arch Unit test for the services.
  */
-@AnalyzeClasses(packages = ["com.ikm.condomanager.application"], importOptions = [DoNotIncludeTests::class])
+@AnalyzeClasses(packages = ["com.ikm.condomanager.application.service"], importOptions = [DoNotIncludeTests::class])
 class ServiceArchUnitTest {
 
     @ArchTest

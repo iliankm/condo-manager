@@ -1,16 +1,15 @@
 package com.ikm.condomanager.adapter.web.converter
 
-import com.ikm.condomanager.adapter.web.dto.CondominiumCreateDTO
 import com.ikm.condomanager.adapter.web.dto.CondominiumDTO
-import com.ikm.condomanager.adapter.web.dto.CondominiumUpdateDTO
 import com.ikm.condomanager.domain.Condominium
+import com.ikm.condomanager.usecase.condominium.UpdateCondominiumData
 
 /**
- * Converts [CondominiumCreateDTO] to [Condominium].
+ * Converts [CondominiumDTO] to [Condominium].
  *
  * @return converted instance of [Condominium]
  */
-fun CondominiumCreateDTO.convertToCondominium() =
+fun CondominiumDTO.convertToCondominium() =
     Condominium.create(
         address = address.convertToCondominiumAddress()
     )
@@ -27,12 +26,9 @@ fun Condominium.convertToCondominiumDTO() =
     )
 
 /**
- * Merges this [CondominiumUpdateDTO] to the passed [Condominium].
- *
- * @param condominium the [Condominium] instance to be merged into
+ * Converts [CondominiumDTO] to [UpdateCondominiumData].
  */
-fun CondominiumUpdateDTO.mergeToCondominium(condominium: Condominium) {
-    condominium.also {
-        condominium.address = address.convertToCondominiumAddress()
-    }
-}
+fun CondominiumDTO.convertToUpdateCondominiumData() =
+    UpdateCondominiumData(
+        address = address.convertToCondominiumAddress()
+    )

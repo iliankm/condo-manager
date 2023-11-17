@@ -2,16 +2,15 @@ package com.ikm.condomanager.adapter.web.controller
 
 import com.ikm.condomanager.adapter.web.converter.convertToCondominium
 import com.ikm.condomanager.adapter.web.converter.convertToCondominiumDTO
-import com.ikm.condomanager.adapter.web.converter.mergeToCondominium
+import com.ikm.condomanager.adapter.web.converter.convertToUpdateCondominiumData
 import com.ikm.condomanager.adapter.web.dto.CondominiumAddressDTO
-import com.ikm.condomanager.adapter.web.dto.CondominiumCreateDTO
 import com.ikm.condomanager.adapter.web.dto.CondominiumDTO
-import com.ikm.condomanager.adapter.web.dto.CondominiumUpdateDTO
 import com.ikm.condomanager.domain.Condominium
 import com.ikm.condomanager.domain.CondominiumId
 import com.ikm.condomanager.usecase.condominium.CreateCondominiumUseCase
 import com.ikm.condomanager.usecase.condominium.DeleteCondominiumUseCase
 import com.ikm.condomanager.usecase.condominium.LoadCondominiumUseCase
+import com.ikm.condomanager.usecase.condominium.UpdateCondominiumData
 import com.ikm.condomanager.usecase.condominium.UpdateCondominiumUseCase
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -51,8 +50,9 @@ class CondominiumControllerTest : BaseControllerTest() {
     @Test
     fun `should create condominium resource`() {
         // given
-        mockkStatic(CondominiumCreateDTO::convertToCondominium, Condominium::convertToCondominiumDTO)
-        val condominiumCreateDTO = CondominiumCreateDTO(
+        mockkStatic(CondominiumDTO::convertToCondominium, Condominium::convertToCondominiumDTO)
+        val condominiumDTO = CondominiumDTO(
+            id = null,
             address = CondominiumAddressDTO(
                 city = "City Name",
                 street = "Street Name",
@@ -61,7 +61,7 @@ class CondominiumControllerTest : BaseControllerTest() {
             )
         )
         val condominium = mockk<Condominium>()
-        every { condominiumCreateDTO.convertToCondominium() } returns condominium
+        every { condominiumDTO.convertToCondominium() } returns condominium
         every { createCondominiumUseCase.create(condominium) } returns condominium
         val createdCondominiumDTO = CondominiumDTO(
             id = CondominiumId(UUID.randomUUID().toString(), 1),
@@ -77,16 +77,16 @@ class CondominiumControllerTest : BaseControllerTest() {
         val result = mvc.perform(
             post("/api/v1/condominiums")
                 .with(jwt())
-                .content(condominiumCreateDTO.toJsonString())
+                .content(condominiumDTO.toJsonString())
                 .contentType(MediaType.APPLICATION_JSON)
         )
         // then
         with(result) {
             andExpect(status().isCreated())
-            andExpect(jsonPath("$.id.id").value(createdCondominiumDTO.id.id))
+            andExpect(jsonPath("$.id.id").value(createdCondominiumDTO.id!!.id))
         }
         verifyAll {
-            condominiumCreateDTO.convertToCondominium()
+            condominiumDTO.convertToCondominium()
             createCondominiumUseCase.create(condominium)
             condominium.convertToCondominiumDTO()
         }
@@ -128,9 +128,10 @@ class CondominiumControllerTest : BaseControllerTest() {
     @Test
     fun `should update condominium resource`() {
         // given
-        mockkStatic(CondominiumUpdateDTO::mergeToCondominium, Condominium::convertToCondominiumDTO)
+        mockkStatic(CondominiumDTO::convertToUpdateCondominiumData, Condominium::convertToCondominiumDTO)
         val id = CondominiumId(UUID.randomUUID().toString(), 1)
-        val condominiumUpdateDTO = CondominiumUpdateDTO(
+        val condominiumDTO = CondominiumDTO(
+            id = id,
             address = CondominiumAddressDTO(
                 city = "City Name",
                 street = "Street Name",
@@ -138,34 +139,32 @@ class CondominiumControllerTest : BaseControllerTest() {
                 location = null
             )
         )
-        val condominium = mockk<Condominium>()
-        every { loadCondominiumUseCase.load(id) } returns condominium
-        every { condominiumUpdateDTO.mergeToCondominium(condominium) } returns Unit
         val updatedCondominium = mockk<Condominium>()
-        every { updateCondominiumUseCase.update(condominium) } returns updatedCondominium
-        val condominiumDTO = CondominiumDTO(
+        val updateCondominiumData = mockk<UpdateCondominiumData>()
+        every { condominiumDTO.convertToUpdateCondominiumData() } returns updateCondominiumData
+        every { updateCondominiumUseCase.update(id, updateCondominiumData) } returns updatedCondominium
+        val updatedCondominiumDTO = CondominiumDTO(
             id = CondominiumId(id.id, 2),
-            address = condominiumUpdateDTO.address
+            address = condominiumDTO.address
         )
-        every { updatedCondominium.convertToCondominiumDTO() } returns condominiumDTO
+        every { updatedCondominium.convertToCondominiumDTO() } returns updatedCondominiumDTO
         // when
         val result = mvc.perform(
             put("/api/v1/condominiums/{id}", id.id)
                 .with(jwt())
-                .content(condominiumUpdateDTO.toJsonString())
+                .content(condominiumDTO.toJsonString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.IF_MATCH, id.version)
         )
         // then
         with(result) {
             andExpect(status().isOk)
-            andExpect(jsonPath("$.id.id").value(condominiumDTO.id.id))
-            andExpect(jsonPath("$.id.version").value(condominiumDTO.id.version))
+            andExpect(jsonPath("$.id.id").value(condominiumDTO.id?.id))
+            andExpect(jsonPath("$.id.version").value(2))
         }
         verifyAll {
-            loadCondominiumUseCase.load(id)
-            condominiumUpdateDTO.mergeToCondominium(condominium)
-            updateCondominiumUseCase.update(condominium)
+            condominiumDTO.convertToUpdateCondominiumData()
+            updateCondominiumUseCase.update(id, updateCondominiumData)
             updatedCondominium.convertToCondominiumDTO()
         }
     }
