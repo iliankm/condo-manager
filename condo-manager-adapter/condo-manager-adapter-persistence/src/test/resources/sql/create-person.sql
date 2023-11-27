@@ -1,3 +1,3 @@
-insert into person (id, version, created_at, updated_at, name, email, phone_number) values ('5f92185c-3452-11ee-be56-0242ac120002', 0, NOW(), NOW(), 'John Doe', 'john.doe@company.com', '0888111222');
-insert into person (id, version, created_at, updated_at, name, email, phone_number) values ('5f92185c-3452-11ee-be56-0242ac120003', 1, NOW(), NOW(), 'name1', 'name1@company.com', '0888222333');
-insert into person (id, version, created_at, updated_at, name, email, phone_number) values ('5f92185c-3452-11ee-be56-0242ac120004', 2, NOW(), NOW(), 'name2', 'name2@company.com', '0888333444');
+insert into person (id, version, created_by, name, email, phone_number) values ('5f92185c-3452-11ee-be56-0242ac120002', 0, 'admin', 'John Doe', 'john.doe@company.com', '0888111222');
+insert into person (id, version, created_by, name, email, phone_number) values ('5f92185c-3452-11ee-be56-0242ac120003', 1, 'admin', 'name1', 'name1@company.com', '0888222333');
+insert into person (id, version, created_by, name, email, phone_number) values ('5f92185c-3452-11ee-be56-0242ac120004', 2, 'admin', 'name2', 'name2@company.com', '0888333444');
