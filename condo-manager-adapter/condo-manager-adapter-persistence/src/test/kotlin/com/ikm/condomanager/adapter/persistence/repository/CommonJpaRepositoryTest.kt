@@ -4,13 +4,21 @@ import com.ikm.condomanager.adapter.persistence.entity.PersonEntity
 import com.ikm.condomanager.domain.DomainId
 import com.ikm.condomanager.exception.NotFoundException
 import com.ikm.condomanager.exception.VersionNotMatchedException
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.authentication.TestingAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
@@ -21,9 +29,23 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
     @Autowired
     private lateinit var personRepository: PersonRepository
 
+    lateinit var testAuthenticationToken: TestingAuthenticationToken
+
+    lateinit var jwtAuthenticationToken: JwtAuthenticationToken
+
+    @BeforeEach
+    internal fun init() {
+        testAuthenticationToken = mockk<TestingAuthenticationToken>()
+        every { testAuthenticationToken.principal } returns "test-user"
+        jwtAuthenticationToken = mockk<JwtAuthenticationToken>()
+        every { jwtAuthenticationToken.name } returns "jwt-user"
+        SecurityContextHolder.clearContext()
+    }
+
     @Test
     fun `should save`() {
         // given
+        SecurityContextHolder.getContext().authentication = testAuthenticationToken
         val personEntity = PersonEntity(
             name = "John Doe",
             email = "john@doe@company.com",
@@ -32,11 +54,32 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
         // when
         val savedPersonEntity = personRepository.saveAndFlush(personEntity)
         // then
-        assertNotNull(savedPersonEntity)
-        assertTrue(savedPersonEntity.id.toString().isNotEmpty())
-        assertEquals(0, savedPersonEntity.version)
-        assertNotNull(savedPersonEntity.createdAt)
-        assertNotNull(savedPersonEntity.updatedAt)
+        with(savedPersonEntity) {
+            assertNotNull(this)
+            assertTrue(id.toString().isNotEmpty())
+            assertEquals(0, version)
+            assertNotNull(createdAt)
+            assertEquals("test-user", createdBy)
+            assertNotNull(updatedAt)
+            assertNull(updatedBy)
+        }
+    }
+
+    @Test
+    @Sql("/sql/create-person.sql")
+    fun `should update`() {
+        // given
+        SecurityContextHolder.getContext().authentication = jwtAuthenticationToken
+        val person = personRepository.getByDomainId(DomainId("5f92185c-3452-11ee-be56-0242ac120004"))
+        // when
+        person.phoneNumber = "0894991153"
+        val savedPerson = personRepository.saveAndFlush(person)
+        // then
+        assertEquals(3, savedPerson.version)
+        assertEquals("0894991153", savedPerson.phoneNumber)
+        assertEquals("admin", savedPerson.createdBy)
+        assertEquals("jwt-user", savedPerson.updatedBy)
+        assertNotEquals(savedPerson.createdAt, savedPerson.updatedAt)
     }
 
     @Test
