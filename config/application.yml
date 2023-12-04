@@ -18,4 +18,5 @@ springdoc:
     path: /swagger-ui
 
 logging:
+  config: file:${spring.config.location:config}/logback-spring.xml
   file.path: logs

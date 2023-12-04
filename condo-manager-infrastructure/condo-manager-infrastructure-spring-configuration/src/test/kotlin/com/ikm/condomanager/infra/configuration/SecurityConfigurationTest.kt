@@ -6,11 +6,16 @@ import com.ikm.condomanager.domain.AuthenticatedUser
 import com.ikm.condomanager.domain.Role.CONDO_MANAGER_USER
 import com.ikm.condomanager.infra.user.LoadCurrentUserAdapter
 import com.ikm.condomanager.port.user.LoadCurrentUserPort
+import io.mockk.every
+import io.mockk.mockk
 import jakarta.annotation.security.RolesAllowed
 import org.hamcrest.CoreMatchers.hasItems
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.MethodSource
+import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
@@ -18,12 +23,17 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.authentication.TestingAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.bind.annotation.GetMapping
@@ -39,6 +49,7 @@ import java.security.spec.X509EncodedKeySpec
 import java.time.Instant
 import java.util.Base64
 import java.util.UUID
+import kotlin.test.assertEquals
 
 /**
  * Spring WebMvc test for [SecurityConfiguration].
@@ -75,6 +86,14 @@ class SecurityConfigurationTest {
             }.let {
                 KeyFactory.getInstance("RSA").generatePrivate(it) as RSAPrivateKey
             }
+
+        @JvmStatic
+        fun authenticationUsernameParameters() =
+            listOf(
+                Arguments.of(mockk<JwtAuthenticationToken>().apply { every { name } returns "my-user" }, "my-user"),
+                Arguments.of(TestingAuthenticationToken(User("my-user2", "", emptySet()), ""), "my-user2"),
+                Arguments.of(TestingAuthenticationToken("", ""), null)
+            )
     }
 
     @Test
@@ -167,6 +186,31 @@ class SecurityConfigurationTest {
         result.andExpect(jsonPath("$.lastName").value("Doe"))
         result.andExpect(jsonPath("$.roles", hasItems(CONDO_MANAGER_USER.name)))
     }
+
+    @Test
+    fun `should get current user from MDC context`() {
+        // given
+        val jwt = JWT.create()
+            .withNotBefore(Instant.now())
+            .withExpiresAt(Instant.now().plusSeconds(60))
+            .withSubject(UUID.randomUUID().toString())
+            .withClaim("preferred_username", "user")
+            .withArrayClaim("roles", arrayOf(CONDO_MANAGER_USER.value))
+            .sign(Algorithm.RSA256(publicKey, privateKey))
+        // when
+        val result = mvc.perform(
+            get("/api/v1/test/user-in-mdc").header(AUTHORIZATION, "Bearer $jwt")
+        )
+        // then
+        result.andExpect(status().isOk)
+        result.andExpect(content().string("user"))
+    }
+
+    @ParameterizedTest
+    @MethodSource("authenticationUsernameParameters")
+    fun `should return username`(authentication: Authentication, expectedUsername: String?) {
+        assertEquals(expectedUsername, authentication.username)
+    }
 }
 
 @RestController
@@ -186,6 +230,10 @@ class TestController(
     @GetMapping("user")
     fun getUser(): AuthenticatedUser? =
         loadCurrentUserPort.load()
+
+    @GetMapping("user-in-mdc")
+    fun getUserInMdc(): String =
+        MDC.get("user")
 }
 
 @Component

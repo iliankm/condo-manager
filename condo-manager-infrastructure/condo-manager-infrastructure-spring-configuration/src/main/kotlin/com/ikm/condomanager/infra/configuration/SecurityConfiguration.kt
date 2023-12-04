@@ -1,6 +1,7 @@
 package com.ikm.condomanager.infra.configuration
 
 import com.ikm.condomanager.domain.Role.CONDO_MANAGER_USER
+import com.ikm.condomanager.infra.filter.UserMdcFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -8,9 +9,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.access.intercept.AuthorizationFilter
 
 /**
  * Spring configuration for web security.
@@ -46,6 +51,7 @@ class SecurityConfiguration {
                 auth.requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                 auth.requestMatchers("/api/**").hasRole(CONDO_MANAGER_USER.value)
             }
+            .addFilterAfter(UserMdcFilter(), AuthorizationFilter::class.java)
             .build()
 
     @Bean
@@ -61,3 +67,9 @@ class SecurityConfiguration {
         return jwtAuthenticationConverter
     }
 }
+
+val Authentication.username: String?
+    get() = when (this) {
+        is JwtAuthenticationToken -> name
+        else -> (principal as? UserDetails)?.username
+    }
