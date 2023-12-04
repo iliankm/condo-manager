@@ -12,6 +12,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.TestingAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
@@ -36,7 +37,7 @@ class CommonJpaRepositoryTest : BaseDataJPATest() {
     @BeforeEach
     internal fun init() {
         testAuthenticationToken = mockk<TestingAuthenticationToken>()
-        every { testAuthenticationToken.principal } returns "test-user"
+        every { testAuthenticationToken.principal } returns User("test-user", "", emptySet())
         jwtAuthenticationToken = mockk<JwtAuthenticationToken>()
         every { jwtAuthenticationToken.name } returns "jwt-user"
         SecurityContextHolder.clearContext()

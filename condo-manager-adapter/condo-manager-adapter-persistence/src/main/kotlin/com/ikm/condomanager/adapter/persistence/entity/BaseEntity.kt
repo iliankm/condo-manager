@@ -1,6 +1,7 @@
 package com.ikm.condomanager.adapter.persistence.entity
 
 import com.ikm.condomanager.domain.DomainId
+import com.ikm.condomanager.infra.configuration.username
 import jakarta.persistence.Column
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -11,9 +12,7 @@ import jakarta.persistence.PreUpdate
 import jakarta.persistence.Version
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import java.time.Instant
 import java.util.UUID
 
@@ -60,9 +59,3 @@ sealed class BaseEntity {
         updatedBy = SecurityContextHolder.getContext()?.authentication?.username
     }
 }
-
-private val Authentication.username: String?
-    get() = when (this) {
-        is JwtAuthenticationToken -> name
-        else -> this.principal.toString()
-    }
