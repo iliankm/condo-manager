@@ -9,10 +9,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verifyAll
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import java.util.UUID
+import kotlin.test.assertEquals
 
 /**
  * Unit test for [CondominiumDTO] related conversions.
@@ -24,7 +24,7 @@ class CondominiumDTOConverterTest {
         mockkStatic(CondominiumAddressDTO::convertToCondominiumAddress)
         val condominiumAddressDTO = mockk<CondominiumAddressDTO>()
         val condominiumDTO = CondominiumDTO(
-            id = null,
+            id = CondominiumId(UUID.randomUUID().toString(), 0),
             address = condominiumAddressDTO
         )
         val condominiumAddress = mockk<CondominiumAddress>()
@@ -32,7 +32,7 @@ class CondominiumDTOConverterTest {
         // when
         val condominium = condominiumDTO.convertToCondominium()
         // then
-        assertNull(condominium.id)
+        assertEquals(condominiumDTO.id, condominium.id)
         assertSame(condominiumAddress, condominium.address)
         verifyAll {
             condominiumAddressDTO.convertToCondominiumAddress()

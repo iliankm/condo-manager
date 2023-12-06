@@ -16,17 +16,6 @@ class Condominium(
     var address: CondominiumAddress
 ) : SelfValidating {
 
-    companion object {
-        /**
-         * Factory function for initial creating of [Condominium].
-         */
-        fun create(address: CondominiumAddress) =
-            Condominium(
-                id = null,
-                address = address
-            )
-    }
-
     init {
         validate()
     }
