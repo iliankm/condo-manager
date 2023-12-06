@@ -49,13 +49,8 @@ class PersonControllerTest : BaseControllerTest() {
         // given
         mockkStatic(PersonDTO::convertToPerson, Person::convertToPersonDTO)
         val personDTO = PersonDTO(name = "John Doe")
-        val person = Person(id = null, name = "John Doe", email = null, phoneNumber = null)
-        val createdPerson = Person(
-            id = PersonId(UUID.randomUUID().toString(), 0),
-            name = "John Doe",
-            email = null,
-            phoneNumber = null
-        )
+        val person = Person(id = null, name = "John Doe")
+        val createdPerson = Person(id = PersonId(UUID.randomUUID().toString(), 0), name = "John Doe")
         val createdPersonDTO = PersonDTO(
             id = PersonId(UUID.randomUUID().toString(), 0),
             name = createdPerson.name
@@ -89,9 +84,7 @@ class PersonControllerTest : BaseControllerTest() {
         val id = UUID.randomUUID().toString()
         val person = Person(
             id = PersonId(id, 0),
-            name = "John Doe",
-            email = null,
-            phoneNumber = null
+            name = "John Doe"
         )
         val personDTO = PersonDTO(
             id = PersonId(UUID.randomUUID().toString(), 0),
@@ -120,11 +113,11 @@ class PersonControllerTest : BaseControllerTest() {
         // given
         mockkStatic(PersonDTO::mergeToPerson, Person::convertToPersonDTO)
         val id = PersonId(UUID.randomUUID().toString(), 1)
-        val person = Person(id = id, name = "J..", email = null, phoneNumber = null)
+        val person = Person(id = id, name = "J..")
         every { loadPersonUseCase.load(id) } returns person
         val personDTO = PersonDTO(name = "John Doe")
         every { personDTO.mergeToPerson(person) } returns Unit
-        val updatedPerson = Person(id = PersonId(id.id, 2), name = "John Doe", email = null, phoneNumber = null)
+        val updatedPerson = Person(id = PersonId(id.id, 2), name = "John Doe")
         every { updatePersonUseCase.update(person) } returns updatedPerson
         val updatedPersonDTO = PersonDTO(id = PersonId(UUID.randomUUID().toString(), 2), name = "John Doe")
         every { updatedPerson.convertToPersonDTO() } returns updatedPersonDTO

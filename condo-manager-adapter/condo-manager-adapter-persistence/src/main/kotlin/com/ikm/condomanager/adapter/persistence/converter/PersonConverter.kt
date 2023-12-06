@@ -34,7 +34,8 @@ fun Person.mergeToPersonEntity(personEntity: PersonEntity) {
 fun PersonEntity.convertToPerson() =
     Person(
         id = domainId,
-        name = name,
-        email = email,
-        phoneNumber = phoneNumber
-    )
+        name = name
+    ).apply {
+        email = this@convertToPerson.email
+        phoneNumber = this@convertToPerson.phoneNumber
+    }
