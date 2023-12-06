@@ -5,6 +5,7 @@ import com.ikm.condomanager.domain.CondominiumAddress
 import com.ikm.condomanager.domain.CondominiumId
 import com.ikm.condomanager.domain.Role.CONDOMINIUM_MANAGE
 import com.ikm.condomanager.domain.SelfValidating
+import com.ikm.condomanager.domain.validate
 import com.ikm.condomanager.exception.NotFoundException
 import com.ikm.condomanager.exception.VersionNotMatchedException
 
