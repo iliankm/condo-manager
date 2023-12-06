@@ -10,7 +10,8 @@ import com.ikm.condomanager.usecase.condominium.UpdateCondominiumData
  * @return converted instance of [Condominium]
  */
 fun CondominiumDTO.convertToCondominium() =
-    Condominium.create(
+    Condominium(
+        id = id,
         address = address.convertToCondominiumAddress()
     )
 

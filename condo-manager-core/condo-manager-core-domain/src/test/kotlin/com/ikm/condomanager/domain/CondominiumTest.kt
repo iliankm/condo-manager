@@ -3,7 +3,6 @@ package com.ikm.condomanager.domain
 import org.junit.jupiter.api.Test
 import java.util.UUID
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 /**
  * Unit test for [Condominium].
@@ -12,6 +11,7 @@ class CondominiumTest {
     @Test
     fun `should create Condominium`() {
         // given
+        val id = CondominiumId(UUID.randomUUID().toString())
         val address = CondominiumAddress(
             city = "City Name",
             street = "Street Name",
@@ -19,11 +19,11 @@ class CondominiumTest {
             location = null
         )
         // when
-        val condominium = Condominium.create(address)
+        val condominium = Condominium(id, address)
         // then
-        assertNull(condominium.id)
+        assertEquals(id, condominium.id)
         assertEquals(condominium.address, address)
-        assertEquals("Condominium(id=null, address=$address)", condominium.toString())
+        assertEquals("Condominium(id=$id, address=$address)", condominium.toString())
     }
 
     @Test

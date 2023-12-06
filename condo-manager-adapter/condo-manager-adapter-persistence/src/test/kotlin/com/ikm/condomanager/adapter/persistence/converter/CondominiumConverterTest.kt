@@ -23,7 +23,8 @@ class CondominiumConverterTest {
     fun `should convert Condominium to CondominiumEntity`() {
         // given
         mockkStatic(CondominiumAddress::convertToCondominiumAddressEntity)
-        val condominium = Condominium.create(
+        val condominium = Condominium(
+            id = CondominiumId(UUID.randomUUID().toString()),
             address = mockk<CondominiumAddress>()
         )
         val condominiumAddressEntity = mockk<CondominiumAddressEntity>()
