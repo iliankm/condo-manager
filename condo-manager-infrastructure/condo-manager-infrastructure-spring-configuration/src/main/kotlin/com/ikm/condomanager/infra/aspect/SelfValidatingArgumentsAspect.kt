@@ -19,7 +19,7 @@ class SelfValidatingArgumentsAspect {
     fun doValidationBeforeMethodsExecution(jp: JoinPoint) =
         jp.args.forEach { arg ->
             when (arg) {
-                is SelfValidating<*> -> arg.validate()
+                is SelfValidating -> arg.validate()
                 is Iterable<*> -> arg.validateAll()
             }
         }
@@ -27,5 +27,5 @@ class SelfValidatingArgumentsAspect {
 
 private fun Iterable<*>.validateAll() =
     forEach {
-        if (it is SelfValidating<*>) it.validate()
+        if (it is SelfValidating) it.validate()
     }

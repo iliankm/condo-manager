@@ -19,4 +19,4 @@ class ValidationTestDomainObject(
     var prop1: String,
     @field:Max(10)
     var prop2: Int
-) : SelfValidating<ValidationTestDomainObject>()
+) : SelfValidating

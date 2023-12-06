@@ -14,7 +14,7 @@ typealias CondominiumId = DomainId
 class Condominium(
     val id: CondominiumId?,
     var address: CondominiumAddress
-) : SelfValidating<Condominium>() {
+) : SelfValidating {
 
     companion object {
         /**
