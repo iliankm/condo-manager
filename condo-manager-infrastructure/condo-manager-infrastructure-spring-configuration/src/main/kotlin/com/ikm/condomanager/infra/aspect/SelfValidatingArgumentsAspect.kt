@@ -1,6 +1,7 @@
 package com.ikm.condomanager.infra.aspect
 
 import com.ikm.condomanager.domain.SelfValidating
+import com.ikm.condomanager.domain.validate
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
