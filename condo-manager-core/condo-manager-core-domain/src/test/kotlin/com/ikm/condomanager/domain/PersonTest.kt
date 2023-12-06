@@ -19,19 +19,16 @@ class PersonTest {
     @Test
     fun `should create Person`() {
         // given
-        val person = Person.create(
-            name = "John Doe",
-            email = "john.doe@company.com",
-            phoneNumber = "00888111222"
-        )
+        val id = PersonId(UUID.randomUUID().toString(), 1)
+        val person = Person(id, "John Doe")
         // then
         with(person) {
+            assertEquals(id, this.id)
             assertEquals(name, "John Doe")
-            assertNull(id)
-            assertEquals("john.doe@company.com", email)
-            assertEquals("00888111222", phoneNumber)
+            assertNull(email)
+            assertNull(phoneNumber)
             assertEquals(
-                "Person(id=null, name='John Doe', email=john.doe@company.com, phoneNumber=00888111222)",
+                "Person(id=$id, name='John Doe', email=null, phoneNumber=null)",
                 person.toString()
             )
         }
@@ -41,7 +38,10 @@ class PersonTest {
     fun `should modify Person`() {
         // given
         val id = PersonId(UUID.randomUUID().toString(), 1)
-        val person = Person(id, "John D.", "john.d@company.com", "00888111111")
+        val person = Person(id, "John D.").apply {
+            email = "john.doe@company.com"
+            phoneNumber = "00888111222"
+        }
         // when
         person.name = "John Doe"
         person.email = "john.doe@company.com"
@@ -62,13 +62,16 @@ class PersonTest {
 
     @ParameterizedTest
     @MethodSource("validPersonParams")
-    fun `should be a valid Person`(id: PersonId?, name: String, email: String?, phone: String?) {
+    fun `should be a valid Person`(id: PersonId?, name: String, emailP: String?, phone: String?) {
         // when
-        val person = Person(id = id, name = name, email = email, phoneNumber = phone)
+        val person = Person(id, name).apply {
+            email = emailP
+            phoneNumber = phone
+        }
         // then
         assertEquals(id, person.id)
         assertEquals(name, person.name)
-        assertEquals(email, person.email)
+        assertEquals(emailP, person.email)
         assertEquals(phone, person.phoneNumber)
     }
 
@@ -77,13 +80,17 @@ class PersonTest {
     fun `should be a not valid Person`(
         id: PersonId?,
         name: String,
-        email: String?,
+        emailP: String?,
         phone: String?,
         propertyToMessage: Pair<String, String>
     ) {
         // when
         val exception = assertThrows(ConstraintViolationException::class.java) {
-            Person(id = id, name = name, email = email, phoneNumber = phone)
+            Person(id, name).apply {
+                email = emailP
+                phoneNumber = phone
+                validate()
+            }
         }
         // then
         exception.assert(propertyToMessage)
@@ -170,7 +177,7 @@ class PersonTest {
                 ),
                 Arguments.of(
                     PersonId(UUID.randomUUID().toString(), 1),
-                    randomAlphabetic(71),
+                    randomAlphabetic(70),
                     "aa@aa",
                     "0888111222",
                     "email" to "{jakarta.validation.constraints.Email.message}"

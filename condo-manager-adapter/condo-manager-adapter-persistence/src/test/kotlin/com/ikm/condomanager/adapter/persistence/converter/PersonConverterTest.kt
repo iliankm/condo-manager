@@ -17,10 +17,11 @@ class PersonConverterTest {
         // given
         val person = Person(
             id = PersonId(UUID.randomUUID().toString(), 0),
-            name = "John Doe",
-            email = "john.doe@company.com",
+            name = "John Doe"
+        ).apply {
+            email = "john.doe@company.com"
             phoneNumber = "0888111222"
-        )
+        }
         // when
         val personEntity = person.convertToPersonEntity()
         // then
@@ -34,10 +35,11 @@ class PersonConverterTest {
         // given
         val person = Person(
             id = PersonId(UUID.randomUUID().toString(), 0),
-            name = "John Doe",
-            email = "john.doe@company.com",
+            name = "John Doe"
+        ).apply {
+            email = "john.doe@company.com"
             phoneNumber = "0888111222"
-        )
+        }
         val personEntity = PersonEntity(
             name = ""
         )

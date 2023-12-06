@@ -39,9 +39,7 @@ class UpdatePersonPersistenceAdapterTest {
         mockkStatic(Person::mergeToPersonEntity, PersonEntity::convertToPerson)
         val person = Person(
             id = PersonId(UUID.randomUUID().toString(), 1),
-            name = "John Doe",
-            email = null,
-            phoneNumber = null
+            name = "John Doe"
         )
         val personEntity = mockk<PersonEntity>()
         every { personRepository.getByDomainId(person.id!!) } returns personEntity
@@ -64,7 +62,7 @@ class UpdatePersonPersistenceAdapterTest {
     @Test
     fun `when Person#id is null, should throw IllegalStateException`() {
         // given
-        val person = Person(id = null, name = "John Doe", email = null, phoneNumber = null)
+        val person = Person(id = null, name = "John Doe")
         // when & then
         assertThrows<IllegalStateException> {
             updatePersonPort.update(person)
@@ -75,7 +73,7 @@ class UpdatePersonPersistenceAdapterTest {
     fun `when Person#id#version is null, should throw IllegalStateException`() {
         // given
         val person =
-            Person(id = PersonId(UUID.randomUUID().toString()), name = "John Doe", email = null, phoneNumber = null)
+            Person(id = PersonId(UUID.randomUUID().toString()), name = "John Doe")
         // when & then
         assertThrows<IllegalStateException> {
             updatePersonPort.update(person)
