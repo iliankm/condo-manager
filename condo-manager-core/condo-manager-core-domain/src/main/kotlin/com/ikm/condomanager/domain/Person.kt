@@ -38,7 +38,7 @@ class Person(
         message = "Must be a valid phone number"
     )
     var phoneNumber: String?
-) : SelfValidating<Person>() {
+) : SelfValidating {
     companion object {
         /**
          * Factory function for initial creation of [Person].

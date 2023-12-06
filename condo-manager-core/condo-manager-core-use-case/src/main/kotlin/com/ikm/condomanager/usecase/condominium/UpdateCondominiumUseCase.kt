@@ -32,7 +32,7 @@ interface UpdateCondominiumUseCase {
  */
 data class UpdateCondominiumData(
     val address: CondominiumAddress
-) : SelfValidating<UpdateCondominiumData>() {
+) : SelfValidating {
     init {
         validate()
     }

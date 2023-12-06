@@ -22,7 +22,7 @@ data class CondominiumAddress(
     @field:Positive
     val houseNumber: Short,
     val location: GeoLocation?
-) : SelfValidating<CondominiumAddress>() {
+) : SelfValidating {
     init {
         validate()
     }

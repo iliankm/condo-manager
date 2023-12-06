@@ -17,7 +17,7 @@ data class GeoLocation(
     @field:DecimalMin("-180")
     @field:DecimalMax("180")
     val lon: BigDecimal
-) : SelfValidating<GeoLocation>() {
+) : SelfValidating {
     init {
         validate()
     }
