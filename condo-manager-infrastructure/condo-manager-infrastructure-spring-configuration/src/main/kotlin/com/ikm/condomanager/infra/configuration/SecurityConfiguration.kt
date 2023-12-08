@@ -1,19 +1,25 @@
 package com.ikm.condomanager.infra.configuration
 
 import com.ikm.condomanager.domain.Role.CONDO_MANAGER_USER
+import com.ikm.condomanager.domain.Role.MONITORING
 import com.ikm.condomanager.infra.filter.UserMdcFilter
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter
+import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.intercept.AuthorizationFilter
 
@@ -42,12 +48,17 @@ class SecurityConfiguration {
             .csrf { csrf ->
                 csrf.disable()
             }
+            // HTTP Basic authentication for the actuator endpoints
+            .httpBasic(Customizer.withDefaults())
             // OAuth2 resource server
             .oauth2ResourceServer { oauth2 ->
                 oauth2.jwt { }
             }
             // Endpoints authorization
             .authorizeHttpRequests { auth ->
+                auth.requestMatchers("/actuator/health").permitAll()
+                auth.requestMatchers("/actuator/info").permitAll()
+                auth.requestMatchers("/actuator/**").hasRole(MONITORING.value)
                 auth.requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                 auth.requestMatchers("/api/**").hasRole(CONDO_MANAGER_USER.value)
             }
@@ -65,6 +76,19 @@ class SecurityConfiguration {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter)
 
         return jwtAuthenticationConverter
+    }
+
+    @Bean
+    fun userDetailsService(
+        @Value("\${management.endpoints.security.username}") monitoringUsername: String,
+        @Value("\${management.endpoints.security.password}") monitoringPassword: String
+    ): UserDetailsService {
+        val monitoringUser = User.builder()
+            .username(monitoringUsername)
+            .password("{noop}$monitoringPassword")
+            .roles(MONITORING.value)
+            .build()
+        return InMemoryUserDetailsManager(monitoringUser)
     }
 }
 
