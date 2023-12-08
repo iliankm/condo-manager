@@ -7,3 +7,7 @@ condomanager:
     password: postgres
   keycloak:
     host: http://localhost:8081
+  actuator:
+    security:
+      username: admin
+      password: admin

@@ -41,6 +41,7 @@ class RoleTest {
         fun roles() =
             Role.entries.map {
                 when (it) {
+                    Role.MONITORING -> Arguments.of(it, "monitoring")
                     Role.CONDO_MANAGER_USER -> Arguments.of(it, "condo_manager_user")
                     Role.CONDOMINIUM_MANAGE -> Arguments.of(it, "condominium_manage")
                     Role.CONDOMINIUM_READ -> Arguments.of(it, "condominium_read")

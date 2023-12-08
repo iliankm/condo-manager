@@ -7,6 +7,10 @@ condomanager:
     password: postgres
   keycloak:
     host: http://keycloak-it:8081
+  actuator:
+    security:
+      username: admin
+      password: admin
 
 logging:
   level.root: INFO
