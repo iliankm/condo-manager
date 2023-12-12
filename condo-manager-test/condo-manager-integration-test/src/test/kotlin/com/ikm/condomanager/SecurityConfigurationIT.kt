@@ -56,7 +56,7 @@ class SecurityConfigurationIT : BaseIntegrationTest() {
         Given {
             pathParam("value", "ping")
         } When {
-            options("${URI}/{value}")
+            options("$URI/{value}")
         } Then {
             statusCode(SC_OK)
         }
@@ -69,7 +69,7 @@ class SecurityConfigurationIT : BaseIntegrationTest() {
             oauth2(user)
             pathParam("value", "ping")
         } When {
-            get("${URI}/{value}")
+            get("$URI/{value}")
         } Then {
             statusCode(statusCode)
         }
@@ -81,7 +81,7 @@ class SecurityConfigurationIT : BaseIntegrationTest() {
         Given {
             oauth2(user)
         } When {
-            get("${URI}/user")
+            get("$URI/user")
         } Then {
             statusCode(statusCode)
             if (username != null) {
@@ -97,13 +97,12 @@ class SecurityConfigurationIT : BaseIntegrationTest() {
     fun `should get current user from MDC context`(
         user: KeycloakUser?,
         statusCode: Int,
-        username: String?,
-        roles: List<Role>
+        username: String?
     ) {
         Given {
             oauth2(user)
         } When {
-            get("${URI}/user-in-mdc")
+            get("$URI/user-in-mdc")
         } Then {
             statusCode(statusCode)
             if (username != null) {
