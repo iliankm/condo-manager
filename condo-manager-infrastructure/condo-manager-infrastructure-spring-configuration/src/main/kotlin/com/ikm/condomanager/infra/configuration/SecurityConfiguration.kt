@@ -66,14 +66,21 @@ class SecurityConfiguration {
             .build()
 
     @Bean
-    fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
-        val grantedAuthoritiesConverter = JwtGrantedAuthoritiesConverter()
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles")
-        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_")
+    fun jwtGrantedAuthoritiesConverter(): JwtGrantedAuthoritiesConverter {
+        val jwtGrantedAuthoritiesConverter = JwtGrantedAuthoritiesConverter()
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles")
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_")
 
+        return jwtGrantedAuthoritiesConverter
+    }
+
+    @Bean
+    fun jwtAuthenticationConverter(
+        jwtGrantedAuthoritiesConverter: JwtGrantedAuthoritiesConverter
+    ): JwtAuthenticationConverter {
         val jwtAuthenticationConverter = JwtAuthenticationConverter()
         jwtAuthenticationConverter.setPrincipalClaimName("preferred_username")
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter)
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter)
 
         return jwtAuthenticationConverter
     }

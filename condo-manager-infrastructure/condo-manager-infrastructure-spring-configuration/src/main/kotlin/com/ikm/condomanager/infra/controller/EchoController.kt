@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
  * REST controller used mainly for security configuration integration testing.
  * The endpoints and components are available only with active profile "integration-test".
  */
-@Profile("integration-test")
+@Profile("integration-test", "test-infra-spring")
 @RestController
 @RequestMapping("api/v1/test")
 class EchoController(
@@ -45,7 +45,7 @@ class EchoController(
 /**
  * Test component available only with active profile "integration-test".
  */
-@Profile("integration-test")
+@Profile("integration-test", "test-infra-spring")
 @Component
 class TestComponent {
     @RolesAllowed(CONDOMINIUM_READ)
