@@ -37,9 +37,9 @@
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
         <detekt-maven-plugin.version>1.23.4</detekt-maven-plugin.version>
         <detekt-formatting-version>1.23.0</detekt-formatting-version>
-        <mockk.version>1.13.5</mockk.version>
+        <mockk.version>1.13.8</mockk.version>
         <springmockk.version>4.0.2</springmockk.version>
-        <archunit.version>1.1.0</archunit.version>
+        <archunit.version>1.2.1</archunit.version>
         <springdoc.openapi.starter.version>2.1.0</springdoc.openapi.starter.version>
         <java.jwt.version>4.4.0</java.jwt.version>
 
