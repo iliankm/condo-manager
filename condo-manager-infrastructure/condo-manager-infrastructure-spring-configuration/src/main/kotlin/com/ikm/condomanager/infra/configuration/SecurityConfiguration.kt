@@ -56,6 +56,8 @@ class SecurityConfiguration {
             }
             // Endpoints authorization
             .authorizeHttpRequests { auth ->
+                auth.requestMatchers("/swagger-ui/**").permitAll()
+                auth.requestMatchers("/api-docs/**").permitAll()
                 auth.requestMatchers("/actuator/health").permitAll()
                 auth.requestMatchers("/actuator/info").permitAll()
                 auth.requestMatchers("/actuator/**").hasRole(MONITORING.value)
