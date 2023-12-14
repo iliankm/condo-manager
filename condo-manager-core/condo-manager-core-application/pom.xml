@@ -44,7 +44,6 @@
         <dependency>
             <groupId>io.mockk</groupId>
             <artifactId>mockk-jvm</artifactId>
-            <version>${mockk.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
