@@ -37,6 +37,7 @@
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
         <detekt-maven-plugin.version>1.23.4</detekt-maven-plugin.version>
         <detekt-formatting-version>1.23.0</detekt-formatting-version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <mockk.version>1.13.8</mockk.version>
         <springmockk.version>4.0.2</springmockk.version>
         <archunit.version>1.2.1</archunit.version>
@@ -208,6 +209,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
                     <executions>
                         <execution>
                             <id>coverage-initialize</id>
