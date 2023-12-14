@@ -33,7 +33,7 @@
         <!-- Versions -->
         <revision>0.6</revision>
         <java.version>17</java.version>
-        <kotlin.version>1.9.0</kotlin.version>
+        <kotlin.version>1.9.21</kotlin.version>
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
         <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
         <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
