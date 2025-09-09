@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
+        <version>3.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -33,7 +33,7 @@
         <!-- Versions -->
         <revision>0.7</revision>
         <java.version>17</java.version>
-        <kotlin.version>1.9.21</kotlin.version>
+        <kotlin.version>2.1.0</kotlin.version>
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
         <detekt-maven-plugin.version>1.23.4</detekt-maven-plugin.version>
         <detekt-formatting-version>1.23.0</detekt-formatting-version>
