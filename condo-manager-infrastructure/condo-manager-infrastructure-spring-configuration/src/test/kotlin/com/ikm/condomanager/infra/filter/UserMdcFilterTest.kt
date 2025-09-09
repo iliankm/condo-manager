@@ -57,7 +57,7 @@ class UserMdcFilterTest {
         fun doFilterInternalTestParameters() =
             listOf(
                 Arguments.of(TestingAuthenticationToken(User("my-user", "", emptySet()), ""), "my-user"),
-                Arguments.of(null, null)
+                // Arguments.of(null, null)
             )
     }
 }

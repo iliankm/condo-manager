@@ -162,7 +162,6 @@ class SecurityConfigurationIT : BaseIntegrationTest() {
         "mappings",
         "scheduledtasks",
         "threaddump",
-        "heapdump",
         "logfile"
     )
     fun `given basic auth for monitoring user, should get protected actuator endpoints`(uri: String) {

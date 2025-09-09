@@ -23,7 +23,13 @@ sealed class BaseIntegrationTest {
 
         @JvmStatic
         protected val environment: DockerComposeContainer<*> =
-            DockerComposeContainer(File("../../docker/docker-compose-integration-test.yml"))
+            DockerComposeContainer(
+                File(".")
+                    .resolve("..")
+                    .resolve("..")
+                    .resolve("docker/docker-compose-integration-test.yml")
+                    .canonicalFile
+            )
                 .withExposedService(
                     KEYCLOAK_SERVICE_NAME,
                     KEYCLOAK_PORT,
@@ -35,7 +41,7 @@ sealed class BaseIntegrationTest {
                     Wait.forListeningPort().withStartupTimeout(ofSeconds(60))
                 )
                 .withEnv(ENV_IMAGE_TAG, System.getProperty(ENV_IMAGE_TAG))
-                .withLocalCompose(true)
+                .withLocalCompose(false)
 
         @JvmStatic
         protected val applicationHost: String

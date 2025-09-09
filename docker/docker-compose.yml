@@ -94,6 +94,7 @@ services:
       SPRING_CONFIG_LOCATION: /config/
     volumes:
       - ../config:/config
+      - ../logs:/workspace/logs
     depends_on:
       - postgres
       - postgres-keycloak
