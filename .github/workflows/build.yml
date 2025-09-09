@@ -112,7 +112,7 @@ jobs:
           dest: 'logs/integration-test'
       - name: Upload container logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: integration-tests-container-logs
           path: logs/integration-test/*
